@@ -24,3 +24,9 @@ web-ext.config.ts
 *.njsproj
 *.sln
 *.sw?
+
+# locks
+bun.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
