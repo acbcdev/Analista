@@ -1,7 +1,6 @@
 #root {
-  width: 400px;
+  width: calc(20vw + 400px);
   margin: 0 auto;
-  padding: 0.4rem;
   text-align: center;
   border: none
 }

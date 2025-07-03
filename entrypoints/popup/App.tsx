@@ -1,24 +1,13 @@
+import TopActions from "@/components/header/topActions";
 import "./App.css";
-import { Button } from "@/components/ui/button";
-import { Cog, Maximize2, Power } from "lucide-react";
+import { ChartAreaAxes } from "@/components/charts/area/chartAxes";
 
 function App() {
   return (
-    <>
-      <header className="flex items-center justify-between ">
-        <Button variant="ghost" size={"icon"}>
-          <Power />
-        </Button>
-        <div className="flex items-center gap-x-2">
-          <Button variant="ghost" size={"icon"}>
-            <Maximize2 />
-          </Button>
-          <Button variant="ghost" size={"icon"}>
-            <Cog />
-          </Button>
-        </div>
-      </header>
-    </>
+    <main className="flex flex-col h-full gap-y-1 p-4 ">
+      <TopActions />
+      <ChartAreaAxes />
+    </main>
   );
 }
 
