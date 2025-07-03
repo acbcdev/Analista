@@ -1,4 +1,4 @@
 export default defineContentScript({
-  matches: ["*"],
+  matches: ["*://*.chaturbate.com/*"],
   main(ctx) {},
 });

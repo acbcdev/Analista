@@ -12,7 +12,7 @@ export type Strema = {
   users: User["id"][]; // List of user IDs who participated in the stream
 
   usersPays: User["id"][]; // List of user IDs who paid for the stream
-
+  privates: number; // Number of private sessions during the stream
   userOnlyView: User["id"][]; // List of user IDs who had exclusive access to the stream
   userAnonymousView: number[]; // each 5 minutes
   chatActivity: {
