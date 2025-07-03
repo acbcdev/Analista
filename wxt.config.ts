@@ -14,7 +14,7 @@ export default defineConfig({
       "*://*.stripchat.com/*",
       "*://*.camsoda.com/*",
     ],
-    permissions: ["tabs", "scripting", "storage"],
+    permissions: ["tabs", "scripting", "storage", "clipboardWrite"],
   },
   vite: () => ({
     plugins: [tailwindcss()],
