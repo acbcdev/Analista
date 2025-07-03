@@ -124,7 +124,14 @@ export default function TopActions() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button variant="ghost" size={"icon"}>
+        <Button
+          variant="ghost"
+          size={"icon"}
+          onClick={() => {
+            const url = browser.runtime.getURL("/dashboard.html");
+            window.open(url);
+          }}
+        >
           <Maximize2 />
         </Button>
         <Button variant="ghost" size={"icon"}>
