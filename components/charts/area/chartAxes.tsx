@@ -108,3 +108,6 @@ export function ChartAreaAxes() {
     </Card>
   );
 }
+function useQueryState(arg0: string) {
+  throw new Error("Function not implemented.");
+}

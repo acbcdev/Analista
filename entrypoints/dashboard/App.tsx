@@ -1,6 +1,12 @@
 import Layout from "@/components/layout/layout";
-
+import { useModelsStore } from "@/store/models";
+import { parseAsInteger, useQueryState } from "nuqs";
 export default function App() {
+  const [model, setModel] = useQueryState(
+    "model",
+    parseAsInteger.withDefault(0)
+  );
+  const models = useModelsStore((state) => state.models);
   return (
     <Layout>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
