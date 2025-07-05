@@ -29,7 +29,7 @@ export function NavMain({
       <SidebarGroupLabel>Views</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          <SidebarMenuItem>
+          <SidebarMenuItem key={item.title}>
             <SidebarMenuButton tooltip={item.title}>
               {item.icon && <item.icon />}
               <span>{item.title}</span>

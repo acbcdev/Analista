@@ -21,6 +21,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useModelsStore } from "@/store/models";
 
 const data = {
   user: {
@@ -28,17 +29,17 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "admin",
-      icon: ShieldUser,
-    },
-    {
-      name: "Acme Inc",
-      icon: "🥑",
-      site: "Orange",
-    },
-  ],
+  // teams: [
+  //   {
+  //     name: "admin",
+  //     icon: ShieldUser,
+  //   },
+  //   {
+  //     name: "Acme Inc",
+  //     icon: "🥑",
+  //     site: "Orange",
+  //   },
+  // ],
   navMain: [
     {
       title: "Dashboard",
@@ -59,10 +60,12 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const models = useModelsStore((state) => state.models);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={models} />
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">
         <NavMain items={data.navMain} />
