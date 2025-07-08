@@ -11,7 +11,6 @@ export default function layout({ children }: { children: React.ReactNode }) {
       {/* <SidebarInset /> */}
       <main className="flex h-full w-full flex-1 flex-col overflow-hidden">
         <Header />
-        <AddModelDialog />
         {children}
       </main>
       <Toaster />
