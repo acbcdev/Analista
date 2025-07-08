@@ -4,9 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import {
@@ -20,7 +20,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import EmojiPicker, { Theme } from "emoji-picker-react";
+// import EmojiPicker, { Theme } from "emoji-picker-react";
+import { Plus } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   icon: z.string().max(1),
@@ -45,7 +47,17 @@ export const AddModelDialog = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {}
 
   return (
-    <Dialog defaultOpen={true}>
+    <Dialog>
+      <DialogTrigger>
+        <Tooltip>
+          <TooltipTrigger>
+            <Button variant="ghost" size={"icon"}>
+              <Plus />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Add New Model</TooltipContent>
+        </Tooltip>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Add model</DialogTitle>
@@ -73,7 +85,7 @@ export const AddModelDialog = () => {
                 name="cbUsername"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>chaturbate Username</FormLabel>
+                    <FormLabel>Chaturbate Username</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -139,9 +151,6 @@ export const AddModelDialog = () => {
             </form>
           </Form>
         </DialogHeader>
-        <DialogFooter>
-          <Button className="btn btn-primary">Save</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
