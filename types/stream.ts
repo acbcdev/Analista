@@ -1,3 +1,4 @@
+import { Platfoms } from "./model";
 import type { User } from "./users";
 
 export type Strema = {
@@ -10,7 +11,7 @@ export type Strema = {
   title: string; // Title of the stream
 
   users: User["id"][]; // List of user IDs who participated in the stream
-
+  platform: Platfoms;
   usersPays: User["id"][]; // List of user IDs who paid for the stream
   privates: number; // Number of private sessions during the stream
   userOnlyView: User["id"][]; // List of user IDs who had exclusive access to the stream

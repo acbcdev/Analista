@@ -5,6 +5,8 @@ import { storage } from "@wxt-dev/storage";
 
 type StoreModelsState = {
   models: Model[];
+  isAddingModel: boolean;
+  setIsAddingModel: (isAdding: boolean) => void;
   addModel: (model: Model) => void;
   removeModel: (id: string) => void;
   updateModel: (id: string, updatedModel: Partial<Model>) => void;
@@ -38,6 +40,8 @@ export const useModelsStore = create<StoreModelsState>()(
   persist(
     (set): StoreModelsState => ({
       models: [],
+      isAddingModel: false,
+      setIsAddingModel: (isAdding) => set({ isAddingModel: isAdding }),
       addModel: (model) =>
         set((state) => ({
           models: [...state.models, model],

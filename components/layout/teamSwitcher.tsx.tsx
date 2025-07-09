@@ -17,7 +17,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Model } from "@/types/model";
-import { Link } from "react-router";
+import { useModelsStore } from "@/store/models";
 
 type TeamSwitcherProps = {
   teams: Model[];
@@ -26,7 +26,7 @@ type TeamSwitcherProps = {
 export function TeamSwitcher({ teams }: TeamSwitcherProps) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = useState<Model | null>(null);
-
+  const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -93,16 +93,15 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <Link to="?addModel=true">
-              <DropdownMenuItem className="gap-2 p-2">
-                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                  <Plus className="size-4" />
-                </div>
-                <div className="text-muted-foreground font-medium">
-                  Add model
-                </div>
-              </DropdownMenuItem>
-            </Link>
+            <DropdownMenuItem
+              className="gap-2 p-2"
+              onClick={() => setIsAddingModel(true)}
+            >
+              <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                <Plus className="size-4" />
+              </div>
+              <div className="text-muted-foreground font-medium">Add model</div>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

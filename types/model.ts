@@ -5,13 +5,8 @@ export type Model = {
   icon: string | React.ElementType; // Icon representing the model
   name: string; // Name of the model
   site: string;
-  cbUsername: string; // Username on Chaturbate
-  scUsername: string; // Username on Stripchat
-  csUsername: string; // Username on Camsoda
-  platform: Platfoms[]; // Platform where the model is active
-  cbStreams: Strema[]; // List of streams on Chaturbate
-  scStreams: Strema[]; // List of streams on Stripchat
-  csStreams: Strema[]; // List of streams on Camsoda
+  platform: ModelPlatforms[]; // Platform where the model is active
+  streams: Strema[]; // List of streams associated with the model
   retentionRate: number; // Retention rate of the model
   createdAt: number; // Record creation timestamp
   updatedAt: number; // Last update timestamp
@@ -28,4 +23,16 @@ export type Admin = {
   icon: React.ElementType; // Icon representing the admin
 };
 
-export type Platfoms = "chaturbate" | "stripchat" | "camsoda";
+type ModelPlatforms = {
+  id: Platfoms;
+  userName: string;
+};
+
+export type Platfoms =
+  | "chaturbate"
+  | "stripchat"
+  | "camsoda"
+  | "cherry"
+  | "stremate"
+  | "cam4"
+  | "myfreecams";
