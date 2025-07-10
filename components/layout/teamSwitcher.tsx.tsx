@@ -27,6 +27,7 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = useState<Model | null>(null);
   const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -75,6 +76,15 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Models
             </DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => setActiveTeam(null)}
+              className="gap-2 p-2"
+            >
+              <div className="flex size-6 items-center justify-center rounded-md border">
+                <Shield className="size-4" />
+              </div>
+              Admin
+            </DropdownMenuItem>
             {teams.map((team) => (
               <DropdownMenuItem
                 key={team.name}

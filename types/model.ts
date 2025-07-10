@@ -7,10 +7,10 @@ export type Model = {
   site: string;
   platform: ModelPlatforms[]; // Platform where the model is active
   streams: Strema[]; // List of streams associated with the model
-  retentionRate: number; // Retention rate of the model
+  retentionRate?: number; // Retention rate of the model
   createdAt: number; // Record creation timestamp
   updatedAt: number; // Last update timestamp
-  coversionRate: number; // Conversion rate of the model
+  coversionRate?: number; // Conversion rate of the model
 };
 
 export type Admin = {

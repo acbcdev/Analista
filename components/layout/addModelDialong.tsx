@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { X } from "lucide-react";
+import { nanoid } from "nanoid";
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   icon: z.string().max(1),
@@ -67,8 +68,11 @@ type formPlatforms = {
 export const AddModelDialog = () => {
   const isAddingModel = useModelsStore((state) => state.isAddingModel);
   const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
+  const addModel = useModelsStore((state) => state.addModel);
+
   const [platformNumber, setPlatformNumber] = useState([1]);
   const [platforms, setPlatforms] = useState<formPlatforms[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,17 +82,46 @@ export const AddModelDialog = () => {
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Form submitted with values:", values);
+    // console.log("Form submitted with values:", values);
     console.log("Platforms:", platforms);
+    const hasPlatformErrors =
+      platforms.some(
+        (item) =>
+          !item.platform || !item.userName || item.userName.trim() === ""
+      ) || platforms.length === 0;
+    if (hasPlatformErrors) {
+      setError("Please add at least one platform");
+      return;
+    }
+    setError(null);
+    addModel({
+      name: values.name,
+      icon: values.icon,
+      site: values.site,
+      platform: platforms.map((item) => ({
+        id: item.platform,
+        userName: item.userName.trim(),
+      })),
+      streams: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      id: nanoid(7),
+    });
+    form.reset();
+    setPlatformNumber([]);
+    setPlatforms([]);
+    setError(null);
   }
 
   return (
     <Dialog open={isAddingModel} onOpenChange={setIsAddingModel}>
-      <DialogContent className="sm:max-w-lg md:min-w-[700px] md:min-h-[700px]">
+      <DialogContent
+        aria-describedby="modal-add-model"
+        className="sm:max-w-lg md:min-w-[700px] md:min-h-[700px]"
+      >
         <DialogHeader>
           <DialogTitle>Add model</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form
             id="createModel"
@@ -150,28 +183,35 @@ export const AddModelDialog = () => {
                     <Button
                       type="button"
                       variant="destructive"
-                      onClick={() =>
+                      onClick={() => {
                         setPlatformNumber((prev) =>
                           prev.filter((_, i) => i !== index)
-                        )
-                      }
+                        );
+                        setError(null);
+                        setPlatforms((prev) =>
+                          prev.filter((_, i) => i !== index)
+                        );
+                      }}
                     >
                       <X />
                     </Button>
                   )}
                 </div>
               ))}
-
+              <p>
+                {error && <span className="mx-2 text-red-500">{error}</span>}
+              </p>
               <Button
                 type="button"
                 disabled={platformNumber.length >= PLATFORMS.length}
                 onClick={() =>
                   setPlatformNumber((prev) => [...prev, prev.length + 1])
                 }
-                className="mt-2"
+                size={"lg"}
+                className="mt-2 w-full"
                 variant="outline"
               >
-                New Platform
+                New platform
               </Button>
             </section>
 
