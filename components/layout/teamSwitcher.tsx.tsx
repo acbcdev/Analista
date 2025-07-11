@@ -89,9 +89,9 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
               <DropdownMenuItem
                 key={team.name}
                 onClick={() => setActiveTeam(team)}
-                className="gap-2 p-2"
+                className="gap-2 p-2 group"
               >
-                <div className="flex size-6 items-center justify-center rounded-md border">
+                <div className="flex size-6 items-center justify-center rounded-md border group-hover:border-background">
                   {typeof team.icon === "string" ? (
                     team.icon
                   ) : (

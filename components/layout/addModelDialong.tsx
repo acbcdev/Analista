@@ -1,4 +1,4 @@
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import EmojiPicker, { Theme } from "emoji-picker-react";
+import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { useModelsStore } from "@/store/models";
 import { Platfoms } from "@/types/model";
 import {
@@ -32,9 +32,11 @@ import {
 } from "../ui/select";
 import { X } from "lucide-react";
 import { nanoid } from "nanoid";
+import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 const formSchema = z.object({
   name: z.string().min(2).max(50),
-  icon: z.string().max(1),
+  icon: z.string().max(3).min(1),
   site: z.string().min(2).max(50),
 });
 
@@ -73,12 +75,13 @@ export const AddModelDialog = () => {
   const [platformNumber, setPlatformNumber] = useState([1]);
   const [platforms, setPlatforms] = useState<formPlatforms[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [emoji, setEmoji] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       icon: "",
-      site: "",
+      site: "🙉",
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -108,9 +111,11 @@ export const AddModelDialog = () => {
       id: nanoid(7),
     });
     form.reset();
-    setPlatformNumber([]);
+    setPlatformNumber([1]);
     setPlatforms([]);
     setError(null);
+    setEmoji(null);
+    toast.success("Model added successfully");
   }
 
   return (
@@ -231,22 +236,42 @@ export const AddModelDialog = () => {
                 </FormItem>
               )}
             />
-            {/* <FormField
-                control={form.control}
-                name="icon"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Icon</FormLabel>
-                    <FormControl>
-                      <EmojiPicker skinTonesDisabled theme={Theme.DARK} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
+            <FormField
+              control={form.control}
+              name="icon"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Icon</FormLabel>
+                  <FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline">
+                          {emoji ? emoji : "Select Emoji"}
+                        </Button>
+                      </PopoverTrigger>
+
+                      <PopoverContent className="p-0 m-0  border-none bg-transparent">
+                        <EmojiPicker
+                          onEmojiClick={(e) => {
+                            setEmoji(e.emoji);
+                            field.onChange(e.emoji);
+                          }}
+                          {...field}
+                          autoFocusSearch
+                          emojiStyle={EmojiStyle.NATIVE}
+                          skinTonesDisabled
+                          theme={Theme.DARK}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </form>
         </Form>
         <DialogFooter>
