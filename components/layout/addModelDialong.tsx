@@ -80,8 +80,8 @@ export const AddModelDialog = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      icon: "",
-      site: "🙉",
+      icon: "🙉",
+      site: "",
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {

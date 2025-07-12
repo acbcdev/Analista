@@ -18,14 +18,19 @@ import {
 } from "@/components/ui/sidebar";
 import { Model } from "@/types/model";
 import { useModelsStore } from "@/store/models";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 type TeamSwitcherProps = {
-  teams: Model[];
+  models: Model[];
 };
 
-export function TeamSwitcher({ teams }: TeamSwitcherProps) {
+export function TeamSwitcher({ models }: TeamSwitcherProps) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = useState<Model | null>(null);
+  const [model, setModel] = useQueryState(
+    "model",
+    parseAsInteger.withDefault(0)
+  );
   const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
 
   return (
@@ -77,7 +82,10 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
               Models
             </DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => setActiveTeam(null)}
+              onClick={() => {
+                setActiveTeam(null);
+                setModel(0);
+              }}
               className="gap-2 p-2"
             >
               <div className="flex size-6 items-center justify-center rounded-md border">
@@ -85,20 +93,23 @@ export function TeamSwitcher({ teams }: TeamSwitcherProps) {
               </div>
               Admin
             </DropdownMenuItem>
-            {teams.map((team) => (
+            {models.map((model, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={model.name}
+                onClick={() => {
+                  setModel(index + 1);
+                  setActiveTeam(model);
+                }}
                 className="gap-2 p-2 group"
               >
                 <div className="flex size-6 items-center justify-center rounded-md border group-hover:border-background">
-                  {typeof team.icon === "string" ? (
-                    team.icon
+                  {typeof model.icon === "string" ? (
+                    model.icon
                   ) : (
-                    <team.icon className="size-3.5 shrink-0" />
+                    <model.icon className="size-3.5 shrink-0" />
                   )}
                 </div>
-                {team.name}
+                {model.name}
                 {/* <DropdownMenuShortcut>{index + 1}</DropdownMenuShortcut> */}
               </DropdownMenuItem>
             ))}
