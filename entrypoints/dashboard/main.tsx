@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router";
-import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import "@/assets/tailwind.css";
 import { router } from "./routes.tsx";
+import Providers from "@/components/providers.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <NuqsAdapter>
+    <Providers>
       <RouterProvider router={router} />
-    </NuqsAdapter>
+    </Providers>
   </React.StrictMode>
 );
