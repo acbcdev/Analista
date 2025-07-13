@@ -37,11 +37,16 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
-  --radius: 0.7rem;
+  --radius: 1rem;
 }
 
 :root {
   --sb-size: 8px;
+}
+
+:root::selection {
+  background-color: var(--primary);
+  color: var(--input);
 }
 
 :root::-webkit-scrollbar {

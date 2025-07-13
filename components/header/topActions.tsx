@@ -22,8 +22,10 @@ export default function TopActions() {
       currentWindow: true,
     });
     let currentTab = tab;
-    if (tab?.url !== CHATURBATE_TAGS_URL) {
-      currentTab = await browser.tabs.create({ url: CHATURBATE_TAGS_URL });
+    if (!tab?.url?.includes(CHATURBATE_TAGS_URL)) {
+      currentTab = await browser.tabs.create({
+        url: `${CHATURBATE_TAGS_URL}/?sort=-vc`,
+      });
     }
     const [tags] = await browser.scripting.executeScript({
       target: { tabId: currentTab.id ?? 0 },
