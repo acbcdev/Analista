@@ -85,8 +85,6 @@ export const AddModelDialog = () => {
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log("Form submitted with values:", values);
-    console.log("Platforms:", platforms);
     const hasPlatformErrors =
       platforms.some(
         (item) =>
