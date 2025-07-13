@@ -1,10 +1,16 @@
-import { createHashRouter } from "react-router";
+import { createMemoryRouter } from "react-router";
 import App from "./App";
+import { TagsView } from "./routes/ViewTags/page";
 
-export let router = createHashRouter([
+export let router = createMemoryRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <div>Not Found</div>,
+    errorElement: <div className="h-dvh w-full">Error ll</div>,
+  },
+  {
+    path: "/viewtags",
+    element: <TagsView />,
+    errorElement: <div className="h-dvh w-full">Error ll</div>,
   },
 ]);
