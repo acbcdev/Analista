@@ -64,8 +64,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border mx-5">
-      <div className="flex items-center py-2 px-2">
+    <div className="mx-5">
+      <div className="flex items-center py-2 ">
         <Input
           placeholder="Filter tags"
           value={(table.getColumn("tag")?.getFilterValue() as string) ?? ""}
@@ -75,76 +75,83 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} className="text-center">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => {
-                  const isTag = cell.column.id === "tag";
+      <div className="border rounded-md">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
                   return (
-                    <TableCell
-                      key={cell.id}
-                      className={isTag ? "font-bold text-start" : "text-center"}
-                    >
-                      {isTag ? (
-                        <Link
-                          to={`https://chaturbate.com/tag/${cell.getValue()}/`.replace(
-                            "#",
-                            ""
+                    <TableHead key={header.id} className="text-center">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
                           )}
-                          target="_blank"
-                          className="hover:underline"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </Link>
-                      ) : (
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )
-                      )}
-                    </TableCell>
+                    </TableHead>
                   );
                 })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    const isTag = cell.column.id === "tag";
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={
+                          isTag ? "font-bold text-start" : "text-center"
+                        }
+                      >
+                        {isTag ? (
+                          <Link
+                            to={`https://chaturbate.com/tag/${cell.getValue()}/`.replace(
+                              "#",
+                              ""
+                            )}
+                            target="_blank"
+                            className="hover:underline"
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </Link>
+                        ) : (
+                          flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
       {table.getRowModel().rows?.length > 0 && (
-        <section className="flex items-center justify-between gap-x-2 mx-2 -4 pt-0">
-          <div>
+        <section className="flex items-center justify-between gap-x-2 pt-0">
+          <div className="border py-2 px-4 rounded-md">
             <span className="text-sm font-bold">
               Page{" "}
               <span className="font-medium">
