@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   modules: ["@wxt-dev/module-react"],
   manifest: {
+    key: "cnifdnnmkllcmcgkggfalobodlhbkdab",
     author: {
       email: "acbc.dev@gmail.com",
     },
@@ -13,6 +14,7 @@ export default defineConfig({
       "*://*.chaturbate.com/*",
       "*://*.stripchat.com/*",
       "*://*.camsoda.com/*",
+      "*://*.acbc.dev/*",
     ],
     permissions: ["tabs", "scripting", "storage", "clipboardWrite", "cookies"],
   },
