@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   ShieldUser,
   TableProperties,
+  Tags,
 } from "lucide-react";
 
 import { NavMain } from "@/components/layout/navMain";
@@ -78,9 +79,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarMenuButton asChild>
-              <Link to="/viewtags">View Tags</Link>
-            </SidebarMenuButton>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to="/viewtags">
+                  <Tags /> View Tags
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
 

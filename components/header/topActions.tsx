@@ -153,7 +153,7 @@ export default function TopActions() {
       return;
     }
 
-    const url = browser.runtime.getURL("/dashboard.html");
+    const url = browser.runtime.getURL("/dashboard.html#/viewtags");
     window.open(`${url}`);
   };
   return (
