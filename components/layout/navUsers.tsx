@@ -1,16 +1,6 @@
 "use client";
-import { Skeleton } from "@/components/ui/skeleton";
-import { BadgeCheck, ChevronsUpDown, Cog, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { BadgeCheck, Cog, LogOut } from "lucide-react";
+
 import {
   SidebarMenu,
   SidebarMenuButton,

@@ -7,8 +7,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
+import { AnimatePresence, motion } from "motion/react";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -122,161 +122,178 @@ export const AddModelDialog = () => {
         aria-describedby="modal-add-model"
         className="sm:max-w-lg md:min-w-[700px] md:min-h-[700px]"
       >
-        <DialogHeader>
-          <DialogTitle>Add model</DialogTitle>
-        </DialogHeader>
-        <Form {...form}>
-          <form
-            id="createModel"
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8"
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <motion.div layout>
+          <DialogHeader>
+            <DialogTitle>Add model</DialogTitle>
+          </DialogHeader>
+          <Form {...form}>
+            <form
+              id="createModel"
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8"
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your public display name.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <section className="space-y-2">
-              {platformNumber.map((_, index) => (
-                <div className="flex gap-x-2">
-                  <Select
-                    onValueChange={(value) => {
-                      const updatedPlatforms = [...platforms];
-                      updatedPlatforms[index] = {
-                        ...updatedPlatforms[index],
-                        platform: value as Platfoms,
-                      };
-                      setPlatforms(updatedPlatforms);
-                    }}
-                  >
-                    <SelectTrigger className="min-w-40">
-                      <SelectValue placeholder="Select a platform" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PLATFORMS.map((platform) => (
-                        <SelectItem key={platform.value} value={platform.value}>
-                          {platform.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    onChange={(e) => {
-                      const updatedPlatforms = [...platforms];
-                      platforms[index] = {
-                        ...updatedPlatforms[index],
-                        userName: e.target.value,
-                      };
-                      setPlatforms(platforms);
-                    }}
-                  />
-                  {index !== 0 && (
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => {
-                        setPlatformNumber((prev) =>
-                          prev.filter((_, i) => i !== index)
-                        );
-                        setError(null);
-                        setPlatforms((prev) =>
-                          prev.filter((_, i) => i !== index)
-                        );
-                      }}
+              <section className="space-y-2">
+                <AnimatePresence>
+                  {platformNumber.map((_, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 100 }}
+                      transition={{ duration: 0.3 }}
+                      layout
                     >
-                      <X />
-                    </Button>
-                  )}
-                </div>
-              ))}
-              <p>
-                {error && <span className="mx-2 text-red-500">{error}</span>}
-              </p>
-              <Button
-                type="button"
-                disabled={platformNumber.length >= PLATFORMS.length}
-                onClick={() =>
-                  setPlatformNumber((prev) => [...prev, prev.length + 1])
-                }
-                size={"lg"}
-                className="mt-2 w-full"
-                variant="outline"
-              >
-                New platform
-              </Button>
-            </section>
-
-            <FormField
-              control={form.control}
-              name="site"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name of Location</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is the site where the model is active.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="icon"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Icon</FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline">
-                          {emoji ? emoji : "Select Emoji"}
-                        </Button>
-                      </PopoverTrigger>
-
-                      <PopoverContent className="p-0 m-0  border-none bg-transparent">
-                        <EmojiPicker
-                          onEmojiClick={(e) => {
-                            setEmoji(e.emoji);
-                            field.onChange(e.emoji);
+                      <div className="flex gap-x-2">
+                        <Select
+                          onValueChange={(value) => {
+                            const updatedPlatforms = [...platforms];
+                            updatedPlatforms[index] = {
+                              ...updatedPlatforms[index],
+                              platform: value as Platfoms,
+                            };
+                            setPlatforms(updatedPlatforms);
                           }}
-                          {...field}
-                          autoFocusSearch
-                          emojiStyle={EmojiStyle.NATIVE}
-                          skinTonesDisabled
-                          theme={Theme.DARK}
+                        >
+                          <SelectTrigger className="min-w-40">
+                            <SelectValue placeholder="Select a platform" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {PLATFORMS.map((platform) => (
+                              <SelectItem
+                                key={platform.value}
+                                value={platform.value}
+                              >
+                                {platform.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          onChange={(e) => {
+                            const updatedPlatforms = [...platforms];
+                            platforms[index] = {
+                              ...updatedPlatforms[index],
+                              userName: e.target.value,
+                            };
+                            setPlatforms(platforms);
+                          }}
                         />
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
-        <DialogFooter>
-          <Button type="submit" form="createModel">
-            Add
-          </Button>
-        </DialogFooter>
+                        {index !== 0 && (
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                              setPlatformNumber((prev) =>
+                                prev.filter((_, i) => i !== index)
+                              );
+                              setError(null);
+                              setPlatforms((prev) =>
+                                prev.filter((_, i) => i !== index)
+                              );
+                            }}
+                          >
+                            <X />
+                          </Button>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+
+                <p>
+                  {error && <span className="mx-2 text-red-500">{error}</span>}
+                </p>
+                <Button
+                  type="button"
+                  disabled={platformNumber.length >= PLATFORMS.length}
+                  onClick={() =>
+                    setPlatformNumber((prev) => [...prev, prev.length + 1])
+                  }
+                  size={"lg"}
+                  className="mt-2 w-full"
+                  variant="outline"
+                >
+                  New platform
+                </Button>
+              </section>
+
+              <FormField
+                control={form.control}
+                name="site"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name of Location</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is the site where the model is active.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Icon</FormLabel>
+                    <FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline">
+                            {emoji ? emoji : "Select Emoji"}
+                          </Button>
+                        </PopoverTrigger>
+
+                        <PopoverContent className="p-0 m-0  border-none bg-transparent">
+                          <EmojiPicker
+                            onEmojiClick={(e) => {
+                              setEmoji(e.emoji);
+                              field.onChange(e.emoji);
+                            }}
+                            {...field}
+                            autoFocusSearch
+                            emojiStyle={EmojiStyle.NATIVE}
+                            skinTonesDisabled
+                            theme={Theme.DARK}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormDescription>
+                      This is your public display name.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+          <DialogFooter>
+            <Button type="submit" form="createModel">
+              Add
+            </Button>
+          </DialogFooter>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );

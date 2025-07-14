@@ -2,23 +2,17 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
   ChartArea,
-  Command,
-  GalleryVerticalEnd,
   LayoutDashboard,
-  ShieldUser,
   TableProperties,
   Tags,
 } from "lucide-react";
 
 import { NavMain } from "@/components/layout/navMain";
-import { NavUser } from "@/components/layout/navUsers";
 import { TeamSwitcher } from "@/components/layout/teamSwitcher.tsx";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
