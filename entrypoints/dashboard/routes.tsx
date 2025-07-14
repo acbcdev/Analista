@@ -1,8 +1,8 @@
-import { createMemoryRouter } from "react-router";
+import { createHashRouter } from "react-router";
 import App from "./App";
 import { TagsView } from "./routes/ViewTags/page";
 
-export let router = createMemoryRouter([
+export let router = createHashRouter([
   {
     path: "/",
     element: <App />,
