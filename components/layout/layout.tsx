@@ -6,7 +6,7 @@ import Header from "./header";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       {/* <SidebarInset /> */}
       <main className="flex h-full w-full flex-1 flex-col overflow-hidden">
