@@ -146,8 +146,15 @@ export default function TopActions() {
 
   const handleViewTags = async () => {
     const tags = await handleClickTags("none");
-    await storage.setItem("local:tags", tags);
-    await storage.setItem("local:tags-date", Date.now());
+    const prevTagsStore = await storage.getItem<
+      Array<{ createAt: number; data: string[]; name: string }>
+    >("local:tags");
+    const prevTags = prevTagsStore?.slice(0, 9) || [];
+    const date = Date.now();
+    await storage.setItem("local:tags", [
+      { createAt: date, data: tags, name: new Date(date).toLocaleString("es") },
+      ...prevTags,
+    ]);
     if (tags?.length === 0) {
       toast.error("No tags found await ");
       return;

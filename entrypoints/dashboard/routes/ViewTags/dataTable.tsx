@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -115,20 +115,20 @@ export function DataTable<TData, TValue>({
                           <Link
                             to={`https://chaturbate.com/tag/${cell.getValue()}/`.replace(
                               "#",
-                              ""
+                              "",
                             )}
                             target="_blank"
                             className="hover:underline"
                           >
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext()
+                              cell.getContext(),
                             )}
                           </Link>
                         ) : (
                           flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )
                         )}
                       </TableCell>
