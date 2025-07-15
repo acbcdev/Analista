@@ -33,6 +33,7 @@ import {
   EmojiPicker,
   EmojiPickerSearch,
   EmojiPickerContent,
+  EmojiPickerFooter,
 } from "@/components/ui/emoji-picker";
 
 import { X } from "lucide-react";
@@ -76,7 +77,7 @@ export const AddModelDialog = () => {
   const isAddingModel = useModelsStore((state) => state.isAddingModel);
   const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
   const addModel = useModelsStore((state) => state.addModel);
-
+  const [isOpen, setIsOpen] = useState(false);
   const [platformNumber, setPlatformNumber] = useState([1]);
   const [platforms, setPlatforms] = useState<formPlatforms[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -262,7 +263,7 @@ export const AddModelDialog = () => {
                   <FormItem>
                     <FormLabel>Icon</FormLabel>
                     <FormControl>
-                      <Popover>
+                      <Popover onOpenChange={setIsOpen} open={isOpen}>
                         <PopoverTrigger asChild>
                           <Button variant="outline">
                             {emoji ? emoji : "Select Emoji"}
@@ -277,12 +278,14 @@ export const AddModelDialog = () => {
                             className="h-[326px] rounded-lg border px-0.5 py-1 shadow-md"
                             onEmojiSelect={({ emoji }) => {
                               setEmoji(emoji);
+                              setIsOpen(false);
                               field.onChange(emoji);
                             }}
                             {...field}
                           >
                             <EmojiPickerSearch />
                             <EmojiPickerContent />
+                            <EmojiPickerFooter />
                           </EmojiPicker>
                         </PopoverContent>
                       </Popover>
