@@ -40,32 +40,33 @@
   --radius: 1rem;
 }
 
-:root {
+.scroll {
   --sb-size: 8px;
 }
+
 
 :root::selection {
   background-color: var(--primary);
   color: var(--input);
 }
 
-:root::-webkit-scrollbar {
+.scroll::-webkit-scrollbar {
   width: var(--sb-size)
 }
 
-:root::-webkit-scrollbar-track {
+.scroll::-webkit-scrollbar-track {
   background: var(--background);
-  border-radius: 3px;
+  border-radius: var(--radius);
 }
 
-:root::-webkit-scrollbar-thumb {
-  background: var(--background);
-  border-radius: 3px;
+.scroll::-webkit-scrollbar-thumb {
+  background: var(--ring);
+  border-radius: var(--radius);
 }
 
 @supports not selector(::-webkit-scrollbar) {
   :root {
-    scrollbar-color: var(--border) var(--);
+    scrollbar-color: var(--border) var(--background);
   }
 }
 

@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { useModelsStore } from "@/store/models";
 import { Platfoms } from "@/types/model";
 import {
@@ -30,6 +29,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import {
+  EmojiPicker,
+  EmojiPickerSearch,
+  EmojiPickerContent,
+} from "@/components/ui/emoji-picker";
+
 import { X } from "lucide-react";
 import { nanoid } from "nanoid";
 import { toast } from "sonner";
@@ -123,7 +128,7 @@ export const AddModelDialog = () => {
         className="sm:max-w-lg md:min-w-[700px] md:min-h-[700px]"
       >
         <motion.div layout>
-          <DialogHeader>
+          <DialogHeader className="mb-8">
             <DialogTitle>Add model</DialogTitle>
           </DialogHeader>
           <Form {...form}>
@@ -239,7 +244,7 @@ export const AddModelDialog = () => {
                 name="site"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name of Location</FormLabel>
+                    <FormLabel>Name of Site</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -263,25 +268,26 @@ export const AddModelDialog = () => {
                             {emoji ? emoji : "Select Emoji"}
                           </Button>
                         </PopoverTrigger>
-
-                        <PopoverContent className="p-0 m-0  border-none bg-transparent">
+                        <PopoverContent
+                          side="top"
+                          onWheel={(e) => e.stopPropagation()}
+                          className="p-0 m-0  border-none bg-transparent"
+                        >
                           <EmojiPicker
-                            onEmojiClick={(e) => {
-                              setEmoji(e.emoji);
-                              field.onChange(e.emoji);
+                            className="h-[326px] rounded-lg border px-0.5 py-1 shadow-md"
+                            onEmojiSelect={({ emoji }) => {
+                              setEmoji(emoji);
+                              field.onChange(emoji);
                             }}
                             {...field}
-                            autoFocusSearch
-                            emojiStyle={EmojiStyle.NATIVE}
-                            skinTonesDisabled
-                            theme={Theme.DARK}
-                          />
+                          >
+                            <EmojiPickerSearch />
+                            <EmojiPickerContent />
+                          </EmojiPicker>
                         </PopoverContent>
                       </Popover>
                     </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
+
                     <FormMessage />
                   </FormItem>
                 )}
