@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { AnimatePresence, motion } from "motion/react";
-import { Button } from "../ui/button";
+import { Button } from "../../../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -28,7 +28,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "../../../../components/ui/select";
 import {
   EmojiPicker,
   EmojiPickerSearch,
@@ -39,7 +39,11 @@ import {
 import { X } from "lucide-react";
 import { nanoid } from "nanoid";
 import { toast } from "sonner";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../../../components/ui/popover";
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   icon: z.string().max(3).min(1),

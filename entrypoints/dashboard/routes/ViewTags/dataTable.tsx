@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="border rounded-md">
+      <div className="border rounded-md h-[66dvh]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -115,20 +115,20 @@ export function DataTable<TData, TValue>({
                           <Link
                             to={`https://chaturbate.com/tag/${cell.getValue()}/`.replace(
                               "#",
-                              "",
+                              ""
                             )}
                             target="_blank"
                             className="hover:underline"
                           >
                             {flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext(),
+                              cell.getContext()
                             )}
                           </Link>
                         ) : (
                           flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext(),
+                            cell.getContext()
                           )
                         )}
                       </TableCell>
@@ -150,7 +150,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       {table.getRowModel().rows?.length > 0 && (
-        <section className="flex items-center justify-between gap-x-2 pt-0">
+        <section className="flex items-center justify-between gap-x-2 pt-0 px-4">
           <div className="border py-2 px-4 rounded-md">
             <span className="text-sm font-bold">
               Page{" "}

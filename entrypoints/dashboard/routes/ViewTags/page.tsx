@@ -2,7 +2,7 @@ import { Tags } from "@/types";
 import { columns } from "./columns";
 import { DataTable } from "./dataTable";
 import { storage } from "@wxt-dev/storage";
-import Layout from "@/components/layout/layout";
+import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, RefreshCw } from "lucide-react";
 import { CHATURBATE_TAGS_URL } from "@/const/url";
@@ -33,6 +33,10 @@ export function TagsView() {
 
   useEffect(() => {
     getData();
+    if (selectedTag) {
+      const tag = allTags.find((tag) => tag.name === selectedTag);
+      setData(tag?.data || []);
+    }
   }, []);
 
   return (

@@ -1,5 +1,5 @@
-import { SidebarProvider } from "../ui/sidebar";
-import { Toaster } from "../ui/sonner";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { AddModelDialog } from "./addModelDialong";
 import { AppSidebar } from "./appSidebar";
 import Header from "./header";

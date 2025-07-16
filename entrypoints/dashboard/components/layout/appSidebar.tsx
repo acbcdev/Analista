@@ -8,8 +8,8 @@ import {
   Tags,
 } from "lucide-react";
 
-import { NavMain } from "@/components/layout/navMain";
-import { TeamSwitcher } from "@/components/layout/teamSwitcher.tsx";
+import { NavMain } from "@/entrypoints/dashboard/components/layout/navMain";
+import { TeamSwitcher } from "@/entrypoints/dashboard/components/layout/teamSwitcher.tsx";
 import {
   Sidebar,
   SidebarContent,
@@ -74,11 +74,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip={"View Tags"}>
-                <Link to="/viewtags">
-                  <Tags /> View Tags
-                </Link>
-              </SidebarMenuButton>
+              <Link to="/viewtags">
+                <SidebarMenuButton tooltip={"View Tags"}>
+                  <Tags />
+                  View Tags
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>

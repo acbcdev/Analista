@@ -1,4 +1,4 @@
-import Layout from "@/components/layout/layout";
+import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useModelsStore } from "@/store/models";
 import { parseAsInteger, useQueryState } from "nuqs";
 export default function App() {

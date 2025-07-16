@@ -1,5 +1,5 @@
 import { Cog, Maximize2, PocketKnife, Power } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../../components/ui/button";
 import { storage } from "@wxt-dev/storage";
 import {
   DropdownMenu,
@@ -7,7 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { CHATURBATE_TAGS_URL } from "@/const/url";
 import { toast } from "sonner";
@@ -15,7 +19,6 @@ import { Tags } from "@/types";
 type opcionTags = "cv" | "json" | "exportJson" | "exportCsv" | "none";
 
 export default function TopActions() {
-  const [tags, setTags] = useState<Tags[]>([]);
   const handleClickTags = async (mode: opcionTags) => {
     const [tab] = await browser.tabs.query({
       active: true,
@@ -175,26 +178,43 @@ export default function TopActions() {
               <PocketKnife />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>
-              <a href={CHATURBATE_TAGS_URL} target="_blank">
-                Chaturbate Tags
-              </a>
-            </DropdownMenuLabel>
+
+          <DropdownMenuContent className="overflow-hidden">
+            <DropdownMenuLabel>Tools</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleViewTags}>
-              View Tags
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Chaturbate</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem onClick={handleViewTags}>
+                    View Tags
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleClickTags("json")}>
+                    Copy JSON
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleClickTags("exportJson")}
+                  >
+                    Export JSON
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleClickTags("exportCsv")}
+                  >
+                    Export CSV
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleClickTags("json")}>
-              Copy JSON
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleClickTags("exportJson")}>
-              Export Json
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleClickTags("exportCsv")}>
-              Export Csv
-            </DropdownMenuItem>
+            <DropdownMenuGroup>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger disabled>Hours</DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem>Copy Hours</DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
 
