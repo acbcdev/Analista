@@ -6,9 +6,9 @@ import { router } from "./routes.tsx";
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <NuqsAdapter>
-      <RouterProvider router={router} />
-    </NuqsAdapter>
-  </React.StrictMode>
+	<React.StrictMode>
+		<NuqsAdapter>
+			<RouterProvider router={router} />
+		</NuqsAdapter>
+	</React.StrictMode>,
 );

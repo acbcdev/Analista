@@ -4,8 +4,8 @@ import App from "./App.tsx";
 import "@/assets/tailwind.css";
 import { Toaster } from "@/components/ui/sonner";
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-    <Toaster />
-  </React.StrictMode>
+	<React.StrictMode>
+		<App />
+		<Toaster />
+	</React.StrictMode>,
 );
