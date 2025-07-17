@@ -9,10 +9,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router";
 
-export function NavMain({
-  items,
-}: {
+type NavMainProps = {
   items: {
     title: string;
     url: string;
@@ -23,17 +22,25 @@ export function NavMain({
       url: string;
     }[];
   }[];
-}) {
+  pathname: string;
+};
+
+export function NavMain({ items, pathname }: NavMainProps) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Views</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton tooltip={item.title}>
-              {item.icon && <item.icon />}
-              <span>{item.title}</span>
-            </SidebarMenuButton>
+            <Link to={item.url}>
+              <SidebarMenuButton
+                variant={pathname === item.url ? "outline" : "default"}
+                tooltip={item.title}
+              >
+                {item.icon && <item.icon />}
+                <span>{item.title}</span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>

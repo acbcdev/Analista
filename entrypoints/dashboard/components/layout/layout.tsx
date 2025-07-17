@@ -6,16 +6,13 @@ import Header from "./header";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultChecked={false}>
       <AppSidebar />
-      {/* <SidebarInset /> */}
       <main className="flex h-full w-full flex-1 flex-col overflow-hidden">
         <Header />
         <AddModelDialog />
         {children}
       </main>
-      {/* <UserProfile /> */}
-
       <Toaster />
     </SidebarProvider>
   );

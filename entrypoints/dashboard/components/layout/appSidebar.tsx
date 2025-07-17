@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   ChartArea,
+  Hourglass,
   LayoutDashboard,
   TableProperties,
   Tags,
@@ -22,7 +23,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { useModelsStore } from "@/store/models";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const data = {
   user: {
@@ -62,22 +63,36 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const models = useModelsStore((state) => state.models);
-
+  const { pathname } = useLocation();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher models={models} />
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden">
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} pathname={pathname} />
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
               <Link to="/viewtags">
-                <SidebarMenuButton tooltip={"View Tags"}>
+                <SidebarMenuButton
+                  variant={pathname === "/viewtags" ? "outline" : "default"}
+                  tooltip={"View Tags"}
+                >
                   <Tags />
                   View Tags
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link to="/viewhours">
+                <SidebarMenuButton
+                  variant={pathname === "/viewhours" ? "outline" : "default"}
+                  tooltip={"View Hours"}
+                >
+                  <Hourglass />
+                  View Hours
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

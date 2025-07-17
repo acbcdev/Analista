@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { AnimatePresence, motion } from "motion/react";
-import { Button } from "../../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -28,7 +28,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../../components/ui/select";
+} from "@/components/ui/select";
 import {
   EmojiPicker,
   EmojiPickerSearch,
@@ -43,14 +43,19 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../../../components/ui/popover";
+} from "@/components/ui/popover";
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   icon: z.string().max(3).min(1),
   site: z.string().min(2).max(50),
 });
 
-const PLATFORMS: { label: string; value: Platfoms }[] = [
+type PlatfomsItem = {
+  label: string;
+  value: Platfoms;
+};
+
+const PLATFORMS: PlatfomsItem[] = [
   { label: "Chaturbate", value: "chaturbate" },
   { label: "Stripchat", value: "stripchat" },
   { label: "Camsoda", value: "camsoda" },
@@ -164,7 +169,7 @@ export const AddModelDialog = () => {
                   {platformNumber.map((_, index) => (
                     <motion.div
                       key={index}
-                      initial={{ opacity: 0, x: -100 }}
+                      initial={index !== 0 && { opacity: 0, x: -100 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 100 }}
                       transition={{ duration: 0.3 }}
