@@ -20,7 +20,35 @@ import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { Hours, HoursStorage } from "@/types";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
+// Registros analizados: 16 sesiones entre el 24 jun y el 16 jul de 2025.
 
+// Tiempo total conectado: 60 h 39 min.
+
+// Promedio por sesión: 3 h 47 min.
+
+// Mediana: 3 h 55 min (las sesiones típicas rondan las 4 h).
+
+// Sesión más larga: 5 h 18 min (01 jul).
+
+// Sesión más corta: 1 h 45 min (12 jul).
+
+// Desviación estándar: ≈1 h 03 min → la mayoría de sesiones fluctúan ±1 h respecto al promedio.
+
+// Sesiones ≥ 4 h: 8 de 16 (50 %).
+
+// Distribución mensual:
+
+// Julio (1‑16): 36 h 33 min ↔ 66 % del total.
+
+// Junio (24‑30): 24 h 06 min ↔ 34 % del total.
+
+// Patrón semanal (suma de horas):
+
+// Mar 14.2 h, Sáb 10.7 h, Vie 10.6 h → picos de actividad.
+
+// Mié es el día de menor uso (2.1 h).
+
+// Estos indicadores permiten ver tu carga típica (≈4 h) y los días con mayor desempeño, útiles para planificar descansos o metas de productividad.
 export function HoursView() {
   const [allHours, setAllHours] = useState<HoursStorage[]>([]);
   const [data, setData] = useState<Hours[]>([]);

@@ -48,13 +48,13 @@ export default function TopActions() {
             tag
               .querySelector(".viewers")
               ?.textContent?.trim()
-              ?.replace(/,/g, "") ?? "0",
+              ?.replace(/,/g, "") ?? "0"
           );
           const rooms = parseFloat(
             tag
               .querySelector(".rooms")
               ?.textContent?.trim()
-              ?.replace(/,/g, "") ?? "0",
+              ?.replace(/,/g, "") ?? "0"
           );
           if (tagName && viewers && rooms) {
             const avgViewersPerRoom = parseFloat((viewers / rooms).toFixed(2));
@@ -131,7 +131,7 @@ export default function TopActions() {
             demandIndex,
           }) => {
             return `"${tag}",${viewers},${rooms},${avgViewersPerRoom},${roomSharePct},${viewerSharePct},${demandIndex},`;
-          },
+          }
         );
 
         const cvData = [header, ...rows].join("\n");
@@ -212,8 +212,9 @@ export default function TopActions() {
       toast.error("No hours found");
       return;
     }
-    const prevHoursStore =
-      await storage.getItem<Record<string, HoursStorage>>("local:hours");
+    const prevHoursStore = await storage.getItem<Record<string, HoursStorage>>(
+      "local:hours"
+    );
     const prevHours = prevHoursStore ?? {};
     const date = Date.now();
     const name = url?.split("user/")[1].replace(".html", "") ?? "";

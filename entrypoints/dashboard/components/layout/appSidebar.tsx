@@ -54,8 +54,8 @@ const data = {
       icon: ChartArea,
     },
     {
-      title: "Table",
-      url: "/table",
+      title: "streams",
+      url: "/streams",
       icon: TableProperties,
     },
   ],
