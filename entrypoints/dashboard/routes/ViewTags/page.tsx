@@ -21,22 +21,18 @@ type tagsStore = {
 
 export function TagsView() {
   const [allTags, setAllTags] = useState<tagsStore[]>([]);
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [data, setData] = useState<Tags[]>([]);
-  const getData = async () => {
-    // Fetch data from your API here.
-    const selectedTag = await storage.getItem("local:selectedTag");
-    const data = await storage.getItem("local:tags");
-    setAllTags(data as tagsStore[]);
-    setSelectedTag(selectedTag as string);
-  };
 
   useEffect(() => {
-    getData();
-    if (selectedTag) {
-      const tag = allTags.find((tag) => tag.name === selectedTag);
-      setData(tag?.data || []);
-    }
+    storage.getItem("local:tags").then((res) => {
+      setAllTags(res as tagsStore[]);
+    });
+    const unwatch = storage.watch("local:tags", (newValue) => {
+      setAllTags(newValue as tagsStore[]);
+    });
+    return () => {
+      unwatch();
+    };
   }, []);
 
   return (
@@ -74,10 +70,6 @@ export function TagsView() {
             </Select>
           )}
         </div>
-
-        <Button variant="ghost" size={"icon"} onClick={getData}>
-          <RefreshCw />
-        </Button>
       </section>
 
       <DataTable columns={columns} data={data} />
