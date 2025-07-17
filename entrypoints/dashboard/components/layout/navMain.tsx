@@ -1,7 +1,7 @@
 "use client";
 
-import { type LucideIcon } from "lucide-react";
-
+import type { LucideIcon } from "lucide-react";
+import { Link } from "react-router";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router";
 
 type NavMainProps = {
   items: {

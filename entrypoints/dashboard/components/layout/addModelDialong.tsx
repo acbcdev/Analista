@@ -307,7 +307,7 @@ export const AddModelDialog = () => {
             </form>
           </Form>
           <DialogFooter>
-            <Button type="submit" form="createModel">
+            <Button type="submit" form="createModel" className="mt-8">
               Add
             </Button>
           </DialogFooter>
