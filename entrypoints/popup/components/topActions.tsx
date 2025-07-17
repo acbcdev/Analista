@@ -13,9 +13,14 @@ import {
   DropdownMenuSubContent,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { CHATURBATE_TAGS_URL } from "@/const/url";
+import {
+  CBHOURS,
+  CHATURBATE_TAGS_URL,
+  SODAHOURS_URL,
+  STRIPHOURS_URL,
+} from "@/const/url";
 import { toast } from "sonner";
-import { Tags } from "@/types";
+import { HoursStorage, TagsStorage } from "@/types";
 type opcionTags = "cv" | "json" | "exportJson" | "exportCsv" | "none";
 
 export default function TopActions() {
@@ -30,6 +35,7 @@ export default function TopActions() {
         url: `${CHATURBATE_TAGS_URL}/?sort=-vc`,
       });
     }
+
     const [tags] = await browser.scripting.executeScript({
       target: { tabId: currentTab.id ?? 0 },
       func: () => {
@@ -42,13 +48,13 @@ export default function TopActions() {
             tag
               .querySelector(".viewers")
               ?.textContent?.trim()
-              ?.replace(/,/g, "") ?? "0"
+              ?.replace(/,/g, "") ?? "0",
           );
           const rooms = parseFloat(
             tag
               .querySelector(".rooms")
               ?.textContent?.trim()
-              ?.replace(/,/g, "") ?? "0"
+              ?.replace(/,/g, "") ?? "0",
           );
           if (tagName && viewers && rooms) {
             const avgViewersPerRoom = parseFloat((viewers / rooms).toFixed(2));
@@ -125,7 +131,7 @@ export default function TopActions() {
             demandIndex,
           }) => {
             return `"${tag}",${viewers},${rooms},${avgViewersPerRoom},${roomSharePct},${viewerSharePct},${demandIndex},`;
-          }
+          },
         );
 
         const cvData = [header, ...rows].join("\n");
@@ -149,9 +155,7 @@ export default function TopActions() {
 
   const handleViewTags = async () => {
     const tags = await handleClickTags("none");
-    const prevTagsStore = await storage.getItem<
-      Array<{ createAt: number; data: string[]; name: string }>
-    >("local:tags");
+    const prevTagsStore = await storage.getItem<TagsStorage[]>("local:tags");
     const prevTags = prevTagsStore?.slice(0, 9) || [];
     const date = Date.now();
     await storage.setItem("local:tags", [
@@ -163,9 +167,82 @@ export default function TopActions() {
       return;
     }
 
-    const url = browser.runtime.getURL("/dashboard.html#/viewtags");
-    window.open(`${url}`);
+    openDashboard("/viewtags");
   };
+  const getHours = async () => {
+    const [tab] = await browser.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    const url = tab?.url;
+    const condition =
+      url?.includes(STRIPHOURS_URL) ||
+      url?.includes(CBHOURS) ||
+      url?.includes(SODAHOURS_URL);
+    if (!condition) {
+      toast.error("This is not a hours site");
+      return;
+    }
+    const [hours] = await browser.scripting.executeScript({
+      target: { tabId: tab.id ?? 0 },
+      func: () => {
+        const data = document.querySelectorAll(".activity-logs p");
+        const hours = [];
+        for (const item of data) {
+          const hoursItem = item.textContent?.trim();
+          const regex =
+            /^(\d{4}-\d{2}-\d{2})\s+\w+\s+-\s+(\d{2})\s+Hours\s+(\d{2})\s+Minutes$/;
+
+          const [, date, hour, minutes] = hoursItem?.match(regex) ?? [];
+          if (date && hour && minutes) {
+            const hoursItem = `${hour}:${minutes}`;
+            hours.push({
+              date,
+              hour: parseInt(hour),
+              minutes: parseInt(minutes),
+              time: hoursItem,
+            });
+          }
+        }
+        return hours;
+      },
+    });
+    if (!hours.result) return;
+    if (hours.result?.length === 0) {
+      toast.error("No hours found");
+      return;
+    }
+    const prevHoursStore =
+      await storage.getItem<Record<string, HoursStorage>>("local:hours");
+    const prevHours = prevHoursStore ?? {};
+    const date = Date.now();
+    const name = url?.split("user/")[1].replace(".html", "") ?? "";
+    await storage.setItem("local:hours", {
+      ...prevHours,
+      [name]: {
+        createAt: date,
+        data: hours.result,
+        name,
+      },
+    });
+    openDashboard("/viewhours");
+  };
+
+  async function openDashboard(path = "", url2?: string) {
+    const url = url2 ?? browser.runtime.getURL("/dashboard.html");
+    const tabs = await browser.tabs.query({ currentWindow: true });
+    for (const tab of tabs) {
+      if (tab.url?.includes(url)) {
+        browser.tabs.update(tab.id ?? 0, { active: true });
+        return;
+      }
+    }
+
+    const openUrl = url2 ? url2 : `${url}#${path}`;
+
+    window.open(openUrl);
+  }
+
   return (
     <header className="flex items-center justify-between ">
       <Button variant="ghost" size={"icon"}>
@@ -208,24 +285,12 @@ export default function TopActions() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger disabled>Hours</DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem>Copy Hours</DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
+              <DropdownMenuItem onClick={getHours}> Hours </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button
-          variant="ghost"
-          size={"icon"}
-          onClick={() => {
-            const url = browser.runtime.getURL("/dashboard.html");
-            window.open(url);
-          }}
-        >
+        <Button variant="ghost" size={"icon"} onClick={() => openDashboard()}>
           <Maximize2 />
         </Button>
         <Button variant="ghost" size={"icon"}>
