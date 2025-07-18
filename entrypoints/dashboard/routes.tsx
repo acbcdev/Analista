@@ -1,6 +1,7 @@
 import { createHashRouter } from "react-router";
 import App from "./App";
 import { Analytics } from "./routes/analytics/page";
+import ErrorPage from "./routes/error-page";
 import { Models } from "./routes/models/page";
 import { Streams } from "./routes/streams/page";
 import { HoursView } from "./routes/viewHours/page";
@@ -10,31 +11,31 @@ export const router = createHashRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <div className="h-dvh w-full">Error</div>,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/viewtags",
     element: <TagsView />,
-    errorElement: <div className="h-dvh w-full">Error </div>,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/viewhours",
     element: <HoursView />,
-    errorElement: <div className="h-dvh w-full">Error </div>,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/models",
     element: <Models />,
-    errorElement: <div className="h-dvh w-full">Error </div>,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/streams",
     element: <Streams />,
-    errorElement: <div className="h-dvh w-full">Error </div>,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/analytics",
     element: <Analytics />,
-    errorElement: <div className="h-dvh w-full">Error </div>,
+    errorElement: <ErrorPage />,
   },
 ]);
