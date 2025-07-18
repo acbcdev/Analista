@@ -27,4 +27,5 @@ export type Strema = {
 	createdAt: number; // Record creation timestamp
 	updatedAt: number; // Last update timestamp
 	notes: string; // Notes about the stream
+	tokens: number; // Number of tokens earned during the stream
 };
