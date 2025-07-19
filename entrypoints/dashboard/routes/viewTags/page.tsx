@@ -21,6 +21,7 @@ type tagsStore = {
 
 export function TagsView() {
   const [allTags, setAllTags] = useState<tagsStore[]>([]);
+
   const [data, setData] = useState<Tags[]>([]);
 
   useEffect(() => {
