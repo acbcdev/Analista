@@ -8,6 +8,7 @@ import {
 } from "date-fns";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useCallback, useState } from "react";
+import type { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import {
 	Command,
@@ -21,14 +22,9 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
+import { RANGES_DATES } from "@/const/range";
+import type { PresetPeriod } from "@/hooks/useDateFilter";
 import { cn } from "@/lib/utils";
-
-export type DateRange = {
-	from: Date | undefined;
-	to: Date | undefined;
-};
-
-export type PresetPeriod = "thisweek" | "this15days" | "thismonth" | "custom";
 
 interface DateFilterProps {
 	dateRange: DateRange;
@@ -36,25 +32,6 @@ interface DateFilterProps {
 	onDateRangeChange: (range: DateRange) => void;
 	onPresetChange: (preset: PresetPeriod) => void;
 }
-
-const rangesDates = [
-	{
-		label: "This week",
-		value: "thisweek",
-	},
-	{
-		label: "These 15 days",
-		value: "this15days",
-	},
-	{
-		label: "This month",
-		value: "thismonth",
-	},
-	{
-		label: "Custom range",
-		value: "custom",
-	},
-];
 
 export function DateFilter({
 	dateRange,
@@ -70,6 +47,10 @@ export function DateFilter({
 
 			switch (presetValue) {
 				case "thisweek":
+					console.log({
+						from: startOfWeek(today, { weekStartsOn: 1 }),
+						to: endOfWeek(today, { weekStartsOn: 1 }),
+					});
 					return {
 						from: startOfWeek(today, { weekStartsOn: 1 }),
 						to: endOfWeek(today, { weekStartsOn: 1 }),
@@ -119,7 +100,7 @@ export function DateFilter({
 							className="w-[200px] justify-between"
 						>
 							{value
-								? rangesDates.find((range) => range.value === value)?.label
+								? RANGES_DATES.find((range) => range.value === value)?.label
 								: "Select Range..."}
 							<ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 						</Button>
@@ -128,7 +109,7 @@ export function DateFilter({
 						<Command>
 							<CommandList>
 								<CommandGroup>
-									{rangesDates.map((range) =>
+									{RANGES_DATES.map((range) =>
 										range.value === "custom" ? (
 											<Popover key={range.value}>
 												<PopoverTrigger>

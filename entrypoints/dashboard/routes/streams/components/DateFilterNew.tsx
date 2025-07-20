@@ -2,7 +2,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { addDays, endOfDay, startOfDay } from "date-fns";
 import { Calendar, CalendarDays, Clock } from "lucide-react";
 import { useCallback, useEffect } from "react";
-import { DatePickerDemo } from "@/components/ui/date-picker";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
 	Select,
 	SelectContent,
@@ -123,7 +123,7 @@ export function DateFilter({
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
 						<div className="flex flex-col gap-1">
 							<span className="text-xs text-muted-foreground">From</span>
-							<DatePickerDemo
+							<DatePicker
 								date={dateRange.from}
 								setDate={(date: Date | undefined) =>
 									onDateRangeChange({ ...dateRange, from: date })
@@ -132,7 +132,7 @@ export function DateFilter({
 						</div>
 						<div className="flex flex-col gap-1">
 							<span className="text-xs text-muted-foreground">To</span>
-							<DatePickerDemo
+							<DatePicker
 								date={dateRange.to}
 								setDate={(date: Date | undefined) =>
 									onDateRangeChange({ ...dateRange, to: date })
