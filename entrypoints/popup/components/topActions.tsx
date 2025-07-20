@@ -1,17 +1,17 @@
-import { Cog, Maximize2, PocketKnife, Power } from "lucide-react";
-import { Button } from "../../../components/ui/button";
 import { storage } from "@wxt-dev/storage";
+import { Cog, Maximize2, PocketKnife, Power } from "lucide-react";
+import { toast } from "sonner";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
+	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuSub,
+	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
-	DropdownMenuSubContent,
-	DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import {
 	CBHOURS,
@@ -19,8 +19,9 @@ import {
 	SODAHOURS_URL,
 	STRIPHOURS_URL,
 } from "@/const/url";
-import { toast } from "sonner";
-import { HoursStorage, TagsStorage } from "@/types";
+import type { HoursStorage, TagsStorage } from "@/types";
+import { Button } from "../../../components/ui/button";
+
 type opcionTags = "cv" | "json" | "exportJson" | "exportCsv" | "none";
 
 export default function TopActions() {
@@ -197,7 +198,8 @@ export default function TopActions() {
 					if (date && hour && minutes) {
 						const hoursItem = `${hour}:${minutes}`;
 						hours.push({
-							date,
+							name: date,
+							date: new Date(date).getMilliseconds(),
 							hour: parseInt(hour),
 							minutes: parseInt(minutes),
 							time: hoursItem,
