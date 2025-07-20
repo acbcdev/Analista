@@ -2,26 +2,26 @@ import {
 	addDays,
 	endOfMonth,
 	endOfWeek,
-	format,
 	startOfMonth,
 	startOfToday,
 	startOfWeek,
 } from "date-fns";
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { DatePickerDemo } from "@/components/ui/date-picker";
+import {
+	Command,
+	CommandGroup,
+	CommandItem,
+	CommandList,
+} from "@/components/ui/command";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export type DateRange = {
 	from: Date | undefined;
@@ -37,14 +37,33 @@ interface DateFilterProps {
 	onPresetChange: (preset: PresetPeriod) => void;
 }
 
+const rangesDates = [
+	{
+		label: "This week",
+		value: "thisweek",
+	},
+	{
+		label: "These 15 days",
+		value: "this15days",
+	},
+	{
+		label: "This month",
+		value: "thismonth",
+	},
+	{
+		label: "Custom range",
+		value: "custom",
+	},
+];
+
 export function DateFilter({
 	dateRange,
 	preset,
 	onDateRangeChange,
 	onPresetChange,
 }: DateFilterProps) {
-	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-
+	const [open, setOpen] = useState(false);
+	const [value, setValue] = useState("");
 	const calculatePresetRange = useCallback(
 		(presetValue: PresetPeriod): DateRange => {
 			const today = startOfToday();
@@ -65,7 +84,6 @@ export function DateFilter({
 						from: startOfMonth(today),
 						to: endOfMonth(today),
 					};
-				case "custom":
 				default:
 					return dateRange;
 			}
@@ -78,7 +96,6 @@ export function DateFilter({
 			onPresetChange(value);
 
 			if (value === "custom") {
-				setIsPopoverOpen(true);
 			} else {
 				const newRange = calculatePresetRange(value);
 				onDateRangeChange(newRange);
@@ -87,97 +104,127 @@ export function DateFilter({
 		[onPresetChange, onDateRangeChange, calculatePresetRange],
 	);
 
-	const getDisplayValue = () => {
-		switch (preset) {
-			case "thisweek":
-				return "This week";
-			case "this15days":
-				return "These 15 days";
-			case "thismonth":
-				return "This month";
-			case "custom":
-				if (dateRange.from && dateRange.to) {
-					return `${format(dateRange.from, "dd/MM/yyyy")} - ${format(dateRange.to, "dd/MM/yyyy")}`;
-				}
-				return "Custom range";
-			default:
-				return "Select period";
-		}
-	};
-
 	return (
-		<div className="mb-6">
-			<div className="flex justify-end items-center gap-2">
+		<section>
+			<div className="flex justify-start items-center gap-2">
 				<span className="text-sm font-medium text-muted-foreground">
 					Filter:
 				</span>
 
-				<Select value={preset} onValueChange={handlePresetChange}>
-					<SelectTrigger className="w-[240px]">
-						<SelectValue>{getDisplayValue()}</SelectValue>
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="thisweek">This week</SelectItem>
-						<SelectItem value="this15days">These 15 days</SelectItem>
-						<SelectItem value="thismonth">This month</SelectItem>
-						<SelectItem value="custom">Custom range</SelectItem>
-					</SelectContent>
-				</Select>
-				<Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+				<Popover open={open} onOpenChange={setOpen}>
 					<PopoverTrigger asChild>
-						<Button variant="outline" size="sm">
-							Select Range
+						<Button
+							variant="outline"
+							aria-expanded={open}
+							className="w-[200px] justify-between"
+						>
+							{value
+								? rangesDates.find((range) => range.value === value)?.label
+								: "Select Range..."}
+							<ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-auto p-4" align="end">
-						<div className="space-y-3">
-							<span className="text-sm font-medium">Select Date Range</span>
-							<div className="grid grid-cols-2 gap-3">
-								<div className="space-y-1">
-									<span className="text-xs font-medium text-muted-foreground">
-										From
-									</span>
-									<DatePickerDemo
-										date={dateRange.from}
-										setDate={(date: Date | undefined) =>
-											onDateRangeChange({ ...dateRange, from: date })
-										}
-									/>
-								</div>
-								<div className="space-y-1">
-									<span className="text-xs font-medium text-muted-foreground">
-										To
-									</span>
-									<DatePickerDemo
-										date={dateRange.to}
-										setDate={(date: Date | undefined) =>
-											onDateRangeChange({ ...dateRange, to: date })
-										}
-									/>
-								</div>
-							</div>
-							<div className="flex gap-2">
-								<Button
-									variant="outline"
-									onClick={() => setIsPopoverOpen(false)}
-									className="flex-1"
-									size="sm"
-								>
-									Cancel
-								</Button>
-								<Button
-									onClick={() => setIsPopoverOpen(false)}
-									disabled={!dateRange.from || !dateRange.to}
-									className="flex-1"
-									size="sm"
-								>
-									Apply
-								</Button>
-							</div>
-						</div>
+					<PopoverContent className="w-[200px] p-0">
+						<Command>
+							<CommandList>
+								<CommandGroup>
+									{rangesDates.map((range) =>
+										range.value === "custom" ? (
+											<Popover key={range.value}>
+												<PopoverTrigger>
+													<CommandItem
+														key={range.value}
+														onSelect={() => {
+															handlePresetChange(range.value as PresetPeriod);
+															setValue(range.value);
+														}}
+														className={cn("flex items-center justify-between")}
+													>
+														{range.label}
+														{preset === range.value && (
+															<CheckIcon className="ml-2 h-4 w-4" />
+														)}
+													</CommandItem>
+												</PopoverTrigger>
+												<PopoverContent className="p-4 mx-2" side="left">
+													<section>
+														<span className="text-sm font-medium ">
+															Select Date Range
+														</span>
+														<div className="space-y-2 mt-4">
+															<div className="space-y-1 flex justify-between items-center">
+																<span className="text-xs font-medium text-muted-foreground">
+																	From:
+																</span>
+																<DatePicker
+																	date={dateRange.from}
+																	setDate={(date: Date | undefined) =>
+																		onDateRangeChange({
+																			...dateRange,
+																			from: date,
+																		})
+																	}
+																/>
+															</div>
+															<div className="space-y-1 flex justify-between items-center">
+																<span className="text-xs font-medium text-muted-foreground">
+																	To
+																</span>
+																<DatePicker
+																	date={dateRange.to}
+																	setDate={(date: Date | undefined) =>
+																		onDateRangeChange({
+																			...dateRange,
+																			to: date,
+																		})
+																	}
+																/>
+															</div>
+															<div className="flex gap-2">
+																<Button
+																	variant="outline"
+																	onClick={() => setOpen(false)}
+																	className="flex-1"
+																	size="sm"
+																>
+																	Cancel
+																</Button>
+																<Button
+																	onClick={() => setOpen(false)}
+																	disabled={!dateRange.from || !dateRange.to}
+																	className="flex-1"
+																	size="sm"
+																>
+																	Apply
+																</Button>
+															</div>
+														</div>
+													</section>
+												</PopoverContent>
+											</Popover>
+										) : (
+											<CommandItem
+												key={range.value}
+												onSelect={() => {
+													handlePresetChange(range.value as PresetPeriod);
+													setValue(range.value);
+													setOpen(false);
+												}}
+												className={cn("flex items-center justify-between")}
+											>
+												{range.label}
+												{preset === range.value && (
+													<CheckIcon className="ml-2 h-4 w-4" />
+												)}
+											</CommandItem>
+										),
+									)}
+								</CommandGroup>
+							</CommandList>
+						</Command>
 					</PopoverContent>
 				</Popover>
 			</div>
-		</div>
+		</section>
 	);
 }
