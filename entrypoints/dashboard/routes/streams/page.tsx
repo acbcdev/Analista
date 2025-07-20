@@ -1,7 +1,8 @@
 import { isWithinInterval } from "date-fns";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
+import { useDateFilter } from "@/hooks/useDateFilter";
 import { useModelsStore } from "@/store/models";
 import { columns } from "./columns";
 import { DataTable } from "./dataTable";
@@ -9,18 +10,8 @@ import { DataTable } from "./dataTable";
 export function Streams() {
 	const models = useModelsStore((state) => state.models);
 
-	// State for date filter
-	const [dateRange, setDateRange] = useState<{
-		from: Date | undefined;
-		to: Date | undefined;
-	}>({
-		from: undefined,
-		to: undefined,
-	});
-
-	const [preset, setPreset] = useState<
-		"thisweek" | "this15days" | "thismonth" | "custom"
-	>("thisweek");
+	const { dateRange, onDateRangeChange, preset, onPresetChange } =
+		useDateFilter();
 
 	// Get all streams with model information
 	const allStreams = useMemo(() => {
@@ -56,9 +47,9 @@ export function Streams() {
 			<div className="p-4 pt-0">
 				<DateFilter
 					dateRange={dateRange}
-					onDateRangeChange={setDateRange}
+					onDateRangeChange={onDateRangeChange}
 					preset={preset}
-					onPresetChange={setPreset}
+					onPresetChange={onPresetChange}
 				/>
 				<DataTable columns={columns} data={filteredStreams} />
 			</div>
