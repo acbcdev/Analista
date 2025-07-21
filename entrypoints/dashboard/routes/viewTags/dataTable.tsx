@@ -1,16 +1,16 @@
 import {
-	ColumnDef,
+	type ColumnDef,
+	type ColumnFiltersState,
 	flexRender,
-	ColumnFiltersState,
 	getCoreRowModel,
-	useReactTable,
 	getFilteredRowModel,
 	getPaginationRowModel,
-	SortingState,
 	getSortedRowModel,
+	type SortingState,
+	useReactTable,
 } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import {
 	Table,
 	TableBody,
@@ -19,11 +19,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
 }
+
 import { useState } from "react";
 import { Link } from "react-router";
 

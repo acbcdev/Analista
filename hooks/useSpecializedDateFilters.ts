@@ -7,11 +7,11 @@ import { useDateRangeFilter } from "./useDateRangeFilter";
  * Wrapper del hook genérico con la lógica específica para extraer fechas de Hours
  */
 export function useHoursDateFilter(data: Hours[], dateRange: DateRange | null) {
-  return useDateRangeFilter(
-    data,
-    dateRange,
-    (item: Hours) => item.date || item.name || null
-  );
+	return useDateRangeFilter(
+		data,
+		dateRange,
+		(item: Hours) => item.date || item.name || null,
+	);
 }
 
 // Ejemplos de uso con otros tipos de datos:
@@ -20,31 +20,31 @@ export function useHoursDateFilter(data: Hours[], dateRange: DateRange | null) {
  * Hook para filtrar streams (ejemplo)
  */
 export function useStreamsDateFilter<T extends { createdAt: Date | string }>(
-  data: T[],
-  dateRange: DateRange | null
+	data: T[],
+	dateRange: DateRange | null,
 ) {
-  return useDateRangeFilter(data, dateRange, (item) => item.createdAt);
+	return useDateRangeFilter(data, dateRange, (item) => item.createdAt);
 }
 
 /**
  * Hook para filtrar logs (ejemplo)
  */
 export function useLogsDateFilter<T extends { timestamp: string }>(
-  data: T[],
-  dateRange: DateRange | null
+	data: T[],
+	dateRange: DateRange | null,
 ) {
-  return useDateRangeFilter(data, dateRange, (item) => item.timestamp);
+	return useDateRangeFilter(data, dateRange, (item) => item.timestamp);
 }
 
 /**
  * Hook para filtrar eventos con fechas en diferentes propiedades (ejemplo)
  */
 export function useEventsDateFilter<
-  T extends { eventDate?: Date | string; date?: Date | string }
+	T extends { eventDate?: Date | string; date?: Date | string },
 >(data: T[], dateRange: DateRange | null) {
-  return useDateRangeFilter(
-    data,
-    dateRange,
-    (item) => item.eventDate || item.date || null
-  );
+	return useDateRangeFilter(
+		data,
+		dateRange,
+		(item) => item.eventDate || item.date || null,
+	);
 }

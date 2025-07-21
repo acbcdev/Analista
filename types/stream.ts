@@ -1,4 +1,4 @@
-import { Platfoms } from "./model";
+import type { Platfoms } from "./model";
 import type { User } from "./users";
 
 export type Strema = {

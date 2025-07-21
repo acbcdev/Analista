@@ -1,4 +1,4 @@
-import { Strema } from "./stream";
+import type { Strema } from "./stream";
 
 export type Model = {
 	id: string;

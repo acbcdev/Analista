@@ -1,7 +1,7 @@
-import { Admin, Model } from "@/types/model";
-import { create } from "zustand";
-import { persist, PersistStorage } from "zustand/middleware";
 import { storage } from "@wxt-dev/storage";
+import { create } from "zustand";
+import { type PersistStorage, persist } from "zustand/middleware";
+import { Admin, type Model } from "@/types/model";
 
 type StoreModelsState = {
 	models: Model[];

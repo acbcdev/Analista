@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronsUpDown, Plus, Shield } from "lucide-react";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useState } from "react";
 import {
 	DropdownMenu,
@@ -16,9 +17,8 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { Model } from "@/types/model";
 import { useModelsStore } from "@/store/models";
-import { parseAsInteger, useQueryState } from "nuqs";
+import type { Model } from "@/types/model";
 
 type TeamSwitcherProps = {
 	models: Model[];

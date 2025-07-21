@@ -18,29 +18,29 @@ export type User = {
 	isRegular: boolean; // Si es usuario recurrente
 	isBigTipper: boolean; // Si da tips grandes (configurable)
 	engagement: {
-		messagesCount: Number; // Número de mensajes enviados
-		reactionsCount: Number; // Reacciones/emojis enviados
-		requestsCount: Number; // Número de requests hechos
+		messagesCount: number; // Número de mensajes enviados
+		reactionsCount: number; // Reacciones/emojis enviados
+		requestsCount: number; // Número de requests hechos
 	};
 	location: {
-		country: String; // Si es detectable por la plataforma
-		timezone: String; // Zona horaria estimada
-		language: String; // Idioma detectado en mensajes
+		country: string; // Si es detectable por la plataforma
+		timezone: string; // Zona horaria estimada
+		language: string; // Idioma detectado en mensajes
 	};
 	referrer: {
-		source: String; // Cómo llegó: 'search', 'tag', 'direct', 'referral'
-		tag: String; // Tag específico por el que llegó
-		campaign: String; // Si viene de una campaña específica
-		medium: String; // 'organic', 'paid', 'social'
+		source: string; // Cómo llegó: 'search', 'tag', 'direct', 'referral'
+		tag: string; // Tag específico por el que llegó
+		campaign: string; // Si viene de una campaña específica
+		medium: string; // 'organic', 'paid', 'social'
 	};
 	preferences: {
 		favoriteShows: string[]; // Tipos de shows que más ve
 		activeHours: number[]; // Horas en que más está activo
-		spendingPattern: String; // 'impulsive', 'calculated', 'budget-conscious'
+		spendingPattern: string; // 'impulsive', 'calculated', 'budget-conscious'
 	};
-	notes: String; // Notas personales de la modelo
+	notes: string; // Notas personales de la modelo
 	tags: string[]; // Etiquetas personalizadas
 	createdAt: number; // Cuándo se creó el registro
 	updatedAt: number; // Última actualización
-	version: Number;
+	version: number;
 };

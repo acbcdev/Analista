@@ -1,13 +1,12 @@
 "use client";
 import { BadgeCheck, Cog, LogOut } from "lucide-react";
-
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export function NavUser() {
 	const { isMobile } = useSidebar();

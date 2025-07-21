@@ -8,34 +8,34 @@ import { HoursView } from "./routes/viewHours/page";
 import { TagsView } from "./routes/viewTags/page";
 
 export const router = createHashRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/viewtags",
-    element: <TagsView />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/viewhours",
-    element: <HoursView />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/models",
-    element: <Models />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/streams",
-    element: <Streams />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/analytics",
-    element: <Analytics />,
-    errorElement: <ErrorPage />,
-  },
+	{
+		path: "/",
+		element: <App />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: "/viewtags",
+		element: <TagsView />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: "/viewhours",
+		element: <HoursView />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: "/models",
+		element: <Models />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: "/streams",
+		element: <Streams />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: "/analytics",
+		element: <Analytics />,
+		errorElement: <ErrorPage />,
+	},
 ]);

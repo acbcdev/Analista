@@ -5,18 +5,10 @@
 		"jsx": "react-jsx",
 		"baseUrl": ".",
 		"paths": {
-			"@/*": [
-				"./*"
-			],
-			"@entrypoints/*": [
-				"./entrypoints/*"
-			],
-			"@components/*": [
-				"./components/*"
-			],
-			"@dashboard/*": [
-				"./entrypoints/dashboard/*"
-			]
+			"@/*": ["./*"],
+			"@entrypoints/*": ["./entrypoints/*"],
+			"@components/*": ["./components/*"],
+			"@dashboard/*": ["./entrypoints/dashboard/*"]
 		}
 	}
 }

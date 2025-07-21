@@ -1,5 +1,5 @@
-import { Settings } from "../settings/modalSettings";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Settings } from "../settings/modalSettings";
 
 export default function header() {
 	return (
