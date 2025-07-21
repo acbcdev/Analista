@@ -1,22 +1,22 @@
 import {
-	addDays,
 	endOfMonth,
 	endOfWeek,
+	getLocalTimeZone,
 	startOfMonth,
-	startOfToday,
 	startOfWeek,
-} from "date-fns";
+	today,
+} from "@internationalized/date";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { useCallback, useState } from "react";
-import type { DateRange } from "react-day-picker";
+import { useCallback, useMemo, useState } from "react";
+import type { DateRange } from "react-aria-components";
 import { Button } from "@/components/ui/button";
+import { RangeCalendar } from "@/components/ui/calendar-rac";
 import {
 	Command,
 	CommandGroup,
 	CommandItem,
 	CommandList,
 } from "@/components/ui/command";
-import { DatePicker } from "@/components/ui/date-picker";
 import {
 	Popover,
 	PopoverContent,
@@ -27,9 +27,9 @@ import type { PresetPeriod } from "@/hooks/useDateFilter";
 import { cn } from "@/lib/utils";
 
 interface DateFilterProps {
-	dateRange: DateRange;
+	dateRange: DateRange | null;
 	preset: PresetPeriod;
-	onDateRangeChange: (range: DateRange) => void;
+	onDateRangeChange: (range: DateRange | null) => void;
 	onPresetChange: (preset: PresetPeriod) => void;
 }
 
@@ -40,36 +40,56 @@ export function DateFilter({
 	onPresetChange,
 }: DateFilterProps) {
 	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState("");
-	const calculatePresetRange = useCallback(
-		(presetValue: PresetPeriod): DateRange => {
-			const today = startOfToday();
+	const [value, setValue] = useState(preset);
+	const [tempDateRange, setTempDateRange] = useState<DateRange | null>(
+		dateRange,
+	);
 
-			switch (presetValue) {
-				case "thisweek":
-					console.log({
-						from: startOfWeek(today, { weekStartsOn: 1 }),
-						to: endOfWeek(today, { weekStartsOn: 1 }),
-					});
+	const now = useMemo(() => today(getLocalTimeZone()), []);
+
+	const presetRangeCalculators = useMemo(
+		() => ({
+			thisweek: (): DateRange => ({
+				start: startOfWeek(now, "es-ES"), // Starts on Monday
+				end: endOfWeek(now, "es-ES"),
+			}),
+
+			this15days: (): DateRange => {
+				// Determinar si estamos en la primera quincena (1-15) o segunda quincena (16-fin)
+				const currentDay = now.day;
+				if (currentDay <= 15) {
+					// Primera quincena: del 1 al 15
 					return {
-						from: startOfWeek(today, { weekStartsOn: 1 }),
-						to: endOfWeek(today, { weekStartsOn: 1 }),
+						start: startOfMonth(now),
+						end: startOfMonth(now).add({ days: 14 }), // día 15
 					};
-				case "this15days":
+				} else {
+					// Segunda quincena: del 16 al fin del mes
 					return {
-						from: startOfMonth(today),
-						to: addDays(startOfMonth(today), 14),
+						start: startOfMonth(now).add({ days: 15 }), // día 16
+						end: endOfMonth(now),
 					};
-				case "thismonth":
-					return {
-						from: startOfMonth(today),
-						to: endOfMonth(today),
-					};
-				default:
-					return dateRange;
-			}
+				}
+			},
+
+			thismonth: (): DateRange => ({
+				start: startOfMonth(now),
+				end: endOfMonth(now),
+			}),
+			all: (): DateRange | null => null, // No range, all data
+		}),
+		[now],
+	);
+
+	const calculatePresetRange = useCallback(
+		(presetValue: PresetPeriod): DateRange | null => {
+			const calculator =
+				presetRangeCalculators[
+					presetValue as keyof typeof presetRangeCalculators
+				];
+			return calculator ? calculator() : dateRange;
 		},
-		[dateRange],
+		[presetRangeCalculators, dateRange],
 	);
 
 	const handlePresetChange = useCallback(
@@ -77,13 +97,45 @@ export function DateFilter({
 			onPresetChange(value);
 
 			if (value === "custom") {
+				// Set initial temp range to current date range or reset
+				setTempDateRange(dateRange);
 			} else {
 				const newRange = calculatePresetRange(value);
 				onDateRangeChange(newRange);
 			}
 		},
-		[onPresetChange, onDateRangeChange, calculatePresetRange],
+		[onPresetChange, onDateRangeChange, calculatePresetRange, dateRange],
 	);
+
+	const getDisplayValue = () => {
+		if (!value) return "Select Range...";
+
+		const range = RANGES_DATES.find((r) => r.value === value);
+		if (!range) return "Select Range...";
+
+		if (preset === "custom" && dateRange?.start && dateRange?.end) {
+			const formatter = new Intl.DateTimeFormat("es-ES", {
+				day: "2-digit",
+				month: "2-digit",
+				year: "numeric",
+			});
+			return `${formatter.format(dateRange.start.toDate(getLocalTimeZone()))} - ${formatter.format(dateRange.end.toDate(getLocalTimeZone()))}`;
+		}
+
+		return range.label;
+	};
+
+	const handleApplyCustomRange = () => {
+		if (tempDateRange?.start && tempDateRange?.end) {
+			onDateRangeChange(tempDateRange);
+		}
+		setOpen(false);
+	};
+
+	const handleCancelCustomRange = () => {
+		setTempDateRange(dateRange);
+		setOpen(false);
+	};
 
 	return (
 		<section>
@@ -97,11 +149,9 @@ export function DateFilter({
 						<Button
 							variant="outline"
 							aria-expanded={open}
-							className="w-[200px] justify-between"
+							className="w-[220px] justify-between"
 						>
-							{value
-								? RANGES_DATES.find((range) => range.value === value)?.label
-								: "Select Range..."}
+							{getDisplayValue()}
 							<ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 						</Button>
 					</PopoverTrigger>
@@ -112,14 +162,14 @@ export function DateFilter({
 									{RANGES_DATES.map((range) =>
 										range.value === "custom" ? (
 											<Popover key={range.value}>
-												<PopoverTrigger>
+												<PopoverTrigger className="w-full">
 													<CommandItem
 														key={range.value}
 														onSelect={() => {
 															handlePresetChange(range.value as PresetPeriod);
-															setValue(range.value);
+															setValue(range.value as PresetPeriod);
 														}}
-														className={cn("flex items-center justify-between")}
+														className={cn("flex justify-between items-center")}
 													>
 														{range.label}
 														{preset === range.value && (
@@ -132,47 +182,26 @@ export function DateFilter({
 														<span className="text-sm font-medium ">
 															Select Date Range
 														</span>
-														<div className="space-y-2 mt-4">
-															<div className="space-y-1 flex justify-between items-center">
-																<span className="text-xs font-medium text-muted-foreground">
-																	From:
-																</span>
-																<DatePicker
-																	date={dateRange.from}
-																	setDate={(date: Date | undefined) =>
-																		onDateRangeChange({
-																			...dateRange,
-																			from: date,
-																		})
-																	}
-																/>
-															</div>
-															<div className="space-y-1 flex justify-between items-center">
-																<span className="text-xs font-medium text-muted-foreground">
-																	To
-																</span>
-																<DatePicker
-																	date={dateRange.to}
-																	setDate={(date: Date | undefined) =>
-																		onDateRangeChange({
-																			...dateRange,
-																			to: date,
-																		})
-																	}
-																/>
-															</div>
+														<div className="space-y-2 mt-4 ">
+															<RangeCalendar
+																className="rounded-md border "
+																value={tempDateRange}
+																onChange={setTempDateRange}
+															/>
 															<div className="flex gap-2">
 																<Button
 																	variant="outline"
-																	onClick={() => setOpen(false)}
+																	onClick={handleCancelCustomRange}
 																	className="flex-1"
 																	size="sm"
 																>
 																	Cancel
 																</Button>
 																<Button
-																	onClick={() => setOpen(false)}
-																	disabled={!dateRange.from || !dateRange.to}
+																	onClick={handleApplyCustomRange}
+																	disabled={
+																		!tempDateRange?.end || !tempDateRange?.start
+																	}
 																	className="flex-1"
 																	size="sm"
 																>
@@ -188,7 +217,7 @@ export function DateFilter({
 												key={range.value}
 												onSelect={() => {
 													handlePresetChange(range.value as PresetPeriod);
-													setValue(range.value);
+													setValue(range.value as PresetPeriod);
 													setOpen(false);
 												}}
 												className={cn("flex items-center justify-between")}

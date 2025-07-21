@@ -5,7 +5,6 @@ export function useStorage<T>(
   const [value, setValue] = useState<T>(defaultValue as T);
   useEffect(() => {
     const localKey: StorageItemKey = `local:${key}`;
-    console.log(localKey);
     storage.getItem(localKey).then((res) => {
       setValue(res as T);
     });

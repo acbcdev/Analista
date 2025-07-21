@@ -1,15 +1,18 @@
-import type { DateRange } from "react-day-picker";
+import { useState } from "react";
+import type { DateRange } from "react-aria-components";
 
-export type PresetPeriod = "thisweek" | "this15days" | "thismonth" | "custom";
+export type PresetPeriod =
+  | "thisweek"
+  | "this15days"
+  | "thismonth"
+  | "custom"
+  | "all";
 
 export function useDateFilter() {
-  const [dateRange, setDateRange] = useState<DateRange>({
-    from: undefined,
-    to: undefined,
-  });
-  const [preset, setPreset] = useState<PresetPeriod>("thisweek");
+  const [dateRange, setDateRange] = useState<DateRange | null>(null);
+  const [preset, setPreset] = useState<PresetPeriod>("all");
 
-  const onDateRangeChange = (range: DateRange) => {
+  const onDateRangeChange = (range: DateRange | null) => {
     setDateRange(range);
   };
 

@@ -1,5 +1,9 @@
 export const RANGES_DATES = [
   {
+    label: "All",
+    value: "all",
+  },
+  {
     label: "This week",
     value: "thisweek",
   },

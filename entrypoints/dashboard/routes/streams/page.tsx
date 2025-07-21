@@ -1,8 +1,8 @@
-import { isWithinInterval } from "date-fns";
 import { useMemo } from "react";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useDateFilter } from "@/hooks/useDateFilter";
+import { useDateRangeFilter } from "@/hooks/useDateRangeFilter";
 import { useModelsStore } from "@/store/models";
 import { columns } from "./columns";
 import { DataTable } from "./dataTable";
@@ -22,25 +22,12 @@ export function Streams() {
 			})),
 		);
 	}, [models]);
-
+	const filteredStreams = useDateRangeFilter(
+		allStreams,
+		dateRange,
+		(item) => new Date(item.createdAt ?? item.updatedAt),
+	);
 	// Filter streams by date range
-	const filteredStreams = useMemo(() => {
-		if (!dateRange.from || !dateRange.to) {
-			return allStreams;
-		}
-
-		return allStreams.filter((stream) => {
-			// Using createdAt timestamp for date filtering
-			if (stream.createdAt) {
-				const streamDate = new Date(stream.createdAt);
-				return isWithinInterval(streamDate, {
-					start: dateRange.from as Date,
-					end: dateRange.to as Date,
-				});
-			}
-			return true; // Include streams without createdAt for now
-		});
-	}, [allStreams, dateRange.from, dateRange.to]);
 
 	return (
 		<Layout>
