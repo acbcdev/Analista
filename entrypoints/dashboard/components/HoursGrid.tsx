@@ -7,6 +7,11 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import {
+	DatePresets,
+	formatDateFromString,
+	getDateString,
+} from "@/lib/dateUtils";
 import type { Hours } from "@/types";
 
 interface HoursGridProps {
@@ -22,18 +27,6 @@ interface GridData {
 export function HoursGrid({ data }: HoursGridProps) {
 	// Procesar datos para crear la estructura de grid
 	const gridData = useMemo(() => {
-		// Función para obtener fecha local en formato YYYY-MM-DD
-		const getLocalDateString = (date: Date) => {
-			// Crear fecha ajustando un día adelante para corregir el desfase
-			const adjustedDate = new Date(date);
-			adjustedDate.setDate(adjustedDate.getDate() + 1);
-
-			const year = adjustedDate.getFullYear();
-			const month = String(adjustedDate.getMonth() + 1).padStart(2, "0");
-			const day = String(adjustedDate.getDate()).padStart(2, "0");
-			return `${year}-${month}-${day}`;
-		};
-
 		// Agrupar por modelo (usando modelName si está disponible, sino usar name)
 		const modelGroups = data.reduce(
 			(acc, item) => {
@@ -47,9 +40,14 @@ export function HoursGrid({ data }: HoursGridProps) {
 			{} as Record<string, (Hours & { modelName?: string })[]>,
 		);
 
-		// Obtener todas las fechas únicas y ordenarlas
+		// Obtener todas las fechas únicas y ordenarlas usando la nueva librería
+		// Usamos el preset con corrección de día (+1) para solucionar el desfase
 		const allDates = [
-			...new Set(data.map((item) => getLocalDateString(new Date(item.date)))),
+			...new Set(
+				data.map((item) =>
+					getDateString(new Date(item.date), DatePresets.withDayOffset(1)),
+				),
+			),
 		].sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
 		// Crear estructura de grid
@@ -66,9 +64,12 @@ export function HoursGrid({ data }: HoursGridProps) {
 					days[date] = { hours: 0, minutes: 0, total: 0 };
 				});
 
-				// Llenar con datos reales
+				// Llenar con datos reales usando la misma lógica de fecha
 				hours.forEach((hour) => {
-					const dateKey = getLocalDateString(new Date(hour.date));
+					const dateKey = getDateString(
+						new Date(hour.date),
+						DatePresets.withDayOffset(1),
+					);
 					if (days[dateKey]) {
 						days[dateKey].hours += hour.hour;
 						days[dateKey].minutes += hour.minutes;
@@ -84,15 +85,9 @@ export function HoursGrid({ data }: HoursGridProps) {
 		return { gridResult, allDates };
 	}, [data]);
 
+	// Usar la nueva función de formateo
 	const formatDate = (dateString: string) => {
-		// dateString viene en formato YYYY-MM-DD, lo convertimos a fecha local de Colombia
-		const [year, month, day] = dateString.split("-");
-		const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-		return date.toLocaleDateString("es-CO", {
-			weekday: "short",
-			day: "numeric",
-			month: "short",
-		});
+		return formatDateFromString(dateString, "display");
 	};
 
 	const formatHours = (total: number) => {
