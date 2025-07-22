@@ -28,13 +28,6 @@ interface DataTableProps<TData, TValue> {
 import { useState } from "react";
 import { Link } from "react-router";
 
-const formatNumber = (num: number) => {
-	return num.toLocaleString("es-ES", {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2,
-	});
-};
-
 export function DataTable<TData, TValue>({
 	columns,
 	data,
