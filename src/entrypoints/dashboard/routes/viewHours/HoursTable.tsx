@@ -9,6 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { FIXED_NUMBER } from "@/const";
 import type { Hours } from "@/types";
 
 interface HoursTableProps {
@@ -66,7 +67,9 @@ export const HoursTable = ({ data, dateRange, ref }: HoursTableProps) => {
 							<TableHead className="w-[100px]">Totals</TableHead>
 							<TableHead>{hours}</TableHead>
 							<TableHead>{minutes}</TableHead>
-							<TableHead className="text-right">{total.toFixed(1)}</TableHead>
+							<TableHead className="text-right">
+								{total.toFixed(FIXED_NUMBER)}
+							</TableHead>
 						</TableRow>
 					</TableFooter>
 				)}

@@ -10,12 +10,21 @@ import type { Hours, HoursStorage } from "@/types";
 interface ModelSelectorProps {
 	allHours: HoursStorage[];
 	onModelSelect: (data: Hours[]) => void;
+	onAllModelsChange: (bol: boolean) => void;
 }
 
-export function ModelSelector({ allHours, onModelSelect }: ModelSelectorProps) {
+export function ModelSelector({
+	allHours,
+	onModelSelect,
+	onAllModelsChange,
+}: ModelSelectorProps) {
 	const handleModelChange = async (value: string) => {
+		if (value === "grid") {
+			onAllModelsChange(true);
+			return;
+		}
 		const selectedHours = allHours.find((hours) => hours.name === value);
-		console.log("Selected model data:", selectedHours?.data);
+		onAllModelsChange(false);
 		onModelSelect(selectedHours?.data || []);
 	};
 
@@ -25,6 +34,7 @@ export function ModelSelector({ allHours, onModelSelect }: ModelSelectorProps) {
 				<SelectValue placeholder="Select a Model" />
 			</SelectTrigger>
 			<SelectContent>
+				<SelectItem value={"grid"}>all models</SelectItem>
 				{allHours?.map((hours: HoursStorage) => (
 					<SelectItem key={hours.createAt} value={hours.name}>
 						{hours.name}

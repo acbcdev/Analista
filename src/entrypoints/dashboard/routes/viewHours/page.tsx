@@ -5,17 +5,18 @@ import { Button } from "@/components/ui/button";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { ModelSelector } from "@/entrypoints/dashboard/components/ModelSelector";
-import {
-	type ViewMode,
-	ViewToggle,
-} from "@/entrypoints/dashboard/components/ViewToggle";
 import { HoursChart } from "@/entrypoints/dashboard/routes/viewHours/HoursChart";
 import { HoursGrid } from "@/entrypoints/dashboard/routes/viewHours/HoursGrid";
 import { HoursTable } from "@/entrypoints/dashboard/routes/viewHours/HoursTable";
+import {
+	type ViewMode,
+	ViewToggle,
+} from "@/entrypoints/dashboard/routes/viewHours/ViewToggle";
 import { useDateFilter } from "@/hooks/useDateFilter";
 import { useDateRangeFilter } from "@/hooks/useDateRangeFilter";
 import { useStorage } from "@/hooks/useStorege";
 import type { Hours, HoursStorage } from "@/types";
+import HoursStats from "./HoursStats";
 
 /**
  * Componente principal para visualizar y filtrar las horas trabajadas
@@ -25,6 +26,7 @@ export function HoursView() {
 	const allkeys = useStorage<Record<string, HoursStorage>>("hours", {});
 	const [data, setData] = useState<Hours[]>([]);
 	const [viewMode, setViewMode] = useState<ViewMode>("table");
+	const [isAllModels, setIsAllModels] = useState<boolean>(false);
 	const tableRef = useRef<HTMLTableElement>(null);
 	const { dateRange, onDateRangeChange, preset, onPresetChange } =
 		useDateFilter();
@@ -85,10 +87,18 @@ export function HoursView() {
 			<div className="px-6 pb-2">
 				{/* Header con controles */}
 				<div className="flex justify-between items-center gap-x-2 text-sm py-2">
-					<ModelSelector allHours={allHours} onModelSelect={setData} />
+					<ModelSelector
+						allHours={allHours}
+						onModelSelect={setData}
+						onAllModelsChange={setIsAllModels}
+					/>
 
 					<div className="flex items-center gap-x-2">
-						<ViewToggle currentView={viewMode} onViewChange={setViewMode} />
+						<ViewToggle
+							currentView={viewMode}
+							onViewChange={setViewMode}
+							isAllModels={isAllModels}
+						/>
 						<Button variant="ghost" size="icon" onClick={handleCopyTable}>
 							<Copy />
 						</Button>
@@ -100,16 +110,17 @@ export function HoursView() {
 						/>
 					</div>
 				</div>
-
-				{/* Contenido principal */}
-				{viewMode === "table" ? (
+				{!isAllModels && data.length !== 0 && (
+					<HoursStats data={filteredData} />
+				)}
+				{isAllModels ? (
+					<HoursGrid data={filteredGridData} />
+				) : viewMode === "table" ? (
 					<HoursTable
 						ref={tableRef}
 						data={data.length === 0 ? [] : filteredData}
 						dateRange={dateRange}
 					/>
-				) : viewMode === "grid" ? (
-					<HoursGrid data={filteredGridData} />
 				) : (
 					<HoursChart data={data.length === 0 ? [] : filteredData} />
 				)}
@@ -118,16 +129,6 @@ export function HoursView() {
 	);
 }
 // Registros analizados: 16 sesiones entre el 24 jun y el 16 jul de 2025.
-
-// Tiempo total conectado: 60 h 39 min.
-
-// Promedio por sesión: 3 h 47 min.
-
-// Mediana: 3 h 55 min (las sesiones típicas rondan las 4 h).
-
-// Sesión más larga: 5 h 18 min (01 jul).
-
-// Sesión más corta: 1 h 45 min (12 jul).
 
 // Desviación estándar: ≈1 h 03 min → la mayoría de sesiones fluctúan ±1 h respecto al promedio.
 
@@ -138,8 +139,6 @@ export function HoursView() {
 // Julio (1‑16): 36 h 33 min ↔ 66 % del total.
 
 // Junio (24‑30): 24 h 06 min ↔ 34 % del total.
-
-// Patrón semanal (suma de horas):
 
 // Mar 14.2 h, Sáb 10.7 h, Vie 10.6 h → picos de actividad.
 

@@ -28,29 +28,12 @@ export function HoursChart({ data }: HoursChartProps) {
 				}),
 				hours: item.hour,
 				minutes: item.minutes,
-				totalHours: item.hour + item.minutes / 60,
+				totalHours: item.totalHours,
 			}))
 			.sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime());
 	}, [data]);
 
 	// Calcular estadísticas
-	const stats = useMemo(() => {
-		const totalHours = chartData.reduce(
-			(acc, item) => acc + item.totalHours,
-			0,
-		);
-		const avgHours = totalHours / chartData.length || 0;
-		const maxSession = Math.max(...chartData.map((item) => item.totalHours));
-		const minSession = Math.min(...chartData.map((item) => item.totalHours));
-
-		return {
-			totalHours: totalHours.toFixed(1),
-			avgHours: avgHours.toFixed(1),
-			maxSession: maxSession.toFixed(1),
-			minSession: minSession.toFixed(1),
-			sessions: chartData.length,
-		};
-	}, [chartData]);
 
 	if (data.length === 0) {
 		return (
@@ -69,38 +52,6 @@ export function HoursChart({ data }: HoursChartProps) {
 	return (
 		<div className="space-y-4">
 			{/* Estadísticas */}
-			<div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-				<Card>
-					<CardHeader className="pb-2">
-						<CardDescription>Total Hours</CardDescription>
-						<CardTitle className="text-2xl">{stats.totalHours}h</CardTitle>
-					</CardHeader>
-				</Card>
-				<Card>
-					<CardHeader className="pb-2">
-						<CardDescription>Sessions</CardDescription>
-						<CardTitle className="text-2xl">{stats.sessions}</CardTitle>
-					</CardHeader>
-				</Card>
-				<Card>
-					<CardHeader className="pb-2">
-						<CardDescription>Average</CardDescription>
-						<CardTitle className="text-2xl">{stats.avgHours}h</CardTitle>
-					</CardHeader>
-				</Card>
-				<Card>
-					<CardHeader className="pb-2">
-						<CardDescription>Max Session</CardDescription>
-						<CardTitle className="text-2xl">{stats.maxSession}h</CardTitle>
-					</CardHeader>
-				</Card>
-				<Card>
-					<CardHeader className="pb-2">
-						<CardDescription>Min Session</CardDescription>
-						<CardTitle className="text-2xl">{stats.minSession}h</CardTitle>
-					</CardHeader>
-				</Card>
-			</div>
 
 			{/* Gráficos */}
 			<Tabs defaultValue="bar" className="w-full">

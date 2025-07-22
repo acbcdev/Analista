@@ -7,6 +7,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { FIXED_NUMBER } from "@/const";
 import {
 	DatePresets,
 	formatDateFromString,
@@ -92,7 +93,7 @@ export function HoursGrid({ data }: HoursGridProps) {
 
 	const formatHours = (total: number) => {
 		if (total === 0) return "";
-		return total.toFixed(1);
+		return total.toFixed(FIXED_NUMBER);
 	};
 
 	if (data.length === 0) {
@@ -139,16 +140,9 @@ export function HoursGrid({ data }: HoursGridProps) {
 										<TableCell key={date} className={`text-center border-r `}>
 											<div className="text-sm">
 												{hasData && (
-													<>
-														<div className="font-medium text-chart-1">
-															{formatHours(dayData.total)}h
-														</div>
-														{dayData.minutes > 0 && (
-															<div className="text-xs text-chart-2">
-																+{dayData.minutes}m
-															</div>
-														)}
-													</>
+													<div className="font-medium text-chart-1">
+														{dayData.hours}:{dayData.minutes}
+													</div>
 												)}
 											</div>
 										</TableCell>

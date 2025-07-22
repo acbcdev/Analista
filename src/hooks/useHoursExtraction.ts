@@ -2,15 +2,7 @@ import { storage } from "@wxt-dev/storage";
 import { toast } from "sonner";
 import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
 import { openDashboard } from "@/lib/action";
-import type { HoursStorage } from "@/types";
-
-interface HourData {
-  name: string;
-  date: number;
-  hour: number;
-  minutes: number;
-  time: string;
-}
+import type { Hours, HoursStorage } from "@/types";
 
 /**
  * Hook para manejar operaciones con horas de trabajo
@@ -61,7 +53,7 @@ function isValidHoursUrl(url?: string): boolean {
   );
 }
 
-async function extractHoursFromPage(tabId: number): Promise<HourData[]> {
+async function extractHoursFromPage(tabId: number): Promise<Hours[]> {
   const [result] = await browser.scripting.executeScript({
     target: { tabId },
     func: extractHoursScript,
@@ -70,9 +62,9 @@ async function extractHoursFromPage(tabId: number): Promise<HourData[]> {
   return result.result || [];
 }
 
-function extractHoursScript(): HourData[] {
+function extractHoursScript(): Hours[] {
   const data = document.querySelectorAll(".activity-logs p");
-  const hours: HourData[] = [];
+  const hours: Hours[] = [];
 
   for (const item of data) {
     const hoursItem = item.textContent?.trim();
@@ -88,6 +80,7 @@ function extractHoursScript(): HourData[] {
         hour: parseInt(hour),
         minutes: parseInt(minutes),
         time: timeString,
+        totalHours: parseInt(hour) + parseInt(minutes) / 60,
       });
     }
   }
@@ -95,10 +88,7 @@ function extractHoursScript(): HourData[] {
   return hours;
 }
 
-async function saveHoursToStorage(
-  hours: HourData[],
-  url: string
-): Promise<void> {
+async function saveHoursToStorage(hours: Hours[], url: string): Promise<void> {
   const prevHoursStore = await storage.getItem<Record<string, HoursStorage>>(
     "local:hours"
   );
