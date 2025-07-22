@@ -1,4 +1,4 @@
-import TopActions from "@/src/entrypoints/popup/components/topActions";
+import TopActions from "@/entrypoints/popup/components/topActions";
 import "./App.css";
 import { ChartAreaAxes } from "@/components/charts/area/chartAxes";
 

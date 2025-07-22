@@ -1,8 +1,8 @@
 import { storage } from "@wxt-dev/storage";
 import { toast } from "sonner";
-import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/src/const/url";
-import { openDashboard } from "@/src/lib/action";
-import type { HoursStorage } from "@/src/types";
+import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
+import { openDashboard } from "@/lib/action";
+import type { HoursStorage } from "@/types";
 
 interface HourData {
   name: string;

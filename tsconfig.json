@@ -16,6 +16,9 @@
 			],
 			"@dashboard/*": [
 				"src/entrypoints/dashboard/*"
+			],
+			"@assets/*": [
+				"./assets/*"
 			]
 		}
 	}
