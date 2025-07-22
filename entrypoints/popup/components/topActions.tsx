@@ -13,13 +13,12 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useChaturbateTags } from "@/hooks/useChaturbateTags";
-import { useDashboardNavigation } from "@/hooks/useDashboardNavigation";
 import { useHoursExtraction } from "@/hooks/useHoursExtraction";
+import { openDashboard } from "@/lib/action";
 
 export default function TopActions() {
 	const { exportTags, saveAndViewTags } = useChaturbateTags();
 	const { extractAndSaveHours } = useHoursExtraction();
-	const { openDashboard } = useDashboardNavigation();
 
 	return (
 		<header className="flex items-center justify-between">

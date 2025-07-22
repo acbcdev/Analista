@@ -1,5 +1,4 @@
 import { getLocalTimeZone } from "@internationalized/date";
-import { forwardRef } from "react";
 import type { DateRange } from "react-aria-components";
 import {
 	Table,

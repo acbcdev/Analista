@@ -3,15 +3,15 @@ import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
-import { HoursChart } from "@/entrypoints/dashboard/components/HoursChart";
-import { HoursGrid } from "@/entrypoints/dashboard/components/HoursGrid";
-import { HoursTable } from "@/entrypoints/dashboard/components/HoursTable";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { ModelSelector } from "@/entrypoints/dashboard/components/ModelSelector";
 import {
 	type ViewMode,
 	ViewToggle,
 } from "@/entrypoints/dashboard/components/ViewToggle";
+import { HoursChart } from "@/entrypoints/dashboard/routes/viewHours/HoursChart";
+import { HoursGrid } from "@/entrypoints/dashboard/routes/viewHours/HoursGrid";
+import { HoursTable } from "@/entrypoints/dashboard/routes/viewHours/HoursTable";
 import { useDateFilter } from "@/hooks/useDateFilter";
 import { useDateRangeFilter } from "@/hooks/useDateRangeFilter";
 import { useStorage } from "@/hooks/useStorege";

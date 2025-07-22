@@ -1,6 +1,7 @@
 import { storage } from "@wxt-dev/storage";
 import { toast } from "sonner";
 import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
+import { openDashboard } from "@/lib/action";
 import type { HoursStorage } from "@/types";
 
 interface HourData {
@@ -15,8 +16,6 @@ interface HourData {
  * Hook para manejar operaciones con horas de trabajo
  */
 export function useHoursExtraction() {
-  const { openDashboard } = useDashboardNavigation();
-
   const extractAndSaveHours = async () => {
     try {
       const [tab] = await browser.tabs.query({

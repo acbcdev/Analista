@@ -5,7 +5,7 @@ import "@/assets/tailwind.css";
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 import { router } from "./routes.tsx";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>
 		<NuqsAdapter>
 			<RouterProvider router={router} />
