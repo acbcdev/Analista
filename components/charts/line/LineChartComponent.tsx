@@ -59,7 +59,7 @@ export function LineChartComponent({
 							tickLine={false}
 							axisLine={false}
 							tickMargin={8}
-							tickFormatter={(value) => value.slice(0, 3)}
+							tickFormatter={(value) => value.slice(-5)}
 						/>
 						<YAxis
 							tickLine={false}
@@ -67,7 +67,7 @@ export function LineChartComponent({
 							tickMargin={8}
 							tickCount={3}
 						/>
-						<ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+						<ChartTooltip content={<ChartTooltipContent />} />
 						{lines.map((line) => (
 							<Line
 								key={line.dataKey}

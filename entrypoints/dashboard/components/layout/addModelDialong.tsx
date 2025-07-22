@@ -135,7 +135,7 @@ export const AddModelDialog = () => {
 		<Dialog open={isAddingModel} onOpenChange={setIsAddingModel}>
 			<DialogContent
 				aria-describedby="modal-add-model"
-				className="sm:max-w-lg md:min-w-[600px] md:min-h-[80dvh] "
+				className="sm:max-w-lg md:min-w-[50rem] md:min-h-[80dvh] "
 			>
 				<motion.div layout>
 					<DialogHeader className="mb-8">

@@ -53,7 +53,10 @@ export function DateFilter({
 				start: startOfWeek(now, "es-ES"), // Starts on Monday
 				end: endOfWeek(now, "es-ES"),
 			}),
-
+			lastweek: (): DateRange => ({
+				start: startOfWeek(now.subtract({ weeks: 1 }), "es-ES"), // Starts on Monday
+				end: endOfWeek(now.subtract({ weeks: 1 }), "es-ES"),
+			}),
 			this15days: (): DateRange => {
 				// Determinar si estamos en la primera quincena (1-15) o segunda quincena (16-fin)
 				const currentDay = now.day;

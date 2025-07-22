@@ -52,13 +52,11 @@ export function BarChartComponent({
 							tickLine={false}
 							tickMargin={10}
 							axisLine={false}
-							tickFormatter={(value) => value.slice(0, 3)}
+							tickFormatter={(value) => value.slice(-5)}
 						/>
 						<YAxis />
-						<ChartTooltip
-							cursor={false}
-							content={<ChartTooltipContent indicator="line" />}
-						/>
+
+						<ChartTooltip content={<ChartTooltipContent indicator="line" />} />
 						{bars.map((bar) => (
 							<Bar
 								key={bar.dataKey}
