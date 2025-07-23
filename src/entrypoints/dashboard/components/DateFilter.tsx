@@ -143,10 +143,6 @@ export function DateFilter({
 	return (
 		<section>
 			<div className="flex justify-start items-center gap-2">
-				<span className="text-sm font-medium text-muted-foreground">
-					Filter:
-				</span>
-
 				<Popover open={open} onOpenChange={setOpen}>
 					<PopoverTrigger asChild>
 						<Button
