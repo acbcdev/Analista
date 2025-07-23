@@ -32,13 +32,14 @@ export function Streams() {
 	return (
 		<Layout>
 			<div className="p-4 pt-0">
-				<DateFilter
-					dateRange={dateRange}
-					onDateRangeChange={onDateRangeChange}
-					preset={preset}
-					onPresetChange={onPresetChange}
-				/>
-				<DataTable columns={columns} data={filteredStreams} />
+				<DataTable columns={columns} data={filteredStreams}>
+					<DateFilter
+						dateRange={dateRange}
+						onDateRangeChange={onDateRangeChange}
+						preset={preset}
+						onPresetChange={onPresetChange}
+					/>
+				</DataTable>
 			</div>
 		</Layout>
 	);
