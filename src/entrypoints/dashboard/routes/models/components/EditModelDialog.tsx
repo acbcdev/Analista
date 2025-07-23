@@ -203,7 +203,7 @@ export const EditModelDialog = ({
 																onValueChange={field.onChange}
 																value={field.value}
 															>
-																<SelectTrigger>
+																<SelectTrigger className="min-w-40">
 																	<SelectValue placeholder="Select a platform" />
 																</SelectTrigger>
 																<SelectContent>

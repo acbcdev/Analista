@@ -1,7 +1,3 @@
-import { DateFilter } from "@dashboard/components/DateFilter";
-import { AddModelDialog } from "@dashboard/components/layout/addModelDialong";
-import Layout from "@dashboard/components/layout/layout";
-import { ModelSelector } from "@dashboard/components/ModelSelector";
 import { Clock, Copy, ExternalLink, Plus } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -14,6 +10,10 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
+import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
+import { AddModelDialog } from "@/entrypoints/dashboard/components/layout/addModelDialong";
+import Layout from "@/entrypoints/dashboard/components/layout/layout";
+import { ModelSelector } from "@/entrypoints/dashboard/components/ModelSelector";
 import {
 	type ViewMode,
 	ViewToggle,

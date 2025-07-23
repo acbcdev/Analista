@@ -1,5 +1,3 @@
-import { AddModelDialog } from "@dashboard/components/layout/addModelDialong";
-import { EditModelDialog } from "@models/components/EditModelDialog";
 import { MoreHorizontal, Plus, Trash, Users } from "lucide-react";
 import { useState } from "react";
 import {
@@ -28,9 +26,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AddModelDialog } from "@/entrypoints/dashboard/components/layout/addModelDialong";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useModelsStore } from "@/store/models";
 import type { Model } from "@/types/model";
+import { EditModelDialog } from "./components/EditModelDialog";
 
 export function Models() {
 	const models = useModelsStore((state) => state.models);
