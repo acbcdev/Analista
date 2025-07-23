@@ -1,4 +1,14 @@
 import { MoreHorizontal, Plus, Trash, Users } from "lucide-react";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -21,7 +31,9 @@ import { useModelsStore } from "@/store/models";
 export function Models() {
 	const models = useModelsStore((state) => state.models);
 	const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
-
+	const removeModel = useModelsStore((state) => state.removeModel);
+	const [wantsToDelete, setWantsToDelete] = useState(false);
+	const [idToDelete, setIdToDelete] = useState<string | null>(null);
 	// Estado vacío cuando no hay modelos
 	if (models.length === 0) {
 		return (
@@ -79,8 +91,10 @@ export function Models() {
 								</div>
 							</div>
 							<DropdownMenu>
-								<DropdownMenuTrigger>
-									<MoreHorizontal className="size-5 text-muted-foreground" />
+								<DropdownMenuTrigger asChild>
+									<Button variant={"ghost"} size="icon">
+										<MoreHorizontal className="size-5 text-muted-foreground" />
+									</Button>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent>
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -88,8 +102,14 @@ export function Models() {
 									<DropdownMenuItem>Edit</DropdownMenuItem>
 									<DropdownMenuItem>View Details</DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem className="text-destructive-foreground focus:bg-destructive/50 focus:text-destructive-foreground">
-										<Trash className=" text-destructive-foreground" />
+									<DropdownMenuItem
+										onClick={() => {
+											setWantsToDelete(true);
+											setIdToDelete(model.id);
+										}}
+										className="text-destructive-foreground focus:bg-destructive/50 focus:text-destructive-foreground"
+									>
+										<Trash className="size-4 text-destructive-foreground" />
 										Delete
 									</DropdownMenuItem>
 								</DropdownMenuContent>
@@ -124,6 +144,38 @@ export function Models() {
 					</Card>
 				))}
 			</div>
+			<AlertDialog
+				open={!!idToDelete && wantsToDelete}
+				onOpenChange={setWantsToDelete}
+			>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Delete Model</AlertDialogTitle>
+						<AlertDialogDescription>
+							Are you sure you want to delete this model?
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel asChild>
+							<Button variant="outline" size="sm">
+								Cancel
+							</Button>
+						</AlertDialogCancel>
+						<AlertDialogAction asChild>
+							<Button
+								variant="destructive"
+								size="sm"
+								onClick={() => {
+									if (!idToDelete) return;
+									removeModel(idToDelete);
+								}}
+							>
+								Delete
+							</Button>
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
 		</Layout>
 	);
 }
