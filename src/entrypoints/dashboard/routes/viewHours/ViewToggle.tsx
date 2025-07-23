@@ -15,7 +15,7 @@ export function ViewToggle({
 	isAllModels,
 }: ViewToggleProps) {
 	return (
-		<div className="flex items-center border rounded-lg p-1">
+		<div className="flex items-center gap-x-1 border rounded-lg p-1">
 			<Button
 				variant={currentView === "table" ? "default" : "ghost"}
 				size="sm"

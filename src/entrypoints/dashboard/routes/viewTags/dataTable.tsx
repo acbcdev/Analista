@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
 					className="max-w-sm"
 				/>
 			</div>
-			<div className="border rounded-md h-[66dvh] overflow-y-hidden ">
+			<div className="border rounded-md  overflow-y-hidden ">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (

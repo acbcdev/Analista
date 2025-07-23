@@ -23,7 +23,7 @@ type tagsStore = {
 };
 
 export function TagsView() {
-	const allTags = useStorage<tagsStore[]>("local:tags", []);
+	const allTags = useStorage<tagsStore[]>("tags", []);
 	const [data, setData] = useState<Tags[]>([]);
 	// Estado vacío cuando no hay tags
 	if (!allTags || allTags?.length === 0) {

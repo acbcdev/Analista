@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { NumberInput } from "@/components/NumberInput";
+import { TagsInput } from "@/components/TagsInput";
+import { TimeInput } from "@/components/TimeInput";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -17,7 +20,6 @@ import {
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -29,6 +31,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Select,
 	SelectContent,
@@ -52,7 +55,7 @@ const formSchema = z.object({
 	views: z.coerce.number().min(0, "Views must be positive"),
 	tokens: z.coerce.number().min(0, "Tokens must be positive"),
 	privates: z.coerce.number().min(0, "Privates must be positive"),
-	tags: z.string().optional(),
+	tags: z.array(z.string().min(1).max(10)).optional(),
 	notes: z.string().optional(),
 });
 
@@ -78,7 +81,7 @@ export const AddStreamDialog = ({ children }: AddStreamDialogProps) => {
 			views: 0,
 			tokens: 0,
 			privates: 0,
-			tags: "",
+			tags: [],
 			notes: "",
 		},
 	});
@@ -86,7 +89,7 @@ export const AddStreamDialog = ({ children }: AddStreamDialogProps) => {
 	const selectedModel = models.find(
 		(model) => model.id === form.watch("modelId"),
 	);
-
+	console.log(models);
 	function onSubmit(values: FormValues) {
 		const startDateTime = new Date(values.date);
 		const endDateTime = new Date(values.date);
@@ -113,7 +116,7 @@ export const AddStreamDialog = ({ children }: AddStreamDialogProps) => {
 			platform: values.platform as Platfoms,
 			tokens: values.tokens,
 			privates: values.privates,
-			tags: values.tags ? values.tags.split(",").map((tag) => tag.trim()) : [],
+			tags: values.tags || [],
 			time: {
 				start: startDateTime.getTime(),
 				end: endDateTime.getTime(),
@@ -155,137 +158,221 @@ export const AddStreamDialog = ({ children }: AddStreamDialogProps) => {
 					</Button>
 				)}
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-				<DialogHeader>
+			<DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto px-3">
+				<DialogHeader className="px-4">
 					<DialogTitle>Add New Stream</DialogTitle>
 				</DialogHeader>
-				<Form {...form}>
-					<form
-						id="addStream"
-						onSubmit={form.handleSubmit(onSubmit)}
-						className="space-y-6"
-					>
-						<div className="grid grid-cols-2 gap-4">
-							<FormField
-								control={form.control}
-								name="modelId"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Model</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
-											<FormControl>
-												<Select>
-													<SelectTrigger>
+
+				<ScrollArea className="max-h-[75vh] px-2">
+					<Form {...form}>
+						<form
+							id="addStream"
+							onSubmit={form.handleSubmit(onSubmit)}
+							className="space-y-6 px-2"
+						>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="modelId"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Model</FormLabel>
+											<Select
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<FormControl>
+													<SelectTrigger className="min-w-40">
 														<SelectValue placeholder="Select a model" />
 													</SelectTrigger>
-												</Select>
-											</FormControl>
-											<SelectContent>
-												{models.map((model) => (
-													<SelectItem key={model.id} value={model.id}>
-														{typeof model.icon === "string" ? model.icon : "📹"}{" "}
-														{model.name}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
+												</FormControl>
 
+												<SelectContent>
+													{models.map((model) => (
+														<SelectItem key={model.id} value={model.id}>
+															{typeof model.icon === "string"
+																? model.icon
+																: null}{" "}
+															{model.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="platform"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Platform</FormLabel>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+												disabled={!selectedModel}
+											>
+												<SelectTrigger className="min-w-40">
+													<SelectValue placeholder="Select platform" />
+												</SelectTrigger>
+												<SelectContent>
+													{selectedModel?.platform.map((platform) => (
+														<SelectItem key={platform.id} value={platform.id}>
+															{platform.id}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</FormItem>
+									)}
+								/>
+							</div>
+
+							<FormField
+								control={form.control}
+								name="title"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Stream Title</FormLabel>
+										<FormControl>
+											<Input {...field} placeholder="Enter stream title" />
+										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
-						</div>
 
-						<FormField
-							control={form.control}
-							name="title"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Stream Title</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Enter stream title" />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+							<FormField
+								control={form.control}
+								name="date"
+								render={({ field }) => (
+									<FormItem className="flex flex-col">
+										<FormLabel>Date</FormLabel>
+										<Popover>
+											<PopoverTrigger asChild>
+												<FormControl>
+													<Button
+														variant="outline"
+														className={cn(
+															"w-full pl-3 text-left font-normal",
+															!field.value && "text-muted-foreground",
+														)}
+													>
+														{field.value ? (
+															field.value.toLocaleDateString()
+														) : (
+															<span>Pick a date</span>
+														)}
+														<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+													</Button>
+												</FormControl>
+											</PopoverTrigger>
+											<PopoverContent className="w-auto p-0" align="start">
+												<Calendar
+													mode="single"
+													selected={field.value}
+													onSelect={field.onChange}
+													disabled={(date) =>
+														date > new Date() || date < new Date("1900-01-01")
+													}
+													autoFocus
+												/>
+											</PopoverContent>
+										</Popover>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-						<FormField
-							control={form.control}
-							name="platform"
-							render={({ field }) => (
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<SelectTrigger>
-										<SelectValue placeholder="Select platform" />
-									</SelectTrigger>
-									<SelectContent>
-										{selectedModel?.platform.map((platform) => (
-											<SelectItem key={platform.id} value={platform.id}>
-												{platform.id}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="date"
-							render={({ field }) => (
-								<FormItem className="flex flex-col">
-									<FormLabel>Date</FormLabel>
-									<Popover>
-										<PopoverTrigger asChild>
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="startTime"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Start Time</FormLabel>
 											<FormControl>
-												<Button
-													variant="outline"
-													className={cn(
-														"w-full pl-3 text-left font-normal",
-														!field.value && "text-muted-foreground",
-													)}
-												>
-													{field.value ? (
-														field.value.toLocaleDateString()
-													) : (
-														<span>Pick a date</span>
-													)}
-													<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-												</Button>
+												<TimeInput onChange={field.onChange} />
 											</FormControl>
-										</PopoverTrigger>
-										<PopoverContent className="w-auto p-0" align="start">
-											<Calendar
-												mode="single"
-												selected={field.value}
-												onSelect={field.onChange}
-												disabled={(date) =>
-													date > new Date() || date < new Date("1900-01-01")
-												}
-												initialFocus
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="endTime"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>End Time</FormLabel>
+											<FormControl>
+												<TimeInput onChange={field.onChange} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+
+							<div className="grid grid-cols-2 gap-4">
+								<FormField
+									control={form.control}
+									name="views"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Views</FormLabel>
+											<FormControl>
+												<NumberInput {...field} minValue={0} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="tokens"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Tokens</FormLabel>
+											<FormControl>
+												<NumberInput {...field} minValue={0} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="privates"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Privates</FormLabel>
+											<FormControl>
+												<NumberInput {...field} minValue={0} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+
+							<FormField
+								control={form.control}
+								name="tags"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Tags</FormLabel>
+										<FormControl>
+											<TagsInput
+												onChange={(tags) => {
+													const tagsToSet = tags.map((tag) => tag.text);
+													field.onChange(tagsToSet);
+												}}
 											/>
-										</PopoverContent>
-									</Popover>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<div className="grid grid-cols-2 gap-4">
-							<FormField
-								control={form.control}
-								name="startTime"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Start Time</FormLabel>
-										<FormControl>
-											<Input {...field} type="time" />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -294,116 +381,25 @@ export const AddStreamDialog = ({ children }: AddStreamDialogProps) => {
 
 							<FormField
 								control={form.control}
-								name="endTime"
+								name="notes"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>End Time</FormLabel>
+										<FormLabel>Notes</FormLabel>
 										<FormControl>
-											<Input {...field} type="time" />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<div className="grid grid-cols-3 gap-4">
-							<FormField
-								control={form.control}
-								name="views"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Views</FormLabel>
-										<FormControl>
-											<Input
+											<Textarea
 												{...field}
-												type="number"
-												min="0"
-												onChange={(e) => field.onChange(Number(e.target.value))}
+												placeholder="Additional notes about the stream"
+												rows={3}
 											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
-
-							<FormField
-								control={form.control}
-								name="tokens"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Tokens</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												type="number"
-												min="0"
-												onChange={(e) => field.onChange(Number(e.target.value))}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name="privates"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Privates</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												type="number"
-												min="0"
-												onChange={(e) => field.onChange(Number(e.target.value))}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
-
-						<FormField
-							control={form.control}
-							name="tags"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Tags</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="tag1, tag2, tag3 (comma separated)"
-										/>
-									</FormControl>
-									<FormDescription>Separate tags with commas</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="notes"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Notes</FormLabel>
-									<FormControl>
-										<Textarea
-											{...field}
-											placeholder="Additional notes about the stream"
-											rows={3}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</form>
-				</Form>
-				<DialogFooter>
+						</form>
+					</Form>
+				</ScrollArea>
+				<DialogFooter className="px-4">
 					<Button type="button" variant="outline" onClick={handleClose}>
 						Cancel
 					</Button>

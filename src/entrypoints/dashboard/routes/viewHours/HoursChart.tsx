@@ -1,3 +1,4 @@
+import { ChartColumnBig, ChartLine } from "lucide-react";
 import { useMemo } from "react";
 import { BarChartComponent } from "@/components/charts/bar/BarChartComponent";
 import { LineChartComponent } from "@/components/charts/line/LineChartComponent";
@@ -56,10 +57,14 @@ export function HoursChart({ data }: HoursChartProps) {
 			{/* Gráficos */}
 			<Tabs defaultValue="bar" className="w-full">
 				<TabsList className="grid w-full grid-cols-2">
-					<TabsTrigger value="bar">Bar Chart</TabsTrigger>
-					<TabsTrigger value="line">Line Chart</TabsTrigger>
+					<TabsTrigger value="bar">
+						<ChartColumnBig /> Bar Chart
+					</TabsTrigger>
+					<TabsTrigger value="line">
+						<ChartLine />
+						Line Chart
+					</TabsTrigger>
 				</TabsList>
-
 				<TabsContent value="bar" className="space-y-4">
 					<BarChartComponent
 						title="Daily Hours (Bar Chart)"
@@ -82,7 +87,7 @@ export function HoursChart({ data }: HoursChartProps) {
 					/>
 				</TabsContent>
 
-				<TabsContent value="line" className="space-y-4">
+				<TabsContent value="line" className="space-y-4 ">
 					<LineChartComponent
 						title="Daily Hours Trend (Line Chart)"
 						description="Hours worked per day showing trends over time"
