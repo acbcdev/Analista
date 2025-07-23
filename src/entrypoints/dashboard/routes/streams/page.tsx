@@ -7,6 +7,7 @@ import { useDateFilter } from "@/hooks/useDateFilter";
 import { useDateRangeFilter } from "@/hooks/useDateRangeFilter";
 import { useModelsStore } from "@/store/models";
 import { columns } from "./columns";
+import { AddStreamDialog } from "./components/AddStreamDialog";
 import { DataTable } from "./dataTable";
 
 export function Streams() {
@@ -66,6 +67,14 @@ export function Streams() {
 							Your models don't have any streams recorded yet. Stream data will
 							appear here once your models start broadcasting.
 						</p>
+						<div className="flex gap-4 justify-center mb-4">
+							<AddStreamDialog>
+								<Button className="gap-2">
+									<Plus className="size-4" />
+									Add Stream Manually
+								</Button>
+							</AddStreamDialog>
+						</div>
 						<div className="text-sm text-muted-foreground">
 							<p>
 								Models added:{" "}
@@ -82,12 +91,15 @@ export function Streams() {
 		<Layout>
 			<div className="p-4 pt-0">
 				<DataTable columns={columns} data={filteredStreams}>
-					<DateFilter
-						dateRange={dateRange}
-						onDateRangeChange={onDateRangeChange}
-						preset={preset}
-						onPresetChange={onPresetChange}
-					/>
+					<div className="flex gap-4 items-center">
+						<DateFilter
+							dateRange={dateRange}
+							onDateRangeChange={onDateRangeChange}
+							preset={preset}
+							onPresetChange={onPresetChange}
+						/>
+						<AddStreamDialog />
+					</div>
 				</DataTable>
 			</div>
 		</Layout>

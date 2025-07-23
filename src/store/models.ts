@@ -2,6 +2,7 @@ import { storage } from "@wxt-dev/storage";
 import { create } from "zustand";
 import { type PersistStorage, persist } from "zustand/middleware";
 import type { Model } from "@/types/model";
+import type { Stream } from "@/types/stream";
 
 type StoreModelsState = {
   models: Model[];
@@ -10,6 +11,7 @@ type StoreModelsState = {
   addModel: (model: Model) => void;
   removeModel: (id: string) => void;
   updateModel: (id: string, updatedModel: Partial<Model>) => void;
+  addStreamToModel: (modelId: string, stream: Stream) => void;
 };
 
 const extensionStore: PersistStorage<StoreModelsState> = {
@@ -61,6 +63,20 @@ export const useModelsStore = create<StoreModelsState>()(
           });
           return {
             models: modeloWith,
+          };
+        }),
+      addStreamToModel: (modelId, stream) =>
+        set((state) => {
+          const index = state.models.findIndex((model) => model.id === modelId);
+          if (index === -1) return state; // Model not found
+          const updatedModel = {
+            ...state.models[index],
+            streams: [...state.models[index].streams, stream],
+            updatedAt: Date.now(),
+          };
+          const updatedModels = state.models.with(index, updatedModel);
+          return {
+            models: updatedModels,
           };
         }),
     }),
