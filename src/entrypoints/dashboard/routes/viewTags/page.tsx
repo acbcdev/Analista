@@ -1,3 +1,4 @@
+import Layout from "@dashboard/components/layout/layout";
 import { storage } from "@wxt-dev/storage";
 import { ExternalLink, Hash, Tag } from "lucide-react";
 import { useState } from "react";
@@ -10,7 +11,6 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { CHATURBATE_TAGS_URL } from "@/const/url";
-import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useStorage } from "@/hooks/useStorege";
 import type { Tags } from "@/types";
 import { columns } from "./columns";

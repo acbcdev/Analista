@@ -1,3 +1,7 @@
+import { DateFilter } from "@dashboard/components/DateFilter";
+import { AddModelDialog } from "@dashboard/components/layout/addModelDialong";
+import Layout from "@dashboard/components/layout/layout";
+import { ModelSelector } from "@dashboard/components/ModelSelector";
 import { Clock, Copy, ExternalLink, Plus } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -10,13 +14,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
-import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
-import { AddModelDialog } from "@/entrypoints/dashboard/components/layout/addModelDialong";
-import Layout from "@/entrypoints/dashboard/components/layout/layout";
-import { ModelSelector } from "@/entrypoints/dashboard/components/ModelSelector";
-import { HoursChart } from "@/entrypoints/dashboard/routes/viewHours/HoursChart";
-import { HoursGrid } from "@/entrypoints/dashboard/routes/viewHours/HoursGrid";
-import { HoursTable } from "@/entrypoints/dashboard/routes/viewHours/HoursTable";
 import {
 	type ViewMode,
 	ViewToggle,
@@ -26,7 +23,10 @@ import { useDateRangeFilter } from "@/hooks/useDateRangeFilter";
 import { useStorage } from "@/hooks/useStorege";
 import { useModelsStore } from "@/store/models";
 import type { Hours, HoursStorage } from "@/types";
+import { HoursChart } from "./HoursChart";
+import { HoursGrid } from "./HoursGrid";
 import HoursStats from "./HoursStats";
+import { HoursTable } from "./HoursTable";
 
 /**
  * Componente principal para visualizar y filtrar las horas trabajadas

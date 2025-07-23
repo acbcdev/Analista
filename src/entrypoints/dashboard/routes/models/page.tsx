@@ -1,4 +1,7 @@
+import { AddModelDialog } from "@dashboard/components/layout/addModelDialong";
+import { EditModelDialog } from "@models/components/EditModelDialog";
 import { MoreHorizontal, Plus, Trash, Users } from "lucide-react";
+import { useState } from "react";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -27,6 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useModelsStore } from "@/store/models";
+import type { Model } from "@/types/model";
 
 export function Models() {
 	const models = useModelsStore((state) => state.models);
@@ -34,6 +38,8 @@ export function Models() {
 	const removeModel = useModelsStore((state) => state.removeModel);
 	const [wantsToDelete, setWantsToDelete] = useState(false);
 	const [idToDelete, setIdToDelete] = useState<string | null>(null);
+	const [isEditingModel, setIsEditingModel] = useState(false);
+	const [modelToEdit, setModelToEdit] = useState<Model | null>(null);
 	// Estado vacío cuando no hay modelos
 	if (models.length === 0) {
 		return (
@@ -52,6 +58,7 @@ export function Models() {
 						Add First Model
 					</Button>
 				</div>
+				<AddModelDialog />
 			</Layout>
 		);
 	}
@@ -99,7 +106,14 @@ export function Models() {
 								<DropdownMenuContent>
 									<DropdownMenuLabel>Actions</DropdownMenuLabel>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem>Edit</DropdownMenuItem>
+									<DropdownMenuItem
+										onClick={() => {
+											setModelToEdit(model);
+											setIsEditingModel(true);
+										}}
+									>
+										Edit
+									</DropdownMenuItem>
 									<DropdownMenuItem>View Details</DropdownMenuItem>
 									<DropdownMenuSeparator />
 									<DropdownMenuItem
@@ -144,6 +158,15 @@ export function Models() {
 					</Card>
 				))}
 			</div>
+			<AddModelDialog />
+			<EditModelDialog
+				model={modelToEdit}
+				isOpen={isEditingModel}
+				onClose={() => {
+					setIsEditingModel(false);
+					setModelToEdit(null);
+				}}
+			/>
 			<AlertDialog
 				open={!!idToDelete && wantsToDelete}
 				onOpenChange={setWantsToDelete}
