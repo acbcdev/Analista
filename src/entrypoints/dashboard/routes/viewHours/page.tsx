@@ -65,7 +65,7 @@ export function HoursView() {
 
 	// Función para copiar tabla al clipboard
 	const handleCopyTable = () => {
-		navigator.clipboard.writeText(tableRef.current?.innerText || "");
+		navigator.clipboard.writeText(tableRef.current?.innerText || "No data");
 		toast.success("Copied to clipboard");
 	};
 
@@ -99,7 +99,12 @@ export function HoursView() {
 							onViewChange={setViewMode}
 							isAllModels={isAllModels}
 						/>
-						<Button variant="ghost" size="icon" onClick={handleCopyTable}>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={handleCopyTable}
+							disabled={isAllModels}
+						>
 							<Copy />
 						</Button>
 						<DateFilter
