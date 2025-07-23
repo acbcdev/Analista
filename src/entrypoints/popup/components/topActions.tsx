@@ -43,9 +43,7 @@ export default function TopActions() {
 							<DropdownMenuSub>
 								<DropdownMenuSubTrigger>Chaturbate</DropdownMenuSubTrigger>
 								<DropdownMenuSubContent>
-									<DropdownMenuItem
-										onClick={() => saveAndViewTags(openDashboard)}
-									>
+									<DropdownMenuItem onClick={() => saveAndViewTags()}>
 										View Tags
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
