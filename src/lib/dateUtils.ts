@@ -8,16 +8,16 @@
  * @interface DateFormatOptions
  */
 export interface DateFormatOptions {
-  /** Si debe ajustar para zona horaria de Colombia (America/Bogota) */
-  useColombiaTimezone?: boolean;
-  /** Si debe aplicar corrección de un día (para casos de desfase) */
-  applyDayOffset?: boolean;
-  /** Offset en días a aplicar (positivo = adelante, negativo = atrás) */
-  dayOffset?: number;
-  /** Formato de salida deseado */
-  outputFormat?: "iso" | "display" | "short" | "custom";
-  /** Opciones personalizadas para toLocaleDateString cuando outputFormat es 'custom' */
-  customFormat?: Intl.DateTimeFormatOptions;
+	/** Si debe ajustar para zona horaria de Colombia (America/Bogota) */
+	useColombiaTimezone?: boolean;
+	/** Si debe aplicar corrección de un día (para casos de desfase) */
+	applyDayOffset?: boolean;
+	/** Offset en días a aplicar (positivo = adelante, negativo = atrás) */
+	dayOffset?: number;
+	/** Formato de salida deseado */
+	outputFormat?: "iso" | "display" | "short" | "custom";
+	/** Opciones personalizadas para toLocaleDateString cuando outputFormat es 'custom' */
+	customFormat?: Intl.DateTimeFormatOptions;
 }
 
 /**
@@ -52,77 +52,77 @@ export interface DateFormatOptions {
  * ```
  */
 export function getDateString(
-  date: Date | string,
-  options: DateFormatOptions = {}
+	date: Date | string,
+	options: DateFormatOptions = {},
 ): string {
-  const {
-    useColombiaTimezone = false,
-    applyDayOffset = false,
-    dayOffset = 0,
-    outputFormat = "iso",
-  } = options;
+	const {
+		useColombiaTimezone = false,
+		applyDayOffset = false,
+		dayOffset = 0,
+		outputFormat = "iso",
+	} = options;
 
-  // Convertir a Date si viene como string
-  let workingDate = new Date(date);
+	// Convertir a Date si viene como string
+	let workingDate = new Date(date);
 
-  // Aplicar offset de días si está habilitado
-  if (applyDayOffset && dayOffset !== 0) {
-    workingDate = new Date(workingDate);
-    workingDate.setDate(workingDate.getDate() + dayOffset);
-  }
+	// Aplicar offset de días si está habilitado
+	if (applyDayOffset && dayOffset !== 0) {
+		workingDate = new Date(workingDate);
+		workingDate.setDate(workingDate.getDate() + dayOffset);
+	}
 
-  // Ajustar para zona horaria de Colombia si está habilitado
-  if (useColombiaTimezone) {
-    try {
-      const colombiaDateString = workingDate.toLocaleString("en-US", {
-        timeZone: "America/Bogota",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-      const [month, day, year] = colombiaDateString.split("/");
-      workingDate = new Date(
-        parseInt(year),
-        parseInt(month) - 1,
-        parseInt(day)
-      );
-    } catch (error) {
-      console.warn("Error applying Colombia timezone, using fallback:", error);
-      // Fallback: usar método simple
-      workingDate = new Date(
-        workingDate.getTime() - workingDate.getTimezoneOffset() * 60000
-      );
-    }
-  }
+	// Ajustar para zona horaria de Colombia si está habilitado
+	if (useColombiaTimezone) {
+		try {
+			const colombiaDateString = workingDate.toLocaleString("en-US", {
+				timeZone: "America/Bogota",
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+			});
+			const [month, day, year] = colombiaDateString.split("/");
+			workingDate = new Date(
+				parseInt(year),
+				parseInt(month) - 1,
+				parseInt(day),
+			);
+		} catch (error) {
+			console.warn("Error applying Colombia timezone, using fallback:", error);
+			// Fallback: usar método simple
+			workingDate = new Date(
+				workingDate.getTime() - workingDate.getTimezoneOffset() * 60000,
+			);
+		}
+	}
 
-  // Formatear según el tipo de salida
-  switch (outputFormat) {
-    case "iso": {
-      const year = workingDate.getFullYear();
-      const month = String(workingDate.getMonth() + 1).padStart(2, "0");
-      const day = String(workingDate.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    }
+	// Formatear según el tipo de salida
+	switch (outputFormat) {
+		case "iso": {
+			const year = workingDate.getFullYear();
+			const month = String(workingDate.getMonth() + 1).padStart(2, "0");
+			const day = String(workingDate.getDate()).padStart(2, "0");
+			return `${year}-${month}-${day}`;
+		}
 
-    case "display":
-      return workingDate.toLocaleDateString("es-CO", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-      });
+		case "display":
+			return workingDate.toLocaleDateString("es-CO", {
+				weekday: "short",
+				day: "numeric",
+				month: "short",
+			});
 
-    case "short":
-      return workingDate.toLocaleDateString("es-CO", {
-        day: "numeric",
-        weekday: "short",
-      });
+		case "short":
+			return workingDate.toLocaleDateString("es-CO", {
+				day: "numeric",
+				weekday: "short",
+			});
 
-    case "custom":
-      return workingDate.toLocaleDateString("es-CO", options.customFormat);
+		case "custom":
+			return workingDate.toLocaleDateString("es-CO", options.customFormat);
 
-    default:
-      return workingDate.toISOString().split("T")[0];
-  }
+		default:
+			return workingDate.toISOString().split("T")[0];
+	}
 }
 
 /**
@@ -153,30 +153,30 @@ export function getDateString(
  * ```
  */
 export function formatDateFromString(
-  dateString: string,
-  format: "display" | "short" | "custom" = "display",
-  customOptions?: Intl.DateTimeFormatOptions
+	dateString: string,
+	format: "display" | "short" | "custom" = "display",
+	customOptions?: Intl.DateTimeFormatOptions,
 ): string {
-  const [year, month, day] = dateString.split("-").map(Number);
-  const date = new Date(year, month - 1, day);
+	const [year, month, day] = dateString.split("-").map(Number);
+	const date = new Date(year, month - 1, day);
 
-  switch (format) {
-    case "display":
-      return date.toLocaleDateString("es-CO", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-      });
-    case "short":
-      return date.toLocaleDateString("es-CO", {
-        day: "numeric",
-        weekday: "short",
-      });
-    case "custom":
-      return date.toLocaleDateString("es-CO", customOptions);
-    default:
-      return dateString;
-  }
+	switch (format) {
+		case "display":
+			return date.toLocaleDateString("es-CO", {
+				weekday: "short",
+				day: "numeric",
+				month: "short",
+			});
+		case "short":
+			return date.toLocaleDateString("es-CO", {
+				day: "numeric",
+				weekday: "short",
+			});
+		case "custom":
+			return date.toLocaleDateString("es-CO", customOptions);
+		default:
+			return dateString;
+	}
 }
 
 /**
@@ -202,9 +202,9 @@ export function formatDateFromString(
  * ```
  */
 export function detectTimezoneIssue(date: Date): boolean {
-  const originalDateString = date.toISOString().split("T")[0];
-  const colombiaDateString = getDateString(date, { useColombiaTimezone: true });
-  return originalDateString !== colombiaDateString;
+	const originalDateString = date.toISOString().split("T")[0];
+	const colombiaDateString = getDateString(date, { useColombiaTimezone: true });
+	return originalDateString !== colombiaDateString;
 }
 
 /**
@@ -230,59 +230,59 @@ export function detectTimezoneIssue(date: Date): boolean {
  * ```
  */
 export const DatePresets = {
-  /**
-   * Para datos que ya están en formato correcto y no necesitan ajustes
-   * @returns {DateFormatOptions} Configuración para fechas normales
-   */
-  normal: (): DateFormatOptions => ({
-    useColombiaTimezone: false,
-    applyDayOffset: false,
-    outputFormat: "iso",
-  }),
+	/**
+	 * Para datos que ya están en formato correcto y no necesitan ajustes
+	 * @returns {DateFormatOptions} Configuración para fechas normales
+	 */
+	normal: (): DateFormatOptions => ({
+		useColombiaTimezone: false,
+		applyDayOffset: false,
+		outputFormat: "iso",
+	}),
 
-  /**
-   * Para datos con problemas de zona horaria que necesitan ajuste a Colombia
-   * @returns {DateFormatOptions} Configuración con ajuste de zona horaria
-   */
-  colombiaTimezone: (): DateFormatOptions => ({
-    useColombiaTimezone: true,
-    applyDayOffset: false,
-    outputFormat: "iso",
-  }),
+	/**
+	 * Para datos con problemas de zona horaria que necesitan ajuste a Colombia
+	 * @returns {DateFormatOptions} Configuración con ajuste de zona horaria
+	 */
+	colombiaTimezone: (): DateFormatOptions => ({
+		useColombiaTimezone: true,
+		applyDayOffset: false,
+		outputFormat: "iso",
+	}),
 
-  /**
-   * Para datos con desfase de días que necesitan corrección
-   * @param {number} [offset=1] - Número de días a ajustar (positivo = adelante)
-   * @returns {DateFormatOptions} Configuración con offset de días
-   */
-  withDayOffset: (offset: number = 1): DateFormatOptions => ({
-    useColombiaTimezone: false,
-    applyDayOffset: true,
-    dayOffset: offset,
-    outputFormat: "iso",
-  }),
+	/**
+	 * Para datos con desfase de días que necesitan corrección
+	 * @param {number} [offset=1] - Número de días a ajustar (positivo = adelante)
+	 * @returns {DateFormatOptions} Configuración con offset de días
+	 */
+	withDayOffset: (offset: number = 1): DateFormatOptions => ({
+		useColombiaTimezone: false,
+		applyDayOffset: true,
+		dayOffset: offset,
+		outputFormat: "iso",
+	}),
 
-  /**
-   * Para datos con problemas de zona horaria Y desfase de días
-   * @param {number} [offset=1] - Número de días a ajustar (positivo = adelante)
-   * @returns {DateFormatOptions} Configuración con corrección completa
-   */
-  fullCorrection: (offset: number = 1): DateFormatOptions => ({
-    useColombiaTimezone: true,
-    applyDayOffset: true,
-    dayOffset: offset,
-    outputFormat: "iso",
-  }),
+	/**
+	 * Para datos con problemas de zona horaria Y desfase de días
+	 * @param {number} [offset=1] - Número de días a ajustar (positivo = adelante)
+	 * @returns {DateFormatOptions} Configuración con corrección completa
+	 */
+	fullCorrection: (offset: number = 1): DateFormatOptions => ({
+		useColombiaTimezone: true,
+		applyDayOffset: true,
+		dayOffset: offset,
+		outputFormat: "iso",
+	}),
 
-  /**
-   * Para formato de visualización directa sin necesidad de conversión posterior
-   * @returns {DateFormatOptions} Configuración para formato de visualización
-   */
-  display: (): DateFormatOptions => ({
-    useColombiaTimezone: false,
-    applyDayOffset: false,
-    outputFormat: "display",
-  }),
+	/**
+	 * Para formato de visualización directa sin necesidad de conversión posterior
+	 * @returns {DateFormatOptions} Configuración para formato de visualización
+	 */
+	display: (): DateFormatOptions => ({
+		useColombiaTimezone: false,
+		applyDayOffset: false,
+		outputFormat: "display",
+	}),
 };
 
 /**
@@ -314,15 +314,15 @@ export const DatePresets = {
  * ```
  */
 export function smartDateFormat(
-  date: Date,
-  fallbackPreset: keyof typeof DatePresets = "normal"
+	date: Date,
+	fallbackPreset: keyof typeof DatePresets = "normal",
 ): string {
-  // Detectar si hay problemas de zona horaria
-  const hasTimezoneIssue = detectTimezoneIssue(date);
+	// Detectar si hay problemas de zona horaria
+	const hasTimezoneIssue = detectTimezoneIssue(date);
 
-  if (hasTimezoneIssue) {
-    return getDateString(date, DatePresets.colombiaTimezone());
-  }
+	if (hasTimezoneIssue) {
+		return getDateString(date, DatePresets.colombiaTimezone());
+	}
 
-  return getDateString(date, DatePresets[fallbackPreset]());
+	return getDateString(date, DatePresets[fallbackPreset]());
 }

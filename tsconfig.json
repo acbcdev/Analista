@@ -5,30 +5,14 @@
 		"jsx": "react-jsx",
 		"baseUrl": ".",
 		"paths": {
-			"@/*": [
-				"./src/*"
-			],
-			"@assets/*": [
-				"./assets/*"
-			],
-			"@analytics/*": [
-				"./src/entrypoints/analytics/*"
-			],
-			"@dashboard/*": [
-				"./src/entrypoints/dashboard/*"
-			],
-			"@models/*": [
-				"./src/entrypoints/dashboard/routes/models/*"
-			],
-			"@streams/*": [
-				"./src/entrypoints/dashboard/routes/streams/*"
-			],
-			"@viewGours/*": [
-				"./src/entrypoints/dashboard/routes/viewHours/*"
-			],
-			"@viewTags/*": [
-				"./src/entrypoints/dashboard/routes/viewTags/*"
-			]
+			"@/*": ["./src/*"],
+			"@assets/*": ["./assets/*"],
+			"@analytics/*": ["./src/entrypoints/analytics/*"],
+			"@dashboard/*": ["./src/entrypoints/dashboard/*"],
+			"@models/*": ["./src/entrypoints/dashboard/routes/models/*"],
+			"@streams/*": ["./src/entrypoints/dashboard/routes/streams/*"],
+			"@viewGours/*": ["./src/entrypoints/dashboard/routes/viewHours/*"],
+			"@viewTags/*": ["./src/entrypoints/dashboard/routes/viewTags/*"]
 		}
 	}
 }
