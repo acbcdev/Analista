@@ -1,4 +1,5 @@
-import { MoreHorizontal, Trash } from "lucide-react";
+import { MoreHorizontal, Plus, Trash, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -19,9 +20,45 @@ import { useModelsStore } from "@/store/models";
 
 export function Models() {
 	const models = useModelsStore((state) => state.models);
+	const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
+
+	// Estado vacío cuando no hay modelos
+	if (models.length === 0) {
+		return (
+			<Layout>
+				<div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8">
+					<div className="mb-6">
+						<Users className="size-16 text-muted-foreground mx-auto mb-4" />
+						<h2 className="text-2xl font-semibold mb-2">No models yet</h2>
+						<p className="text-muted-foreground max-w-md">
+							Get started by adding your first model to track performance across
+							different platforms.
+						</p>
+					</div>
+					<Button onClick={() => setIsAddingModel(true)} className="gap-2">
+						<Plus className="size-4" />
+						Add First Model
+					</Button>
+				</div>
+			</Layout>
+		);
+	}
+
 	return (
 		<Layout>
-			<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 pt-0">
+			<div className="flex justify-between items-center p-4 pb-0">
+				<div>
+					<h1 className="text-2xl font-semibold">Models</h1>
+					<p className="text-muted-foreground">
+						Manage your models and track their performance
+					</p>
+				</div>
+				<Button onClick={() => setIsAddingModel(true)} className="gap-2">
+					<Plus className="size-4" />
+					Add Model
+				</Button>
+			</div>
+			<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 pt-4">
 				{models.map((model) => (
 					<Card
 						key={model.id}
