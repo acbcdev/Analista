@@ -26,7 +26,7 @@ export function Models() {
 	if (models.length === 0) {
 		return (
 			<Layout>
-				<div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8">
+				<div className="data-empty">
 					<div className="mb-6">
 						<Users className="size-16 text-muted-foreground mx-auto mb-4" />
 						<h2 className="text-2xl font-semibold mb-2">No models yet</h2>

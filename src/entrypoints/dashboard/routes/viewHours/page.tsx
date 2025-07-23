@@ -1,8 +1,17 @@
-import { Copy } from "lucide-react";
+import { Clock, Copy, ExternalLink, Plus } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
+import { AddModelDialog } from "@/entrypoints/dashboard/components/layout/addModelDialong";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { ModelSelector } from "@/entrypoints/dashboard/components/ModelSelector";
 import { HoursChart } from "@/entrypoints/dashboard/routes/viewHours/HoursChart";
@@ -15,6 +24,7 @@ import {
 import { useDateFilter } from "@/hooks/useDateFilter";
 import { useDateRangeFilter } from "@/hooks/useDateRangeFilter";
 import { useStorage } from "@/hooks/useStorege";
+import { useModelsStore } from "@/store/models";
 import type { Hours, HoursStorage } from "@/types";
 import HoursStats from "./HoursStats";
 
@@ -30,6 +40,8 @@ export function HoursView() {
 	const tableRef = useRef<HTMLTableElement>(null);
 	const { dateRange, onDateRangeChange, preset, onPresetChange } =
 		useDateFilter();
+	const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
+	const models = useModelsStore((state) => state.models);
 
 	// Caja negra: filtrado de fechas con timezone de Colombia
 	// const filteredData = useHoursDateFilter(data, dateRange);
@@ -71,13 +83,112 @@ export function HoursView() {
 
 	// Estado vacío: mostrar mensaje
 	if (!allHours || allHours.length === 0) {
+		// Si hay modelos pero no hay datos de horas, mostrar enlaces específicos
+		if (models.length > 0) {
+			const platformUrls = {
+				chaturbate: CBHOURS,
+				camsoda: SODAHOURS_URL,
+				stripchat: STRIPHOURS_URL,
+			};
+
+			// Obtener plataformas únicas de los modelos
+			const uniquePlatforms = new Set(
+				models.flatMap((model) =>
+					model.platform
+						.filter((p) =>
+							["chaturbate", "camsoda", "stripchat"].includes(p.id),
+						)
+						.map((p) => p.id),
+				),
+			);
+
+			return (
+				<Layout>
+					<div className="data-empty">
+						<div className="mb-8">
+							<Clock className="size-16 text-muted-foreground mx-auto mb-4" />
+							<h2 className="text-2xl font-semibold mb-2">
+								Extract hours data from platforms
+							</h2>
+							<p className="text-muted-foreground max-w-md mb-6">
+								Visit the analytics pages of your models to extract hours data.
+								Click on the platform links below:
+							</p>
+						</div>
+
+						<div className="grid gap-4 w-full max-w-2xl">
+							{Array.from(uniquePlatforms).map((platform) => {
+								const modelNames = models
+									.filter((model) =>
+										model.platform.some((p) => p.id === platform),
+									)
+									.map(
+										(model) =>
+											model.platform.find((p) => p.id === platform)?.userName,
+									)
+									.filter(Boolean);
+
+								return (
+									<Card key={platform} className="text-left">
+										<CardHeader className="pb-3">
+											<CardTitle className="text-lg capitalize flex items-center gap-2">
+												{platform}
+												<ExternalLink className="size-4" />
+											</CardTitle>
+											<CardDescription>
+												Models: {modelNames.join(", ")}
+											</CardDescription>
+										</CardHeader>
+										<CardContent className="pt-0">
+											<div className="flex flex-wrap gap-2">
+												{modelNames.map((username) => (
+													<Button
+														key={username}
+														variant="outline"
+														size="sm"
+														asChild
+														className="gap-2"
+													>
+														<a
+															href={`${platformUrls[platform as keyof typeof platformUrls]}/${username}`}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															<ExternalLink className="size-3" />
+															{username}
+														</a>
+													</Button>
+												))}
+											</div>
+										</CardContent>
+									</Card>
+								);
+							})}
+						</div>
+					</div>
+				</Layout>
+			);
+		}
+
+		// Si no hay modelos, mostrar el estado de agregar modelo
 		return (
 			<Layout>
-				<div className="px-6 pt-10">
-					<div className="flex gap-x-2 text-sm">
-						<p className="text-lg">No models Found</p>
+				<div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8">
+					<div className="mb-6">
+						<Clock className="size-16 text-muted-foreground mx-auto mb-4" />
+						<h2 className="text-2xl font-semibold mb-2">No hours data found</h2>
+						<p className="text-muted-foreground max-w-md mb-6">
+							Start tracking your hours by adding models and recording your work
+							sessions. Your analytics will appear here once you begin logging
+							data.
+						</p>
+						<Button onClick={() => setIsAddingModel(true)} className="gap-2">
+							<Plus className="size-4" />
+							Add Your First Model
+						</Button>
 					</div>
 				</div>
+				<AddModelDialog />
 			</Layout>
 		);
 	}

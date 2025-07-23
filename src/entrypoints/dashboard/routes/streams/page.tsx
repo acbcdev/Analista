@@ -1,4 +1,6 @@
+import { Plus, Video } from "lucide-react";
 import { useMemo } from "react";
+import { Button } from "@/components/ui/button";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
 import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useDateFilter } from "@/hooks/useDateFilter";
@@ -9,6 +11,7 @@ import { DataTable } from "./dataTable";
 
 export function Streams() {
 	const models = useModelsStore((state) => state.models);
+	const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
 
 	const { dateRange, onDateRangeChange, preset, onPresetChange } =
 		useDateFilter();
@@ -28,6 +31,52 @@ export function Streams() {
 		(item) => new Date(item.createdAt ?? item.updatedAt),
 	);
 	// Filter streams by date range
+
+	// Estado vacío: no hay modelos
+	if (models.length === 0) {
+		return (
+			<Layout>
+				<div className="data-empty">
+					<div className="mb-6">
+						<Video className="size-16 text-muted-foreground mx-auto mb-4" />
+						<h2 className="text-2xl font-semibold mb-2">No streams found</h2>
+						<p className="text-muted-foreground max-w-md mb-6">
+							Add models to start tracking their streams and analyze performance
+							data across platforms.
+						</p>
+						<Button onClick={() => setIsAddingModel(true)} className="gap-2">
+							<Plus className="size-4" />
+							Add Your First Model
+						</Button>
+					</div>
+				</div>
+			</Layout>
+		);
+	}
+
+	// Estado vacío: hay modelos pero no hay streams
+	if (allStreams.length === 0) {
+		return (
+			<Layout>
+				<div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8">
+					<div className="mb-6">
+						<Video className="size-16 text-muted-foreground mx-auto mb-4" />
+						<h2 className="text-2xl font-semibold mb-2">No streams data yet</h2>
+						<p className="text-muted-foreground max-w-md mb-6">
+							Your models don't have any streams recorded yet. Stream data will
+							appear here once your models start broadcasting.
+						</p>
+						<div className="text-sm text-muted-foreground">
+							<p>
+								Models added:{" "}
+								<span className="font-medium">{models.length}</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</Layout>
+		);
+	}
 
 	return (
 		<Layout>
