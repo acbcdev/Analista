@@ -62,6 +62,23 @@ const data = {
 			icon: Users,
 		},
 	],
+	navUtils: [
+		{
+			title: "View Tags",
+			url: "/viewtags",
+			icon: Tags,
+		},
+		{
+			title: "View Hours",
+			url: "/viewhours",
+			icon: Hourglass,
+		},
+		{
+			title: "Tip Menu",
+			url: "/tipMenu",
+			icon: ChartArea,
+		},
+	],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -73,34 +90,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<TeamSwitcher models={models} />
 			</SidebarHeader>
 			<SidebarContent className="overflow-x-hidden">
-				<NavMain items={data.navMain} pathname={pathname} />
+				<NavMain items={data.navMain} pathname={pathname} label="views" />
 				<SidebarSeparator />
-				<SidebarGroup>
-					<SidebarMenu>
-						<SidebarMenuItem>
-							<Link to="/viewtags">
-								<SidebarMenuButton
-									className={pathname === "/viewtags" ? "bg-border" : ""}
-									tooltip={"View Tags"}
-								>
-									<Tags />
-									View Tags
-								</SidebarMenuButton>
-							</Link>
-						</SidebarMenuItem>
-						<SidebarMenuItem>
-							<Link to="/viewhours">
-								<SidebarMenuButton
-									className={pathname === "/viewhours" ? "bg-border" : ""}
-									tooltip={"View Hours"}
-								>
-									<Hourglass />
-									View Hours
-								</SidebarMenuButton>
-							</Link>
-						</SidebarMenuItem>
-					</SidebarMenu>
-				</SidebarGroup>
+				<NavMain items={data.navUtils} pathname={pathname} />
 
 				{/* <NavProjects projects={data.projects} /> */}
 			</SidebarContent>

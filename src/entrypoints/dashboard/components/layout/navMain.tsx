@@ -22,12 +22,13 @@ type NavMainProps = {
 		}[];
 	}[];
 	pathname: string;
+	label?: string;
 };
 
-export function NavMain({ items, pathname }: NavMainProps) {
+export function NavMain({ items, pathname, label }: NavMainProps) {
 	return (
 		<SidebarGroup>
-			<SidebarGroupLabel>Views</SidebarGroupLabel>
+			{label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
 			<SidebarMenu>
 				{items.map((item) => (
 					<SidebarMenuItem key={item.title}>

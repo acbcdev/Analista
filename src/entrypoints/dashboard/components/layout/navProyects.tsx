@@ -25,22 +25,19 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 
-export function NavProjects({
-	projects,
-}: {
-	projects: {
-		name: string;
-		url: string;
-		icon: LucideIcon;
-	}[];
-}) {
+type UtilsItem = {
+	name: string;
+	url: string;
+	icon: LucideIcon;
+};
+export function NavUtils({ utils }: { utils: UtilsItem[] }) {
 	const { isMobile } = useSidebar();
 
 	return (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
 			<SidebarGroupLabel>Projects</SidebarGroupLabel>
 			<SidebarMenu>
-				{projects.map((item) => (
+				{utils.map((item) => (
 					<SidebarMenuItem key={item.name}>
 						<SidebarMenuButton asChild>
 							<a href={item.url}>
