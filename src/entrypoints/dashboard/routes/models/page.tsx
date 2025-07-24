@@ -58,7 +58,6 @@ export function Models() {
 						Add First Model
 					</Button>
 				</div>
-				<AddModelDialog />
 			</Layout>
 		);
 	}

@@ -61,11 +61,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface AddStreamDialogProps {
-	children?: React.ReactNode;
-}
-
-export const AddStreamDialog = ({ children }: AddStreamDialogProps) => {
+export const AddStreamDialog = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const models = useModelsStore((state) => state.models);
 	const addStreamToModel = useModelsStore((state) => state.addStreamToModel);
@@ -151,12 +147,10 @@ export const AddStreamDialog = ({ children }: AddStreamDialogProps) => {
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
-				{children || (
-					<Button className="gap-2">
-						<Plus className="size-4" />
-						Add Stream
-					</Button>
-				)}
+				<Button className="gap-2">
+					<Plus className="size-4" />
+					Add Stream
+				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto px-3">
 				<DialogHeader className="px-4">
