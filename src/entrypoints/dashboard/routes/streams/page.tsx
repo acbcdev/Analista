@@ -68,12 +68,7 @@ export function Streams() {
 							appear here once your models start broadcasting.
 						</p>
 						<div className="flex gap-4 justify-center mb-4">
-							<AddStreamDialog>
-								<Button className="gap-2">
-									<Plus className="size-4" />
-									Add Stream Manually
-								</Button>
-							</AddStreamDialog>
+							<AddStreamDialog />
 						</div>
 						<div className="text-sm text-muted-foreground">
 							<p>

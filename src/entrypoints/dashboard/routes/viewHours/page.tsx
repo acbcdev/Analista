@@ -188,7 +188,6 @@ export function HoursView() {
 						</Button>
 					</div>
 				</div>
-				<AddModelDialog />
 			</Layout>
 		);
 	}
