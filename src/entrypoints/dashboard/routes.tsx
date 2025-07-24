@@ -4,6 +4,8 @@ import { Analytics } from "./routes/analytics/page";
 import ErrorPage from "./routes/error-page";
 import { Models } from "./routes/models/page";
 import { Streams } from "./routes/streams/page";
+import { CreateTipMenu } from "./routes/tipMenu/createTipMenu";
+import TipMenuPage from "./routes/tipMenu/page";
 import { HoursView } from "./routes/viewHours/page";
 import { TagsView } from "./routes/viewTags/page";
 
@@ -36,6 +38,16 @@ export const router = createHashRouter([
 	{
 		path: "/analytics",
 		element: <Analytics />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: "/tipMenu",
+		element: <TipMenuPage />,
+		errorElement: <ErrorPage />,
+	},
+	{
+		path: "/tipMenu/create",
+		element: <CreateTipMenu />,
 		errorElement: <ErrorPage />,
 	},
 ]);
