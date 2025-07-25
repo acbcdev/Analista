@@ -53,6 +53,76 @@ export function useTipMenuInjection() {
 async function injectMenuItems(menu: TipMenu): Promise<boolean> {
   console.log("Starting injection for menu:", menu.name);
 
+  // Injected types (cannot import from other files)
+  type TipMenuItem = {
+    id: string;
+    text: string;
+    price: number;
+    settings: {
+      textFormat: "global" | "none" | "capitalize" | "capitalizeWords";
+      useGlobalEmoji?: boolean;
+      emoji?: string;
+      emojiPosition?: "none" | "start" | "end";
+    };
+  };
+  type GlobalSettings = {
+    textFormat: "none" | "capitalize" | "capitalizeWords";
+    emoji: string;
+    emojiPosition: "none" | "start" | "end";
+  };
+
+  // Injected formatters from /src/lib/formata.ts
+  const formatText = (
+    text: string,
+    format: "none" | "capitalize" | "capitalizeWords"
+  ): string => {
+    switch (format) {
+      case "capitalize":
+        return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+      case "capitalizeWords":
+        return text
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(" ");
+      default:
+        return text;
+    }
+  };
+
+  const formatMenuItem = (
+    item: TipMenuItem,
+    globalSettings: GlobalSettings
+  ): string => {
+    const textFormat =
+      item.settings.textFormat === "global"
+        ? globalSettings.textFormat
+        : item.settings.textFormat;
+
+    const emoji =
+      item.settings.textFormat === "global"
+        ? globalSettings.emoji
+        : item.settings.useGlobalEmoji
+        ? globalSettings.emoji
+        : item.settings.emoji || "";
+
+    const emojiPosition =
+      item.settings.textFormat === "global"
+        ? globalSettings.emojiPosition
+        : item.settings.emojiPosition || "start";
+
+    const formattedText = formatText(item.text, textFormat);
+
+    if (emojiPosition === "start" && emoji) {
+      return `${emoji} ${formattedText}`;
+    } else if (emojiPosition === "end" && emoji) {
+      return `${formattedText} ${emoji}`;
+    }
+
+    return formattedText;
+  };
+
   // Configurable selectors for different sites
   const siteConfigs = [
     {
@@ -165,17 +235,22 @@ async function injectMenuItems(menu: TipMenu): Promise<boolean> {
   };
 
   // Function to fill a row with data
-  const fillRow = (row: Element, activity: string, price: number) => {
+  const fillRow = (
+    row: Element,
+    item: TipMenuItem,
+    globalSettings: GlobalSettings
+  ) => {
+    const formattedActivity = formatMenuItem(item, globalSettings);
     const activityInput = row.querySelector(config.activityInputSelector);
     const priceInput = row.querySelector(config.priceInputSelector);
     console.log("Row inputs:", activityInput, priceInput);
     if (activityInput) {
-      (activityInput as HTMLInputElement).value = activity;
+      (activityInput as HTMLInputElement).value = formattedActivity;
       activityInput.dispatchEvent(new Event("input", { bubbles: true }));
       activityInput.dispatchEvent(new Event("change", { bubbles: true }));
     }
     if (priceInput) {
-      (priceInput as HTMLInputElement).value = price.toString();
+      (priceInput as HTMLInputElement).value = item.price.toString();
       priceInput.dispatchEvent(new Event("input", { bubbles: true }));
       priceInput.dispatchEvent(new Event("change", { bubbles: true }));
     }
@@ -190,11 +265,12 @@ async function injectMenuItems(menu: TipMenu): Promise<boolean> {
         continue;
       }
       // Fill first row in this section
-      fillRow(rows[0], menu.items[0].text, menu.items[0].price);
+      fillRow(rows[0], menu.items[0], menu.globalSettings);
       // Add and fill remaining items
       for (let i = 1; i < menu.items.length; i++) {
+        const item = menu.items[i];
         const newRow = await addNewRow(section);
-        fillRow(newRow, menu.items[i].text, menu.items[i].price);
+        fillRow(newRow, item, menu.globalSettings);
       }
     }
     return true;
