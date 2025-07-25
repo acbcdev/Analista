@@ -1,7 +1,7 @@
 "use client";
 
 import { Copy, Edit, Eye, Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -128,7 +128,7 @@ export default function TipMenuPage() {
 					<Card>
 						<CardContent className="pt-6">
 							<div className="flex flex-col sm:flex-row gap-4">
-								<div className="flex-1 space-y-1">
+								<div className="flex-1 space-y-2">
 									<Label htmlFor="search">Search menus</Label>
 									<Input
 										id="search"

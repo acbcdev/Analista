@@ -31,7 +31,7 @@ export function EmojiPopover({
 	className = "",
 }: EmojiPopoverProps) {
 	const defaultTrigger = (
-		<Button variant="outline" className={`h-10 w-16 text-lg ${className}`}>
+		<Button variant="outline" className={className}>
 			{currentEmoji}
 		</Button>
 	);

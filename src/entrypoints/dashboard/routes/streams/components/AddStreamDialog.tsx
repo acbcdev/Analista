@@ -157,12 +157,12 @@ export const AddStreamDialog = () => {
 					<DialogTitle>Add New Stream</DialogTitle>
 				</DialogHeader>
 
-				<ScrollArea className="max-h-[75vh] px-2">
+				<ScrollArea className="max-h-[65vh] px-2 pb-2">
 					<Form {...form}>
 						<form
 							id="addStream"
 							onSubmit={form.handleSubmit(onSubmit)}
-							className="space-y-6 px-2"
+							className="space-y-3 px-2"
 						>
 							<div className="grid grid-cols-2 gap-4">
 								<FormField
@@ -384,6 +384,7 @@ export const AddStreamDialog = () => {
 												{...field}
 												placeholder="Additional notes about the stream"
 												rows={3}
+												className="mb-2"
 											/>
 										</FormControl>
 										<FormMessage />
