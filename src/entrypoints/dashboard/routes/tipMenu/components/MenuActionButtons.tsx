@@ -1,4 +1,4 @@
-import { Copy, Edit, Eye, MoreVertical, Trash2 } from "lucide-react";
+import { Copy, Edit, MoreVertical, Trash2 } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,7 +59,7 @@ export function MenuActionButtons({
 					</DropdownMenuItem>
 
 					<DropdownMenuSeparator />
-					{/* 
+					{/*
 					<DropdownMenuItem
 						onClick={() => onToggleStatus(menu.id)}
 						className={`flex items-center gap-2 ${

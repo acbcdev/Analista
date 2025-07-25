@@ -1,4 +1,4 @@
-import { persist } from "zustand/middleware";
+import { type PersistStorage, persist } from "zustand/middleware";
 import { create } from "zustand/react";
 
 export interface TipMenuItem {
@@ -39,6 +39,30 @@ type StoreTipMenuState = {
     tipMenuId: string,
     tipMenuItem: TipMenuItem
   ) => void;
+};
+
+const extensionStore: PersistStorage<StoreTipMenuState> = {
+  getItem: async (name) => {
+    try {
+      const value = await storage.getItem(`local:${name}`);
+      if (!value) return null;
+      // If value is a string, parse it; otherwise, assume it's already an object
+      const parsed = typeof value === "string" ? JSON.parse(value) : value;
+      // Ensure the parsed value has a 'state' property
+      if (parsed && typeof parsed === "object" && "state" in parsed) {
+        return parsed as { state: StoreTipMenuState; version?: number };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  },
+  setItem: (name, value) => {
+    storage.setItem(`local:${name}`, value);
+  },
+  removeItem: (name) => {
+    storage.removeItem(`local:${name}`);
+  },
 };
 
 export const useStoreTipMenu = create<StoreTipMenuState>()(
@@ -87,6 +111,6 @@ export const useStoreTipMenu = create<StoreTipMenuState>()(
           };
         }),
     }),
-    { name: "tipMenus" }
+    { name: "tipMenus", storage: extensionStore }
   )
 );
