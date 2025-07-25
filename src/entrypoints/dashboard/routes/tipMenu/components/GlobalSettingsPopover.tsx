@@ -1,5 +1,4 @@
 import { Settings } from "lucide-react";
-import { Tab } from "react-aria-components";
 import { EmojiPopover } from "@/components/EmojiPopover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

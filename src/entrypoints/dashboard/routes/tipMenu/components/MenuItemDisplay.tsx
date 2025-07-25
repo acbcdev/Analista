@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { TipMenuItem } from "@/store/tipMenu";
+import { formatMenuItem } from "./utils";
 
 interface MenuItemDisplayProps {
 	item: TipMenuItem;
@@ -10,10 +11,6 @@ interface MenuItemDisplayProps {
 		emoji: string;
 		emojiPosition: "start" | "end" | "none";
 	};
-	formatText: (
-		text: string,
-		format: "none" | "capitalize" | "capitalizeWords",
-	) => string;
 	onCopyToClipboard: (text: string, type: "text" | "price") => void;
 	onRemoveItem: () => void;
 }
@@ -22,35 +19,12 @@ export function MenuItemDisplay({
 	item,
 	index,
 	globalSettings,
-	formatText,
 	onCopyToClipboard,
 	onRemoveItem,
 }: MenuItemDisplayProps) {
-	const formattedText =
-		item.settings.textFormat === "global"
-			? formatText(item.text, globalSettings.textFormat)
-			: formatText(item.text, item.settings.textFormat);
-
-	const emoji =
-		item.settings.textFormat === "global"
-			? globalSettings.emoji
-			: item.settings.useGlobalEmoji
-				? globalSettings.emoji
-				: item.settings.emoji;
-
-	const isEnd =
-		item.settings.textFormat === "global"
-			? globalSettings.emojiPosition === "end"
-			: item.settings.emojiPosition === "end";
-
-	const isStart =
-		item.settings.textFormat === "global"
-			? globalSettings.emojiPosition === "start"
-			: item.settings.emojiPosition === "start";
-
 	const handleCopyText = () => {
-		const text = `${isStart ? `${emoji} ` : ""}${formattedText}${isEnd ? ` ${emoji}` : ""}`;
-		onCopyToClipboard(text, "text");
+		const formattedText = formatMenuItem(item, globalSettings);
+		onCopyToClipboard(formattedText, "text");
 	};
 
 	const handleCopyPrice = () => {
@@ -71,9 +45,7 @@ export function MenuItemDisplay({
 						onClick={handleCopyText}
 						title="Click to copy text"
 					>
-						{isStart && <span className="text-lg">{emoji} </span>}
-						{formattedText}
-						{isEnd && <span className="text-lg"> {emoji}</span>}
+						{formatMenuItem(item, globalSettings)}
 					</button>
 				</div>
 

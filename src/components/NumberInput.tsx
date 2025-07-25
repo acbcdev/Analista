@@ -50,6 +50,7 @@ interface NumberInputProps {
 const NumberInput = ({
 	value,
 	onChange,
+	onKeyDown,
 	label,
 	showLabel = true,
 	placeholder,
@@ -78,6 +79,7 @@ const NumberInput = ({
 			isRequired={required}
 			isInvalid={!!error}
 			id={id}
+			onKeyDown={onKeyDown}
 			{...props}
 		>
 			<div className={cn("w-full space-y-2", className)}>

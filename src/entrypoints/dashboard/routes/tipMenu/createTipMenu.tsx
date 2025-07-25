@@ -14,23 +14,6 @@ import { CreateMenuHeader } from "./components/CreateMenuHeader";
 import { MenuInformation } from "./components/MenuInformation";
 import { MenuItemsList } from "./components/MenuItemsList";
 
-const formatText = (
-	text: string,
-	format: "none" | "capitalize" | "capitalizeWords",
-): string => {
-	if (format === "none") return text;
-	if (format === "capitalize") {
-		return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-	}
-	if (format === "capitalizeWords") {
-		return text
-			.split(" ")
-			.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-			.join(" ");
-	}
-	return text;
-};
-
 // Función para copiar texto al clipboard
 const copyToClipboard = async (text: string, type: "text" | "price") => {
 	try {
@@ -156,7 +139,6 @@ export function CreateTipMenu() {
 					<MenuItemsList
 						items={items}
 						globalSettings={globalSettings}
-						formatText={formatText}
 						onCopyToClipboard={copyToClipboard}
 						onRemoveItem={removeItem}
 					/>

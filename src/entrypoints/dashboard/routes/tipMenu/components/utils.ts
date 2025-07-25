@@ -28,13 +28,17 @@ export const formatMenuItem = (
       ? globalSettings.textFormat
       : item.settings.textFormat;
 
-  const emoji = item.settings.useGlobalEmoji
-    ? globalSettings.emoji
-    : item.settings.emoji;
+  const emoji =
+    item.settings.textFormat === "global"
+      ? globalSettings.emoji
+      : item.settings.useGlobalEmoji
+      ? globalSettings.emoji
+      : item.settings.emoji;
 
-  const emojiPosition = item.settings.useGlobalEmoji
-    ? globalSettings.emojiPosition
-    : item.settings.emojiPosition;
+  const emojiPosition =
+    item.settings.textFormat === "global"
+      ? globalSettings.emojiPosition
+      : item.settings.emojiPosition;
 
   const formattedText = formatText(item.text, textFormat);
 

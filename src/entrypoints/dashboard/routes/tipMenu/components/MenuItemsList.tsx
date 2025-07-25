@@ -9,10 +9,6 @@ interface MenuItemsListProps {
 		emoji: string;
 		emojiPosition: "start" | "end" | "none";
 	};
-	formatText: (
-		text: string,
-		format: "none" | "capitalize" | "capitalizeWords",
-	) => string;
 	onCopyToClipboard: (text: string, type: "text" | "price") => void;
 	onRemoveItem: (index: number) => void;
 }
@@ -20,7 +16,6 @@ interface MenuItemsListProps {
 export function MenuItemsList({
 	items,
 	globalSettings,
-	formatText,
 	onCopyToClipboard,
 	onRemoveItem,
 }: MenuItemsListProps) {
@@ -41,7 +36,6 @@ export function MenuItemsList({
 							item={item}
 							index={index}
 							globalSettings={globalSettings}
-							formatText={formatText}
 							onCopyToClipboard={onCopyToClipboard}
 							onRemoveItem={() => onRemoveItem(index)}
 						/>
