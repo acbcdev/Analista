@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { ArrowLeft, Save } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
 	type TipMenu,
 	type TipMenuItem,
@@ -10,7 +12,6 @@ import {
 } from "@/store/tipMenu";
 import Layout from "../../components/layout/layout";
 import { AddMenuItem } from "./components/create/AddMenuItem";
-import { CreateMenuHeader } from "./components/create/CreateMenuHeader";
 import { MenuItemsList } from "./components/item/MenuItemsList";
 import { MenuInformation } from "./components/MenuInformation";
 
@@ -28,9 +29,10 @@ const copyToClipboard = async (text: string, type: "text" | "price") => {
 	}
 };
 
-export function CreateTipMenu() {
+export function EditTipMenu() {
 	const navigate = useNavigate();
-	const { addTipMenu } = useStoreTipMenu();
+	const { id } = useParams<{ id: string }>();
+	const { tipMenus, updateTipMenu } = useStoreTipMenu();
 
 	// Menu information state
 	const [menuName, setMenuName] = useState("");
@@ -54,6 +56,32 @@ export function CreateTipMenu() {
 			| "capitalizeWords"
 			| "global",
 	});
+
+	// Loading state
+	const [isLoading, setIsLoading] = useState(true);
+	const [menuNotFound, setMenuNotFound] = useState(false);
+
+	// Load menu data on component mount
+	useEffect(() => {
+		if (!id) {
+			navigate("/tipMenu");
+			return;
+		}
+
+		const menu = tipMenus.find((m) => m.id === id);
+		if (!menu) {
+			setMenuNotFound(true);
+			setIsLoading(false);
+			return;
+		}
+
+		// Load menu data
+		setMenuName(menu.name);
+		setMenuDescription(menu.description);
+		setGlobalSettings(menu.globalSettings);
+		setItems(menu.items);
+		setIsLoading(false);
+	}, [id, tipMenus, navigate]);
 
 	const addItem = () => {
 		if (newItem.text.trim() && newItem.price > 0) {
@@ -89,36 +117,92 @@ export function CreateTipMenu() {
 		setItems(items.filter((_, i) => i !== index));
 	};
 
-	const saveTipMenu = () => {
-		if (!menuName.trim() || items.length === 0) {
-			alert("Please provide a menu name and at least one menu item");
+	const updateTipMenuData = () => {
+		if (!id || !menuName.trim() || items.length === 0) {
+			toast.error("Please provide a menu name and at least one menu item");
 			return;
 		}
 
-		const tipMenu: TipMenu = {
-			id: Date.now().toString(),
+		const updatedMenu: TipMenu = {
+			id: id,
 			name: menuName,
 			description: menuDescription,
 			items: items,
 			globalSettings: globalSettings,
 			isActive: true,
-			createdAt: Date.now(),
+			createdAt: tipMenus.find((m) => m.id === id)?.createdAt || Date.now(),
 			updatedAt: Date.now(),
 		};
 
-		addTipMenu(tipMenu);
+		updateTipMenu(id, updatedMenu);
+		toast.success("Menu updated successfully!");
 		navigate("/tipMenu");
 	};
+
+	if (isLoading) {
+		return (
+			<Layout>
+				<div className="container mx-auto p-6 max-w-4xl">
+					<div className="flex items-center justify-center h-64">
+						<div className="text-lg">Loading menu...</div>
+					</div>
+				</div>
+			</Layout>
+		);
+	}
+
+	if (menuNotFound) {
+		return (
+			<Layout>
+				<div className="container mx-auto p-6 max-w-4xl">
+					<div className="flex items-center justify-center h-64">
+						<div className="text-center">
+							<h2 className="text-xl font-semibold mb-2">Menu Not Found</h2>
+							<p className="text-muted-foreground mb-4">
+								The menu you're looking for doesn't exist.
+							</p>
+							<button
+								type="button"
+								onClick={() => navigate("/tipMenu")}
+								className="bg-primary text-primary-foreground px-4 py-2 rounded-md"
+							>
+								Go Back to Menus
+							</button>
+						</div>
+					</div>
+				</div>
+			</Layout>
+		);
+	}
 
 	return (
 		<Layout>
 			<div className="container mx-auto p-6 max-w-4xl">
 				<div className="space-y-6">
-					<CreateMenuHeader
-						menuName={menuName}
-						hasItems={items.length > 0}
-						onSave={saveTipMenu}
-					/>
+					{/* Header */}
+					<div className="flex items-center justify-between">
+						<div className="flex items-center gap-4">
+							<Link to="/tipMenu">
+								<Button variant="ghost" size="icon" asChild>
+									<ArrowLeft className="p-1" />
+								</Button>
+							</Link>
+							<div>
+								<h1 className="text-3xl font-bold">Edit Tip Menu</h1>
+								<p className="text-muted-foreground">
+									Modify your existing tip menu configuration
+								</p>
+							</div>
+						</div>
+						<Button
+							onClick={updateTipMenuData}
+							className="bg-blue-600 hover:bg-blue-700"
+							disabled={!menuName.trim() || items.length === 0}
+						>
+							<Save className="h-4 w-4 mr-2" />
+							Update Menu
+						</Button>
+					</div>
 
 					<MenuInformation
 						menuName={menuName}

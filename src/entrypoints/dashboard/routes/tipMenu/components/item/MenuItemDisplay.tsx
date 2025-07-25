@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { TipMenuItem } from "@/store/tipMenu";
-import { formatMenuItem } from "./utils";
+import { formatMenuItem } from "../utils";
 
 interface MenuItemDisplayProps {
 	item: TipMenuItem;

@@ -1,4 +1,5 @@
 import { Eye } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
 	Popover,
@@ -45,6 +46,12 @@ export function MenuPreviewPopover({ menu }: MenuPreviewPopoverProps) {
 								+{menu.items.length - 5} more items
 							</div>
 						)}
+					</div>
+					<Separator />
+					<div className="flex justify-center">
+						<Button asChild size="sm" variant="outline" className="w-full">
+							<Link to={`/tipMenu/view/${menu.id}`}>View Complete Menu</Link>
+						</Button>
 					</div>
 				</div>
 			</PopoverContent>
