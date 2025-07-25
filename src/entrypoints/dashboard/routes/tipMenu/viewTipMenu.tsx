@@ -11,8 +11,8 @@ import {
 	type TipMenuItem,
 	useStoreTipMenu,
 } from "@/store/tipMenu";
+import { formatMenuItem } from "../../../../lib/formata";
 import Layout from "../../components/layout/layout";
-import { formatMenuItem } from "./components/utils";
 
 export function ViewTipMenu() {
 	const navigate = useNavigate();

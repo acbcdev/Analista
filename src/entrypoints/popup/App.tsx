@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { useChaturbateTags } from "@/hooks/useChaturbateTags";
 import { useHoursExtraction } from "@/hooks/useHoursExtraction";
 import { openDashboard } from "@/lib/action";
+import { TipMenuInjection } from "./components/TipMenuInjection";
 import "./App.css";
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
 	const { extractAndSaveHours } = useHoursExtraction();
 
 	return (
-		<main className=" p-4 bg-background">
+		<main className="p-4 bg-background">
 			{/* Header */}
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-2">
@@ -120,6 +121,9 @@ function App() {
 					</div>
 				</CardContent>
 			</Card>
+
+			{/* Tip Menu Injection */}
+			<TipMenuInjection />
 
 			{/* Status Card */}
 			<Card>

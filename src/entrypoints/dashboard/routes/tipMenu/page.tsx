@@ -9,8 +9,10 @@ import { SearchFilter } from "./components/SearchFilter";
 import { StatsCards } from "./components/StatsCards";
 
 export default function TipMenuPage() {
-	const { tipMenus, removeTipMenu, updateTipMenu, addTipMenu } =
-		useStoreTipMenu();
+	const tipMenus = useStoreTipMenu((state) => state.tipMenus);
+	const removeTipMenu = useStoreTipMenu((state) => state.removeTipMenu);
+	const updateTipMenu = useStoreTipMenu((state) => state.updateTipMenu);
+	const addTipMenu = useStoreTipMenu((state) => state.addTipMenu);
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const filteredMenus = tipMenus.filter(

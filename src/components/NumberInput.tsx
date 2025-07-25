@@ -79,7 +79,6 @@ const NumberInput = ({
 			isRequired={required}
 			isInvalid={!!error}
 			id={id}
-			onKeyDown={onKeyDown}
 			{...props}
 		>
 			<div className={cn("w-full space-y-2", className)}>
@@ -105,6 +104,7 @@ const NumberInput = ({
 						ref={ref}
 						placeholder={placeholder}
 						className="bg-input/30 text-foreground flex-1 px-3 py-2 tabular-nums outline-none focus:outline-none"
+						onKeyDown={onKeyDown}
 					/>
 					{showButtons && (
 						<div className="flex h-[calc(100%+2px)] flex-col">
