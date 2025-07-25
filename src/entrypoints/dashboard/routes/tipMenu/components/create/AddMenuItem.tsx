@@ -71,7 +71,7 @@ export function AddMenuItem({
 						<Label htmlFor="price">Price (tokens)</Label>
 						<NumberInput
 							id="price"
-							value={newItem.price || 0}
+							value={newItem.price}
 							onChange={(num) =>
 								onNewItemChange({
 									...newItem,
