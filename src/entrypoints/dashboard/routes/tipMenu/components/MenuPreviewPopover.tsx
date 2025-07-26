@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import type { TipMenu } from "@/store/tipMenu";
-import { formatMenuItem } from "../../../../../lib/formata";
+import { formatMenuItem } from "../../../../../lib/formater";
 
 interface MenuPreviewPopoverProps {
 	menu: TipMenu;

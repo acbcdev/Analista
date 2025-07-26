@@ -1,8 +1,9 @@
+import { FIXED_NUMBER } from "@/const";
 import type { TipMenu, TipMenuItem } from "@/store/tipMenu";
 
 export const formatText = (
   text: string,
-  format: "none" | "capitalize" | "capitalizeWords"
+  format: TipMenu["globalSettings"]["textFormat"]
 ): string => {
   switch (format) {
     case "capitalize":
@@ -49,4 +50,13 @@ export const formatMenuItem = (
   }
 
   return formattedText;
+};
+
+export const formatHours = (total: number): string => {
+  if (total === 0) return "";
+  return total.toFixed(FIXED_NUMBER);
+};
+
+export const formatPercentage = (value: number): number => {
+  return parseFloat(value.toFixed(FIXED_NUMBER));
 };

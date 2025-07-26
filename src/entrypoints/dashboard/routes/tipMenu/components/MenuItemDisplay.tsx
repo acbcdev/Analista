@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { formatMenuItem } from "@/lib/formata";
+import { formatMenuItem } from "@/lib/formater";
 import type { TipMenuItem } from "@/store/tipMenu";
 import type { emojiPosition, textCase } from "@/types";
 

@@ -11,7 +11,7 @@ import {
 	type TipMenuItem,
 	useStoreTipMenu,
 } from "@/store/tipMenu";
-import { formatMenuItem } from "../../../../lib/formata";
+import { formatMenuItem } from "../../../../lib/formater";
 import Layout from "../../components/layout/layout";
 
 export function ViewTipMenu() {
