@@ -40,7 +40,7 @@ export function MenuInformation({
 							value={menuDescription}
 							onChange={(e) => onMenuDescriptionChange(e.target.value)}
 							placeholder="Optional description..."
-							className="min-h-[80px]"
+							className="field-sizing-content max-h-29.5 min-h-0 resize-none py-1.75"
 						/>
 					</div>
 				</div>

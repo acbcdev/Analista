@@ -110,13 +110,8 @@ export function TipMenuInjection() {
 						</SelectTrigger>
 						<SelectContent>
 							{activeMenus.map((menu) => (
-								<SelectItem key={menu.id} value={menu.id} className="text-xs">
-									<div className="flex flex-col">
-										<span className="font-medium">{menu.name}</span>
-										<span className="text-muted-foreground">
-											{menu.items.length} items
-										</span>
-									</div>
+								<SelectItem key={menu.id} value={menu.id}>
+									{menu.name} ({menu.items.length} items)
 								</SelectItem>
 							))}
 						</SelectContent>

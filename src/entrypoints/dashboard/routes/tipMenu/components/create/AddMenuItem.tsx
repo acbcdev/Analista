@@ -71,16 +71,15 @@ export function AddMenuItem({
 						<Label htmlFor="price">Price (tokens)</Label>
 						<NumberInput
 							id="price"
-							value={newItem.price}
+							value={newItem.price === 0 ? undefined : newItem.price}
 							onChange={(num) =>
 								onNewItemChange({
 									...newItem,
-									price: typeof num === "number" ? num : Number(num) || 0,
+									price: typeof num === "number" ? num : Number(num),
 								})
 							}
 							minValue={0}
 							onKeyDown={onKeyPress}
-							placeholder="0"
 						/>
 					</div>
 				</div>
