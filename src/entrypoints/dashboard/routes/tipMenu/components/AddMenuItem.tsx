@@ -4,28 +4,29 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { emojiPosition, textCase } from "@/types";
 import { GlobalSettingsPopover } from "./GlobalSettingsPopover";
 
 interface AddMenuItemProps {
 	newItem: {
 		text: string;
 		price: number;
-		textFormat: "none" | "capitalize" | "capitalizeWords" | "global";
+		textFormat: textCase;
 	};
 	globalSettings: {
-		textFormat: "none" | "capitalize" | "capitalizeWords";
+		textFormat: textCase;
 		emoji: string;
-		emojiPosition: "start" | "end" | "none";
+		emojiPosition: emojiPosition;
 	};
 	onNewItemChange: (item: {
 		text: string;
 		price: number;
-		textFormat: "none" | "capitalize" | "capitalizeWords" | "global";
+		textFormat: textCase;
 	}) => void;
 	onGlobalSettingsChange: (settings: {
-		textFormat: "none" | "capitalize" | "capitalizeWords";
+		textFormat: textCase;
 		emoji: string;
-		emojiPosition: "start" | "end" | "none";
+		emojiPosition: emojiPosition;
 	}) => void;
 	onAddItem: () => void;
 	onKeyPress: (e: React.KeyboardEvent) => void;

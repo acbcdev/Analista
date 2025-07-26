@@ -2,14 +2,15 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatMenuItem } from "@/lib/formata";
 import type { TipMenuItem } from "@/store/tipMenu";
+import type { emojiPosition, textCase } from "@/types";
 
 interface MenuItemDisplayProps {
 	item: TipMenuItem;
 	index: number;
 	globalSettings: {
-		textFormat: "none" | "capitalize" | "capitalizeWords";
+		textFormat: textCase;
 		emoji: string;
-		emojiPosition: "start" | "end" | "none";
+		emojiPosition: emojiPosition;
 	};
 	onCopyToClipboard: (text: string, type: "text" | "price") => void;
 	onRemoveItem: () => void;

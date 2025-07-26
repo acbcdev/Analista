@@ -8,6 +8,7 @@ import {
 	type TipMenuItem,
 	useStoreTipMenu,
 } from "@/store/tipMenu";
+import type { emojiPosition, textCase } from "@/types";
 import Layout from "../../components/layout/layout";
 import { AddMenuItem } from "./components/AddMenuItem";
 import { CreateMenuHeader } from "./components/CreateMenuHeader";
@@ -28,6 +29,12 @@ const copyToClipboard = async (text: string, type: "text" | "price") => {
 	}
 };
 
+type GlobalSettings = {
+	textFormat: textCase;
+	emoji: string;
+	emojiPosition: emojiPosition;
+};
+
 export function CreateTipMenu() {
 	const navigate = useNavigate();
 	const { addTipMenu } = useStoreTipMenu();
@@ -37,10 +44,10 @@ export function CreateTipMenu() {
 	const [menuDescription, setMenuDescription] = useState("");
 
 	// Global settings state
-	const [globalSettings, setGlobalSettings] = useState({
-		textFormat: "capitalizeWords" as "none" | "capitalize" | "capitalizeWords",
+	const [globalSettings, setGlobalSettings] = useState<GlobalSettings>({
+		textFormat: "capitalizeWords",
 		emoji: "⭐",
-		emojiPosition: "end" as "start" | "end" | "none",
+		emojiPosition: "end",
 	});
 
 	// Individual item state

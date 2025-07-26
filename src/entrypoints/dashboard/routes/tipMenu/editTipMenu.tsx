@@ -1,5 +1,3 @@
-"use client";
-
 import { ArrowLeft, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
@@ -10,10 +8,11 @@ import {
 	type TipMenuItem,
 	useStoreTipMenu,
 } from "@/store/tipMenu";
+import type { emojiPosition, textCase } from "@/types";
 import Layout from "../../components/layout/layout";
-import { AddMenuItem } from "./components/create/AddMenuItem";
-import { MenuItemsList } from "./components/item/MenuItemsList";
+import { AddMenuItem } from "./components/AddMenuItem";
 import { MenuInformation } from "./components/MenuInformation";
+import { MenuItemsList } from "./components/MenuItemsList";
 
 // Función para copiar texto al clipboard
 const copyToClipboard = async (text: string, type: "text" | "price") => {
@@ -29,6 +28,12 @@ const copyToClipboard = async (text: string, type: "text" | "price") => {
 	}
 };
 
+type GlobalSettings = {
+	textFormat: textCase;
+	emoji: string;
+	emojiPosition: emojiPosition;
+};
+
 export function EditTipMenu() {
 	const navigate = useNavigate();
 	const { id } = useParams<{ id: string }>();
@@ -39,10 +44,10 @@ export function EditTipMenu() {
 	const [menuDescription, setMenuDescription] = useState("");
 
 	// Global settings state
-	const [globalSettings, setGlobalSettings] = useState({
-		textFormat: "capitalizeWords" as "none" | "capitalize" | "capitalizeWords",
+	const [globalSettings, setGlobalSettings] = useState<GlobalSettings>({
+		textFormat: "capitalizeWords",
 		emoji: "⭐",
-		emojiPosition: "end" as "start" | "end" | "none",
+		emojiPosition: "end",
 	});
 
 	// Individual item state
@@ -50,11 +55,7 @@ export function EditTipMenu() {
 	const [newItem, setNewItem] = useState({
 		text: "",
 		price: 0,
-		textFormat: "global" as
-			| "none"
-			| "capitalize"
-			| "capitalizeWords"
-			| "global",
+		textFormat: "global" as textCase,
 	});
 
 	// Loading state

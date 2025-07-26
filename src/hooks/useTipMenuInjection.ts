@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import type { TipMenu } from "@/store/tipMenu";
 import { useStoreTipMenu } from "@/store/tipMenu";
+import type { emojiPosition, textCase } from "@/types";
 
 export function useTipMenuInjection() {
   const tipMenus = useStoreTipMenu((state) => state.tipMenus);
@@ -59,23 +60,20 @@ async function injectMenuItems(menu: TipMenu): Promise<boolean> {
     text: string;
     price: number;
     settings: {
-      textFormat: "global" | "none" | "capitalize" | "capitalizeWords";
+      textFormat: textCase;
       useGlobalEmoji?: boolean;
       emoji?: string;
-      emojiPosition?: "none" | "start" | "end";
+      emojiPosition?: emojiPosition;
     };
   };
   type GlobalSettings = {
-    textFormat: "none" | "capitalize" | "capitalizeWords";
+    textFormat: textCase;
     emoji: string;
-    emojiPosition: "none" | "start" | "end";
+    emojiPosition: emojiPosition;
   };
 
   // Injected formatters from /src/lib/formata.ts
-  const formatText = (
-    text: string,
-    format: "none" | "capitalize" | "capitalizeWords"
-  ): string => {
+  const formatText = (text: string, format: textCase): string => {
     switch (format) {
       case "capitalize":
         return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();

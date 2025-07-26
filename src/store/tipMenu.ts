@@ -1,14 +1,15 @@
 import { type PersistStorage, persist } from "zustand/middleware";
 import { create } from "zustand/react";
+import type { emojiPosition, textCase } from "@/types";
 
 export interface TipMenuItem {
   id: string;
   text: string;
   price: number;
   settings: {
-    textFormat: "none" | "capitalize" | "capitalizeWords" | "global";
+    textFormat: textCase;
     emoji?: string;
-    emojiPosition?: "start" | "end" | "none";
+    emojiPosition?: emojiPosition;
     useGlobalEmoji?: boolean;
   };
 }
@@ -19,9 +20,9 @@ export type TipMenu = {
   description: string;
   items: TipMenuItem[];
   globalSettings: {
-    textFormat: "none" | "capitalize" | "capitalizeWords";
+    textFormat: textCase;
     emoji: string;
-    emojiPosition: "start" | "end" | "none";
+    emojiPosition: emojiPosition;
   };
   createdAt: number;
   updatedAt: number;

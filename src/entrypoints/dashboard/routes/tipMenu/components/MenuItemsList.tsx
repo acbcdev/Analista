@@ -1,13 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { TipMenuItem } from "@/store/tipMenu";
+import type { emojiPosition, textCase } from "@/types";
 import { MenuItemDisplay } from "./MenuItemDisplay";
 
 interface MenuItemsListProps {
 	items: TipMenuItem[];
 	globalSettings: {
-		textFormat: "none" | "capitalize" | "capitalizeWords";
+		textFormat: textCase;
 		emoji: string;
-		emojiPosition: "start" | "end" | "none";
+		emojiPosition: emojiPosition;
 	};
 	onCopyToClipboard: (text: string, type: "text" | "price") => void;
 	onRemoveItem: (index: number) => void;

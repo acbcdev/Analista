@@ -16,17 +16,18 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { emojiPosition, textCase } from "@/types";
 
 interface GlobalSettingsPopoverProps {
 	globalSettings: {
-		textFormat: "none" | "capitalize" | "capitalizeWords";
+		textFormat: textCase;
 		emoji: string;
-		emojiPosition: "start" | "end" | "none";
+		emojiPosition: emojiPosition;
 	};
 	onGlobalSettingsChange: (settings: {
-		textFormat: "none" | "capitalize" | "capitalizeWords";
+		textFormat: textCase;
 		emoji: string;
-		emojiPosition: "start" | "end" | "none";
+		emojiPosition: emojiPosition;
 	}) => void;
 }
 
@@ -114,10 +115,10 @@ export function GlobalSettingsPopover({
 						<Label className="font-semibold">Emoji Position</Label>
 						<Select
 							value={globalSettings.emojiPosition}
-							onValueChange={(value: "start" | "end" | "none") =>
+							onValueChange={(value) =>
 								onGlobalSettingsChange({
 									...globalSettings,
-									emojiPosition: value,
+									emojiPosition: value as emojiPosition,
 								})
 							}
 						>
