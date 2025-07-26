@@ -9,7 +9,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useModelsStore } from "@/store/models";
 
 const chartData = [
@@ -74,7 +73,7 @@ const chartConfig = {
 export function Analytics() {
 	const models = useModelsStore((state) => state.models);
 	return (
-		<Layout>
+		<>
 			<div className="flex items-center justify-between p-4">
 				<h1 className="text-2xl font-bold">Analytics</h1>
 				<Select>
@@ -153,6 +152,6 @@ export function Analytics() {
 					nameKey="month"
 				/>
 			</div>
-		</Layout>
+		</>
 	);
 }

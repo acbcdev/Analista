@@ -142,93 +142,87 @@ export function EditTipMenu() {
 
 	if (isLoading) {
 		return (
-			<Layout>
-				<div className="container mx-auto p-6 max-w-4xl">
-					<div className="flex items-center justify-center h-64">
-						<div className="text-lg">Loading menu...</div>
-					</div>
+			<div className="container mx-auto p-6 max-w-4xl">
+				<div className="flex items-center justify-center h-64">
+					<div className="text-lg">Loading menu...</div>
 				</div>
-			</Layout>
+			</div>
 		);
 	}
 
 	if (menuNotFound) {
 		return (
-			<Layout>
-				<div className="container mx-auto p-6 max-w-4xl">
-					<div className="flex items-center justify-center h-64">
-						<div className="text-center">
-							<h2 className="text-xl font-semibold mb-2">Menu Not Found</h2>
-							<p className="text-muted-foreground mb-4">
-								The menu you're looking for doesn't exist.
-							</p>
-							<button
-								type="button"
-								onClick={() => navigate("/tipMenu")}
-								className="bg-primary text-primary-foreground px-4 py-2 rounded-md"
-							>
-								Go Back to Menus
-							</button>
-						</div>
+			<div className="container mx-auto p-6 max-w-4xl">
+				<div className="flex items-center justify-center h-64">
+					<div className="text-center">
+						<h2 className="text-xl font-semibold mb-2">Menu Not Found</h2>
+						<p className="text-muted-foreground mb-4">
+							The menu you're looking for doesn't exist.
+						</p>
+						<button
+							type="button"
+							onClick={() => navigate("/tipMenu")}
+							className="bg-primary text-primary-foreground px-4 py-2 rounded-md"
+						>
+							Go Back to Menus
+						</button>
 					</div>
 				</div>
-			</Layout>
+			</div>
 		);
 	}
 
 	return (
-		<Layout>
-			<div className="container mx-auto p-6 max-w-4xl">
-				<div className="space-y-6">
-					{/* Header */}
-					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-4">
-							<Link to="/tipMenu">
-								<Button variant="ghost" size="icon" asChild>
-									<ArrowLeft className="p-1" />
-								</Button>
-							</Link>
-							<div>
-								<h1 className="text-3xl font-bold">Edit Tip Menu</h1>
-								<p className="text-muted-foreground">
-									Modify your existing tip menu configuration
-								</p>
-							</div>
+		<div className="container mx-auto p-6 max-w-4xl">
+			<div className="space-y-6">
+				{/* Header */}
+				<div className="flex items-center justify-between">
+					<div className="flex items-center gap-4">
+						<Link to="/tipMenu">
+							<Button variant="ghost" size="icon" asChild>
+								<ArrowLeft className="p-1" />
+							</Button>
+						</Link>
+						<div>
+							<h1 className="text-3xl font-bold">Edit Tip Menu</h1>
+							<p className="text-muted-foreground">
+								Modify your existing tip menu configuration
+							</p>
 						</div>
-						<Button
-							onClick={updateTipMenuData}
-							className="bg-blue-600 hover:bg-blue-700"
-							disabled={!menuName.trim() || items.length === 0}
-						>
-							<Save className="h-4 w-4 mr-2" />
-							Update Menu
-						</Button>
 					</div>
-
-					<MenuInformation
-						menuName={menuName}
-						menuDescription={menuDescription}
-						onMenuNameChange={setMenuName}
-						onMenuDescriptionChange={setMenuDescription}
-					/>
-
-					<AddMenuItem
-						newItem={newItem}
-						globalSettings={globalSettings}
-						onNewItemChange={setNewItem}
-						onGlobalSettingsChange={setGlobalSettings}
-						onAddItem={addItem}
-						onKeyPress={handleKeyPress}
-					/>
-
-					<MenuItemsList
-						items={items}
-						globalSettings={globalSettings}
-						onCopyToClipboard={copyToClipboard}
-						onRemoveItem={removeItem}
-					/>
+					<Button
+						onClick={updateTipMenuData}
+						className="bg-blue-600 hover:bg-blue-700"
+						disabled={!menuName.trim() || items.length === 0}
+					>
+						<Save className="h-4 w-4 mr-2" />
+						Update Menu
+					</Button>
 				</div>
+
+				<MenuInformation
+					menuName={menuName}
+					menuDescription={menuDescription}
+					onMenuNameChange={setMenuName}
+					onMenuDescriptionChange={setMenuDescription}
+				/>
+
+				<AddMenuItem
+					newItem={newItem}
+					globalSettings={globalSettings}
+					onNewItemChange={setNewItem}
+					onGlobalSettingsChange={setGlobalSettings}
+					onAddItem={addItem}
+					onKeyPress={handleKeyPress}
+				/>
+
+				<MenuItemsList
+					items={items}
+					globalSettings={globalSettings}
+					onCopyToClipboard={copyToClipboard}
+					onRemoveItem={removeItem}
+				/>
 			</div>
-		</Layout>
+		</div>
 	);
 }

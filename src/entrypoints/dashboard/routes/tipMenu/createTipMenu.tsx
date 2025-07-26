@@ -118,39 +118,37 @@ export function CreateTipMenu() {
 	};
 
 	return (
-		<Layout>
-			<div className="container mx-auto p-6 max-w-4xl">
-				<div className="space-y-6">
-					<CreateMenuHeader
-						menuName={menuName}
-						hasItems={items.length > 0}
-						onSave={saveTipMenu}
-					/>
+		<div className="container mx-auto p-6 max-w-4xl">
+			<div className="space-y-6">
+				<CreateMenuHeader
+					menuName={menuName}
+					hasItems={items.length > 0}
+					onSave={saveTipMenu}
+				/>
 
-					<MenuInformation
-						menuName={menuName}
-						menuDescription={menuDescription}
-						onMenuNameChange={setMenuName}
-						onMenuDescriptionChange={setMenuDescription}
-					/>
+				<MenuInformation
+					menuName={menuName}
+					menuDescription={menuDescription}
+					onMenuNameChange={setMenuName}
+					onMenuDescriptionChange={setMenuDescription}
+				/>
 
-					<AddMenuItem
-						newItem={newItem}
-						globalSettings={globalSettings}
-						onNewItemChange={setNewItem}
-						onGlobalSettingsChange={setGlobalSettings}
-						onAddItem={addItem}
-						onKeyPress={handleKeyPress}
-					/>
+				<AddMenuItem
+					newItem={newItem}
+					globalSettings={globalSettings}
+					onNewItemChange={setNewItem}
+					onGlobalSettingsChange={setGlobalSettings}
+					onAddItem={addItem}
+					onKeyPress={handleKeyPress}
+				/>
 
-					<MenuItemsList
-						items={items}
-						globalSettings={globalSettings}
-						onCopyToClipboard={copyToClipboard}
-						onRemoveItem={removeItem}
-					/>
-				</div>
+				<MenuItemsList
+					items={items}
+					globalSettings={globalSettings}
+					onCopyToClipboard={copyToClipboard}
+					onRemoveItem={removeItem}
+				/>
 			</div>
-		</Layout>
+		</div>
 	);
 }

@@ -1,7 +1,9 @@
 import { lazy, Suspense } from "react";
 import { createHashRouter } from "react-router";
 import App from "./App";
+import { RootLayout } from "./components/RootLayout";
 import ErrorPage from "./routes/error-page";
+import { LoadingFallback } from "./routes/Loading";
 
 // Lazy load components
 const Analytics = lazy(() =>
@@ -45,97 +47,93 @@ const TagsView = lazy(() =>
 );
 
 // Loading component
-const LoadingFallback = () => (
-	<div className="grid place-content-center h-[100dvh]">
-		<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-	</div>
-);
 
 export const router = createHashRouter([
 	{
 		path: "/",
-		element: <App />,
+		element: <RootLayout />,
 		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/viewtags",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<TagsView />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/viewhours",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<HoursView />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/models",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<Models />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/streams",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<Streams />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/analytics",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<Analytics />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/tipMenu",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<TipMenuPage />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/tipMenu/create",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<CreateTipMenu />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/tipMenu/edit/:id",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<EditTipMenu />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
-	},
-	{
-		path: "/tipMenu/view/:id",
-		element: (
-			<Suspense fallback={<LoadingFallback />}>
-				<ViewTipMenu />
-			</Suspense>
-		),
-		errorElement: <ErrorPage />,
+		children: [
+			{
+				index: true,
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<App />
+					</Suspense>
+				),
+			},
+			{
+				path: "viewtags",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<TagsView />
+					</Suspense>
+				),
+			},
+			{
+				path: "viewhours",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<HoursView />
+					</Suspense>
+				),
+			},
+			{
+				path: "models",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<Models />
+					</Suspense>
+				),
+			},
+			{
+				path: "streams",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<Streams />
+					</Suspense>
+				),
+			},
+			{
+				path: "analytics",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<Analytics />
+					</Suspense>
+				),
+			},
+			{
+				path: "tipMenu",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<TipMenuPage />
+					</Suspense>
+				),
+			},
+			{
+				path: "tipMenu/create",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<CreateTipMenu />
+					</Suspense>
+				),
+			},
+			{
+				path: "tipMenu/edit/:id",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<EditTipMenu />
+					</Suspense>
+				),
+			},
+			{
+				path: "tipMenu/view/:id",
+				element: (
+					<Suspense fallback={<LoadingFallback />}>
+						<ViewTipMenu />
+					</Suspense>
+				),
+			},
+		],
 	},
 ]);

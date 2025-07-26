@@ -8,6 +8,7 @@ interface EmptyStateProps {
 	actionLabel?: string;
 	onAction?: () => void;
 	actionHref?: string;
+	children?: React.ReactNode;
 }
 
 export function EmptyState({
@@ -17,6 +18,7 @@ export function EmptyState({
 	actionLabel,
 	onAction,
 	actionHref,
+	children,
 }: EmptyStateProps) {
 	return (
 		<div className="data-empty">
@@ -36,6 +38,7 @@ export function EmptyState({
 					</Button>
 				)}
 			</div>
+			{children}
 		</div>
 	);
 }

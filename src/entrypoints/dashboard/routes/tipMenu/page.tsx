@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { type TipMenu, useStoreTipMenu } from "@/store/tipMenu";
-import Layout from "../../components/layout/layout";
 import { DashboardHeader } from "./components/DashboardHeader";
 import { MenusList } from "./components/MenusList";
 import { SearchFilter } from "./components/SearchFilter";
@@ -48,27 +47,22 @@ export default function TipMenuPage() {
 	};
 
 	return (
-		<Layout>
-			<div className="container mx-auto p-6 max-w-6xl">
-				<div className="space-y-6">
-					<DashboardHeader />
+		<div className="container mx-auto p-6 max-w-6xl">
+			<div className="space-y-6">
+				<DashboardHeader />
 
-					<SearchFilter
-						searchTerm={searchTerm}
-						onSearchChange={setSearchTerm}
-					/>
+				<SearchFilter searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
-					<StatsCards tipMenus={tipMenus} />
+				<StatsCards tipMenus={tipMenus} />
 
-					<MenusList
-						filteredMenus={filteredMenus}
-						searchTerm={searchTerm}
-						onDuplicate={duplicateMenu}
-						onToggleStatus={toggleMenuStatus}
-						onDelete={deleteMenu}
-					/>
-				</div>
+				<MenusList
+					filteredMenus={filteredMenus}
+					searchTerm={searchTerm}
+					onDuplicate={duplicateMenu}
+					onToggleStatus={toggleMenuStatus}
+					onDelete={deleteMenu}
+				/>
 			</div>
-		</Layout>
+		</div>
 	);
 }

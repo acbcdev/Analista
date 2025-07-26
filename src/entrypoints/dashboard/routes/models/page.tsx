@@ -27,9 +27,9 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AddModelDialog } from "@/entrypoints/dashboard/components/layout/addModelDialong";
-import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { useModelsStore } from "@/store/models";
 import type { Model } from "@/types/model";
+import { EmptyState } from "../EmptyState";
 import { EditModelDialog } from "./components/EditModelDialog";
 
 export function Models() {
@@ -41,29 +41,20 @@ export function Models() {
 	const [isEditingModel, setIsEditingModel] = useState(false);
 	const [modelToEdit, setModelToEdit] = useState<Model | null>(null);
 	// Estado vacío cuando no hay modelos
-	if (models.length === 0) {
+
+	if (models.length === 0)
 		return (
-			<Layout>
-				<div className="data-empty">
-					<div className="mb-6">
-						<Users className="size-16 text-muted-foreground mx-auto mb-4" />
-						<h2 className="text-2xl font-semibold mb-2">No models yet</h2>
-						<p className="text-muted-foreground max-w-md">
-							Get started by adding your first model to track performance across
-							different platforms.
-						</p>
-					</div>
-					<Button onClick={() => setIsAddingModel(true)} className="gap-2">
-						<Plus className="size-4" />
-						Add First Model
-					</Button>
-				</div>
-			</Layout>
+			<EmptyState
+				icon={Users}
+				title={"No models yet"}
+				description="Get started by adding your first model to track performance acros different platforms."
+				onAction={() => setIsAddingModel(true)}
+				actionLabel="Add First Model"
+			/>
 		);
-	}
 
 	return (
-		<Layout>
+		<>
 			<div className="flex justify-between items-center p-4 pb-0">
 				<div>
 					<h1 className="text-2xl font-semibold">Models</h1>
@@ -198,6 +189,6 @@ export function Models() {
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
-		</Layout>
+		</>
 	);
 }
