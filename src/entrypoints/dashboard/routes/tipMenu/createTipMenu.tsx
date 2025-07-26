@@ -9,10 +9,10 @@ import {
 	useStoreTipMenu,
 } from "@/store/tipMenu";
 import Layout from "../../components/layout/layout";
-import { AddMenuItem } from "./components/create/AddMenuItem";
-import { CreateMenuHeader } from "./components/create/CreateMenuHeader";
-import { MenuItemsList } from "./components/item/MenuItemsList";
+import { AddMenuItem } from "./components/AddMenuItem";
+import { CreateMenuHeader } from "./components/CreateMenuHeader";
 import { MenuInformation } from "./components/MenuInformation";
+import { MenuItemsList } from "./components/MenuItemsList";
 
 // Función para copiar texto al clipboard
 const copyToClipboard = async (text: string, type: "text" | "price") => {

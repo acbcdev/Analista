@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { TipMenuItem } from "@/store/tipMenu";
-import { MenuItemDisplay } from "./item/MenuItemDisplay";
+import { MenuItemDisplay } from "./MenuItemDisplay";
 
 interface MenuItemsListProps {
 	items: TipMenuItem[];
