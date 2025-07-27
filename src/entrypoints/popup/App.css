@@ -1,6 +1,6 @@
 #root {
 	width: calc(20vw + 400px);
-	max-width: calc(400px +50px);
+	max-width: calc(400px + 50px);
 	overflow-x: hidden;
 	margin: 0 auto;
 	text-align: center;

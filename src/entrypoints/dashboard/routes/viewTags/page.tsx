@@ -60,22 +60,22 @@ export function TagsView() {
 					</Select>
 				</div>
 			</section>
-			data.length === 0 ? (
-			<div className="flex flex-col items-center justify-center min-h-[40vh] text-center p-8">
-				<div className="mb-6">
-					<Hash className="size-12 text-muted-foreground mx-auto mb-4" />
-					<h3 className="text-xl font-semibold mb-2">
-						Select a date to view tags
-					</h3>
-					<p className="text-muted-foreground">
-						Choose a date from the dropdown above to see the tag analytics for
-						that period.
-					</p>
+			{data.length === 0 ? (
+				<div className="flex flex-col items-center justify-center min-h-[40vh] text-center p-8">
+					<div className="mb-6">
+						<Hash className="size-12 text-muted-foreground mx-auto mb-4" />
+						<h3 className="text-xl font-semibold mb-2">
+							Select a date to view tags
+						</h3>
+						<p className="text-muted-foreground">
+							Choose a date from the dropdown above to see the tag analytics for
+							that period.
+						</p>
+					</div>
 				</div>
-			</div>
 			) : (
-			<DataTable columns={columns} data={data} />
-			);
+				<DataTable columns={columns} data={data} />
+			)}
 		</>
 	);
 }
