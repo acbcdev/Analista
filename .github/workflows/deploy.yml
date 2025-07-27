@@ -1,0 +1,124 @@
+name: Deploy to Web Stores
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to deploy'
+        required: true
+        type: string
+
+jobs:
+  prepare-deployment:
+    runs-on: ubuntu-latest
+    
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      
+    steps:
+    - name: Get version
+      id: get_version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.release_tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+        fi
+
+  deploy-chrome:
+    runs-on: ubuntu-latest
+    needs: prepare-deployment
+    if: false # Disabled until Chrome Web Store credentials are configured
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ needs.prepare-deployment.outputs.version }}
+        
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+        
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+      
+    - name: Build Chrome extension
+      run: bun run build
+      
+    - name: Verify Chrome build
+      run: |
+        ls -la .output/chrome-mv3/
+        if [ ! -f ".output/chrome-mv3/manifest.json" ]; then
+          echo "❌ Chrome build verification failed"
+          exit 1
+        fi
+        echo "✅ Chrome build verified"
+      
+    - name: Create ZIP for Chrome
+      run: bun run zip
+      
+    - name: Deploy to Chrome Web Store
+      uses: PlasmoHQ/bpp@v3
+      with:
+        keys: ${{ secrets.CHROME_EXTENSION_KEYS }} # Ensure this secret exists in your repository settings
+        artifact: "*.zip"
+        
+  deploy-firefox:
+    runs-on: ubuntu-latest
+    needs: prepare-deployment
+    if: false # Disabled until Firefox Add-ons credentials are configured
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ needs.prepare-deployment.outputs.version }}
+        
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+        
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+      
+    - name: Build Firefox extension
+      run: bun run build:firefox
+      
+    - name: Verify Firefox build
+      run: |
+        ls -la .output/firefox-mv2/
+        if [ ! -f ".output/firefox-mv2/manifest.json" ]; then
+          echo "❌ Firefox build verification failed"
+          exit 1
+        fi
+        echo "✅ Firefox build verified"
+      
+    - name: Create ZIP for Firefox
+      run: bun run zip:firefox
+      
+    - name: Deploy to Firefox Add-ons
+      uses: trmcnvn/firefox-addon@v1
+      with:
+        uuid: ${{ secrets.FIREFOX_EXTENSION_UUID }}
+        xpi: "*.zip"
+        manifest: .output/manifest.json
+        api-key: ${{ secrets.FIREFOX_JWT_ISSUER }}
+        api-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
+
+  notify-deployment:
+    runs-on: ubuntu-latest
+    needs: [deploy-chrome, deploy-firefox]
+    if: always()
+    
+    steps:
+    - name: Notify deployment status
+      run: |
+        echo "🚀 Extension deployment workflow completed"
+        echo "Version: ${{ needs.prepare-deployment.outputs.version }}"
+        echo "Note: Web store deployments are currently disabled"
+        echo "Enable them by configuring the required secrets and removing 'if: false' conditions"
