@@ -16,12 +16,14 @@ interface QuickActionsCardProps {
 	onViewTags: () => void;
 	onExportTags: () => void;
 	onExtractHours: () => void;
+	showHoursSection?: boolean;
 }
 
 export function QuickActionsCard({
 	onViewTags,
 	onExportTags,
 	onExtractHours,
+	showHoursSection = false,
 }: QuickActionsCardProps) {
 	return (
 		<Card className="mb-4">
@@ -37,9 +39,12 @@ export function QuickActionsCard({
 			<CardContent className="space-y-3">
 				<TagsExtractionSection onView={onViewTags} onExport={onExportTags} />
 
-				<Separator />
-
-				<HoursExtractionSection onExtract={onExtractHours} />
+				{showHoursSection && (
+					<>
+						<Separator />
+						<HoursExtractionSection onExtract={onExtractHours} />
+					</>
+				)}
 			</CardContent>
 		</Card>
 	);

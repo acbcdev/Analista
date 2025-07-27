@@ -8,7 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { CHATURBATE_TAGS_URL } from "@/const/url";
+import {  CHATURBATE_URL } from "@/const/url";
 import { useStorage } from "@/hooks/useStorege";
 import type { Tags } from "@/types";
 import { EmptyState } from "../EmptyState";
@@ -31,8 +31,9 @@ export function TagsView() {
 				icon={Hash}
 				title="No tags data found"
 				description="No tag data has been collected yet. Visit Chaturbate to start collecting tag analytics."
-				actionLabel="Visit Chaturbate Tags"
-				actionHref={`${CHATURBATE_TAGS_URL}/?sort=-vc`}
+				actionLabel="Visit Chaturbate Tags "
+				
+				actionHref={`${CHATURBATE_URL}/?sort=-vc`}
 			/>
 		);
 

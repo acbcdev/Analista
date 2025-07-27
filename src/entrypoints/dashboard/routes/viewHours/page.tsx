@@ -181,7 +181,7 @@ export function HoursView() {
 	}
 
 	return (
-		<Layout>
+		<>
 			<div className="px-6 pb-2">
 				{/* Header con controles */}
 				<div className="flex justify-between items-center gap-x-2 text-sm py-2">
@@ -228,7 +228,7 @@ export function HoursView() {
 					<HoursChart data={data.length === 0 ? [] : filteredData} />
 				)}
 			</div>
-		</Layout>
+		</>
 	);
 }
 // Registros analizados: 16 sesiones entre el 24 jun y el 16 jul de 2025.
