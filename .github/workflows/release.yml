@@ -67,13 +67,63 @@ jobs:
         
     - name: Create ZIP files
       run: |
+        # Clean any existing ZIP files first
+        rm -f *.zip
+        
         # Create Chrome ZIP
+        echo "Creating Chrome ZIP..."
         bun run zip
-        mv *.zip analista-extension-chrome.zip
+        
+        echo "Files after Chrome zip command:"
+        ls -la
+        
+        # Find and rename Chrome ZIP
+        if ls *.zip 1> /dev/null 2>&1; then
+          CHROME_ZIP=$(ls *.zip | head -n 1)
+          echo "Found Chrome ZIP: $CHROME_ZIP"
+          cp "$CHROME_ZIP" analista-extension-chrome.zip
+          rm "$CHROME_ZIP"
+          echo "✅ Chrome ZIP created: analista-extension-chrome.zip"
+        else
+          echo "❌ No ZIP file found after Chrome build"
+          exit 1
+        fi
         
         # Create Firefox ZIP  
+        echo "Creating Firefox ZIP..."
         bun run zip:firefox
-        mv *.zip analista-extension-firefox.zip
+        
+        echo "Files after Firefox zip command:"
+        ls -la
+        
+        # Find and rename Firefox ZIP (excluding the Chrome one we already have)
+        FIREFOX_ZIP=$(ls *.zip | grep -v "analista-extension-chrome.zip" | head -n 1)
+        if [ -n "$FIREFOX_ZIP" ] && [ -f "$FIREFOX_ZIP" ]; then
+          echo "Found Firefox ZIP: $FIREFOX_ZIP"
+          mv "$FIREFOX_ZIP" analista-extension-firefox.zip
+          echo "✅ Firefox ZIP created: analista-extension-firefox.zip"
+        else
+          echo "❌ No Firefox ZIP file found"
+          exit 1
+        fi
+        
+        # Verify final ZIP files
+        echo "Final ZIP files:"
+        ls -la *.zip
+        
+        # Double check files exist and have reasonable size
+        for zip_file in analista-extension-chrome.zip analista-extension-firefox.zip; do
+          if [ ! -f "$zip_file" ]; then
+            echo "❌ Missing: $zip_file"
+            exit 1
+          fi
+          size=$(stat -c%s "$zip_file")
+          if [ "$size" -lt 1000 ]; then
+            echo "❌ $zip_file is too small ($size bytes)"
+            exit 1
+          fi
+          echo "✅ $zip_file verified ($size bytes)"
+        done
         
     - name: Create Release
       uses: softprops/action-gh-release@v2
