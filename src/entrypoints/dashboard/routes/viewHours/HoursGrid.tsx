@@ -136,12 +136,13 @@ export function HoursGrid({ data }: HoursGridProps) {
 								{gridData.allDates.map((date) => {
 									const dayData = row.days[date];
 									const hasData = dayData && dayData.total > 0;
+									const minutes = dayData.minutes>9 ? dayData.minutes : `0${dayData.minutes}`;
 									return (
 										<TableCell key={date} className={`text-center border-r `}>
 											<div className="text-sm">
 												{hasData && (
 													<div className="font-medium text-chart-1">
-														{dayData.hours}:{dayData.minutes}
+														{dayData.hours}:{minutes}
 													</div>
 												)}
 											</div>

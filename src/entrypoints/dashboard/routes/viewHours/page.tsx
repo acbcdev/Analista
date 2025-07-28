@@ -2,6 +2,7 @@ import { Clock, Copy, ExternalLink } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import {
 	Card,
 	CardContent,
@@ -12,7 +13,6 @@ import {
 import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
 
-import Layout from "@/entrypoints/dashboard/components/layout/layout";
 import { ModelSelector } from "@/entrypoints/dashboard/components/ModelSelector";
 import {
 	type ViewMode,
@@ -34,29 +34,42 @@ import { HoursTable } from "./HoursTable";
  * Refactorizado como una caja negra reutilizable con responsabilidades separadas
  */
 export function HoursView() {
-	const allkeys = useStorage<Record<string, HoursStorage>>("hours", {});
-	const [data, setData] = useState<Hours[]>([]);
-	const [viewMode, setViewMode] = useState<ViewMode>("table");
-	const [isAllModels, setIsAllModels] = useState<boolean>(false);
-	const tableRef = useRef<HTMLTableElement>(null);
-	const { dateRange, onDateRangeChange, preset, onPresetChange } =
-		useDateFilter();
-	const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
-	const models = useModelsStore((state) => state.models);
+const allHours = useStorage<HoursStorage[]>("hours", []);
+const [data, setData] = useState<Hours[]>([]);
+const [viewMode, setViewMode] = useState<ViewMode>("table");
+const [isAllModels, setIsAllModels] = useState<boolean>(false);
+const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
+const tableRef = useRef<HTMLTableElement>(null);
+const { dateRange, onDateRangeChange, preset, onPresetChange } = useDateFilter();
+const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
+const models = useModelsStore((state) => state.models);
 
-	const filteredData = useDateRangeFilter(
-		data,
-		dateRange,
-		(item) => item.name || null,
+// Filtrar modelos por plataforma seleccionada
+const filteredModels = useMemo(() => {
+	if (selectedPlatform === "all") return models;
+	return models.filter((model) =>
+		model.platform.some((p) => p.id === selectedPlatform)
 	);
+}, [models, selectedPlatform]);
+
+// Filtrar datos de horas por plataforma seleccionada
+const filteredHours = useMemo(() => {
+	if (selectedPlatform === "all") return allHours;
+	return allHours.filter((hourStorage) => hourStorage.platform === selectedPlatform);
+}, [allHours, filteredModels, selectedPlatform]);
+
+const filteredData = useDateRangeFilter(
+	data,
+	dateRange,
+	(item) => item.name || null,
+);
 
 	// Caja negra: transformar datos del storage
-	const allHours = useMemo(() => Object.values(allkeys || {}), [allkeys]);
 
 	// Para la vista grid, necesitamos todos los datos con información del modelo
 	const allModelsData = useMemo(() => {
 		const result: (Hours & { modelName: string })[] = [];
-		allHours.forEach((hourStorage) => {
+		filteredHours.forEach((hourStorage) => {
 			hourStorage.data.forEach((hour) => {
 				result.push({
 					...hour,
@@ -65,7 +78,7 @@ export function HoursView() {
 			});
 		});
 		return result;
-	}, [allHours]);
+	}, [filteredHours]);
 
 	// Filtrar datos para vista grid (todos los modelos)
 	const filteredGridData = useDateRangeFilter(
@@ -83,16 +96,16 @@ export function HoursView() {
 	// Estado vacío: mostrar mensaje
 	if (!allHours || allHours.length === 0) {
 		// Si hay modelos pero no hay datos de horas, mostrar enlaces específicos
-		if (models.length > 0) {
+		if (filteredModels.length > 0) {
 			const platformUrls = {
 				chaturbate: CBHOURS,
 				camsoda: SODAHOURS_URL,
 				stripchat: STRIPHOURS_URL,
 			};
 
-			// Obtener plataformas únicas de los modelos
+			// Obtener plataformas únicas de los modelos filtrados
 			const uniquePlatforms = new Set(
-				models.flatMap((model) =>
+				filteredModels.flatMap((model) =>
 					model.platform
 						.filter((p) =>
 							["chaturbate", "camsoda", "stripchat"].includes(p.id),
@@ -114,9 +127,11 @@ export function HoursView() {
 						</p>
 					</div>
 
+
+
 					<div className="grid grid-3 gap-4 w-full max-w-2xl">
 						{Array.from(uniquePlatforms).map((platform) => {
-							const modelNames = models
+							const modelNames = filteredModels
 								.filter((model) =>
 									model.platform.some((p) => p.id === platform),
 								)
@@ -185,12 +200,22 @@ export function HoursView() {
 			<div className="px-6 pb-2">
 				{/* Header con controles */}
 				<div className="flex justify-between items-center gap-x-2 text-sm py-2">
+						<Select value={selectedPlatform??null} onValueChange={setSelectedPlatform}>
+							<SelectTrigger className="w-[160px]">
+								<SelectValue placeholder="Select platform" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="all">All</SelectItem>
+								<SelectItem value="chaturbate">Chaturbate</SelectItem>
+								<SelectItem value="stripchat">Stripchat</SelectItem>
+								<SelectItem value="camsoda">Camsoda</SelectItem>
+							</SelectContent>
+						</Select>
 					<ModelSelector
-						allHours={allHours}
+						allHours={filteredHours}
 						onModelSelect={setData}
 						onAllModelsChange={setIsAllModels}
 					/>
-
 					<div className="flex items-center gap-x-2">
 						<ViewToggle
 							currentView={viewMode}

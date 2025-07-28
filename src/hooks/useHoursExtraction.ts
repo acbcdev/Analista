@@ -39,7 +39,7 @@ export function useHoursExtraction() {
         return;
       }
 
-      await saveHoursToStorage(hours, url);
+      await saveHoursToStorage(hours, url, platform);
       openDashboard("/viewhours");
     } catch {
       toast.error("Failed to extract hours");
@@ -102,20 +102,29 @@ function extractHoursScript(platform: PlatformsHours): Hours[] {
   return hours;
 }
 
-async function saveHoursToStorage(hours: Hours[], url: string): Promise<void> {
-  const prevHoursStore = await storage.getItem<Record<string, HoursStorage>>(
-    "local:hours"
-  );
-  const prevHours = prevHoursStore ?? {};
+const platformsComparison = {
+  cbhours: "chaturbate",
+  sodahours: "camsoda",
+  striphours: "stripchat",
+};
+
+async function saveHoursToStorage(
+  hours: Hours[],
+  url: string,
+  platform: PlatformsHours
+): Promise<void> {
+  const prevHoursStore = await storage.getItem<HoursStorage[]>("local:hours");
+  const prevHours = prevHoursStore ?? [];
   const date = Date.now();
   const name = url.split("user/")[1]?.replace(".html", "") ?? "";
-
-  await storage.setItem("local:hours", {
-    ...prevHours,
-    [name]: {
+  const platformName = platformsComparison[platform] || platform;
+  await storage.setItem("local:hours", [
+    {
       createAt: date,
       data: hours,
       name,
+      platform: platformName,
     },
-  });
+    ...prevHours,
+  ]);
 }

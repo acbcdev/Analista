@@ -13,6 +13,12 @@ interface ModelSelectorProps {
 	onAllModelsChange: (bol: boolean) => void;
 }
 
+const platformsComparison = {
+	 chaturbate:"cb",
+	camsoda: "cs",
+	 stripchat: "sc",
+};
+
 export function ModelSelector({
 	allHours,
 	onModelSelect,
@@ -30,16 +36,25 @@ export function ModelSelector({
 
 	return (
 		<Select onValueChange={handleModelChange}>
-			<SelectTrigger>
+			<SelectTrigger className="w-[160px]">
 				<SelectValue placeholder="Select a Model" />
 			</SelectTrigger>
 			<SelectContent>
-				<SelectItem value={"grid"}>all models</SelectItem>
+				{allHours.length ===0  ?(
+					<SelectItem value="grid" disabled>
+						No models available
+					</SelectItem>
+				) : (
+					<>
+							<SelectItem value={"grid"} disabled={allHours.length ===0}>all models</SelectItem>
 				{allHours?.map((hours: HoursStorage) => (
 					<SelectItem key={hours.createAt} value={hours.name}>
-						{hours.name}
+						{hours.name} - {platformsComparison[hours.platform as keyof typeof platformsComparison] || hours.platform}
 					</SelectItem>
 				))}
+					</>
+				)}
+		
 			</SelectContent>
 		</Select>
 	);
