@@ -35,7 +35,7 @@ export function ModelSelector({
 	};
 
 	return (
-		<Select onValueChange={handleModelChange}>
+		<Select onValueChange={handleModelChange} value={allHours.length === 0 ? "grid" : ""}>
 			<SelectTrigger className="w-[160px]">
 				<SelectValue placeholder="Select a Model" />
 			</SelectTrigger>

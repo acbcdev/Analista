@@ -2,14 +2,6 @@ import { Clock, Copy, ExternalLink } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import { CBHOURS, SODAHOURS_URL, STRIPHOURS_URL } from "@/const/url";
 import { DateFilter } from "@/entrypoints/dashboard/components/DateFilter";
 
@@ -28,6 +20,8 @@ import { HoursChart } from "./HoursChart";
 import { HoursGrid } from "./HoursGrid";
 import HoursStats from "./HoursStats";
 import { HoursTable } from "./HoursTable";
+import { PlatformSelector } from "./PlatformSelector";
+import { PlatformEmptyState } from "./PlatformEmptyState";
 
 /**
  * Componente principal para visualizar y filtrar las horas trabajadas
@@ -38,7 +32,7 @@ const allHours = useStorage<HoursStorage[]>("hours", []);
 const [data, setData] = useState<Hours[]>([]);
 const [viewMode, setViewMode] = useState<ViewMode>("table");
 const [isAllModels, setIsAllModels] = useState<boolean>(false);
-const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
+const [platform, setPlatform] = useState<string>("all");
 const tableRef = useRef<HTMLTableElement>(null);
 const { dateRange, onDateRangeChange, preset, onPresetChange } = useDateFilter();
 const setIsAddingModel = useModelsStore((state) => state.setIsAddingModel);
@@ -46,17 +40,17 @@ const models = useModelsStore((state) => state.models);
 
 // Filtrar modelos por plataforma seleccionada
 const filteredModels = useMemo(() => {
-	if (selectedPlatform === "all") return models;
+	if (platform === "all") return models;
 	return models.filter((model) =>
-		model.platform.some((p) => p.id === selectedPlatform)
+		model.platform.some((p) => p.id === platform)
 	);
-}, [models, selectedPlatform]);
+}, [models, platform]);
 
 // Filtrar datos de horas por plataforma seleccionada
 const filteredHours = useMemo(() => {
-	if (selectedPlatform === "all") return allHours;
-	return allHours.filter((hourStorage) => hourStorage.platform === selectedPlatform);
-}, [allHours, filteredModels, selectedPlatform]);
+	if (platform === "all") return allHours;
+	return allHours.filter((hourStorage) => hourStorage.platform === platform);
+}, [allHours, filteredModels, platform]);
 
 const filteredData = useDateRangeFilter(
 	data,
@@ -97,89 +91,7 @@ const filteredData = useDateRangeFilter(
 	if (!allHours || allHours.length === 0) {
 		// Si hay modelos pero no hay datos de horas, mostrar enlaces específicos
 		if (filteredModels.length > 0) {
-			const platformUrls = {
-				chaturbate: CBHOURS,
-				camsoda: SODAHOURS_URL,
-				stripchat: STRIPHOURS_URL,
-			};
-
-			// Obtener plataformas únicas de los modelos filtrados
-			const uniquePlatforms = new Set(
-				filteredModels.flatMap((model) =>
-					model.platform
-						.filter((p) =>
-							["chaturbate", "camsoda", "stripchat"].includes(p.id),
-						)
-						.map((p) => p.id),
-				),
-			);
-
-			return (
-				<div className="data-empty">
-					<div className="mb-8">
-						<Clock className="size-16 text-muted-foreground mx-auto mb-4" />
-						<h2 className="text-2xl font-semibold mb-2">
-							Extract hours data from platforms
-						</h2>
-						<p className="text-muted-foreground max-w-md mb-6">
-							Visit the analytics pages of your models to extract hours data.
-							Click on the platform links below:
-						</p>
-					</div>
-
-
-
-					<div className="grid grid-3 gap-4 w-full max-w-2xl">
-						{Array.from(uniquePlatforms).map((platform) => {
-							const modelNames = filteredModels
-								.filter((model) =>
-									model.platform.some((p) => p.id === platform),
-								)
-								.map(
-									(model) =>
-										model.platform.find((p) => p.id === platform)?.userName,
-								)
-								.filter(Boolean);
-
-							return (
-								<Card key={platform} className="text-left">
-									<CardHeader className="pb-3">
-										<CardTitle className="text-lg capitalize flex items-center gap-2">
-											{platform}
-											<ExternalLink className="size-4" />
-										</CardTitle>
-										<CardDescription>
-											Models: {modelNames.join(", ")}
-										</CardDescription>
-									</CardHeader>
-									<CardContent className="pt-0">
-										<div className="flex flex-wrap gap-2">
-											{modelNames.map((username) => (
-												<Button
-													key={username}
-													variant="outline"
-													size="sm"
-													asChild
-													className="gap-2"
-												>
-													<a
-														href={`${platformUrls[platform as keyof typeof platformUrls]}/${username}`}
-														target="_blank"
-														rel="noopener noreferrer"
-													>
-														<ExternalLink className="size-3" />
-														{username}
-													</a>
-												</Button>
-											))}
-										</div>
-									</CardContent>
-								</Card>
-							);
-						})}
-					</div>
-				</div>
-			);
+			return <PlatformEmptyState filteredModels={filteredModels} />;
 		}
 
 		return (
@@ -201,17 +113,13 @@ const filteredData = useDateRangeFilter(
 				{/* Header con controles */}
 				<div className="flex justify-between items-center gap-x-2 text-sm py-2">
 					<div className="flex items-center gap-x-2">
-		<Select value={selectedPlatform??null} onValueChange={setSelectedPlatform}>
-							<SelectTrigger className="w-[160px]">
-								<SelectValue placeholder="Select platform" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="all">All</SelectItem>
-								<SelectItem value="chaturbate">Chaturbate</SelectItem>
-								<SelectItem value="stripchat">Stripchat</SelectItem>
-								<SelectItem value="camsoda">Camsoda</SelectItem>
-							</SelectContent>
-						</Select>
+						<PlatformSelector 
+							selectedPlatform={platform} 
+							onPlatformChange={
+								setPlatform
+
+							} 
+						/>
 					<ModelSelector
 						allHours={filteredHours}
 						onModelSelect={setData}
