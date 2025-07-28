@@ -200,7 +200,8 @@ const filteredData = useDateRangeFilter(
 			<div className="px-6 pb-2">
 				{/* Header con controles */}
 				<div className="flex justify-between items-center gap-x-2 text-sm py-2">
-						<Select value={selectedPlatform??null} onValueChange={setSelectedPlatform}>
+					<div className="flex items-center gap-x-2">
+		<Select value={selectedPlatform??null} onValueChange={setSelectedPlatform}>
 							<SelectTrigger className="w-[160px]">
 								<SelectValue placeholder="Select platform" />
 							</SelectTrigger>
@@ -216,6 +217,8 @@ const filteredData = useDateRangeFilter(
 						onModelSelect={setData}
 						onAllModelsChange={setIsAllModels}
 					/>
+					</div>
+				
 					<div className="flex items-center gap-x-2">
 						<ViewToggle
 							currentView={viewMode}

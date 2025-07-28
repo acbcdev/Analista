@@ -29,7 +29,7 @@ export function ModelSelector({
 			onAllModelsChange(true);
 			return;
 		}
-		const selectedHours = allHours.find((hours) => hours.name === value);
+		const selectedHours = allHours.find((hours) => hours.name === value.split("-")[0] && hours.platform === value.split("-")[1]);
 		onAllModelsChange(false);
 		onModelSelect(selectedHours?.data || []);
 	};
@@ -47,11 +47,14 @@ export function ModelSelector({
 				) : (
 					<>
 							<SelectItem value={"grid"} disabled={allHours.length ===0}>all models</SelectItem>
-				{allHours?.map((hours: HoursStorage) => (
-					<SelectItem key={hours.createAt} value={hours.name}>
-						{hours.name} - {platformsComparison[hours.platform as keyof typeof platformsComparison] || hours.platform}
+				{allHours?.map((hours: HoursStorage) =>
+				{
+					const platform = platformsComparison[hours.platform as keyof typeof platformsComparison] || hours.platform;
+					return(
+					<SelectItem key={hours.createAt} value={`${hours.name}-${hours.platform}`}>
+						{hours.name} - {platform}
 					</SelectItem>
-				))}
+				)})}
 					</>
 				)}
 		
