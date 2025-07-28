@@ -70,6 +70,10 @@ jobs:
         
     - name: Create ZIP files
       run: |
+        # Get package version
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        echo "Package version: $PACKAGE_VERSION"
+        
         # Clean any existing ZIP files first
         rm -f *.zip
         
@@ -78,18 +82,25 @@ jobs:
         bun run zip
         
         echo "Files after Chrome zip command:"
-        ls -la
+        ls -la .output/
         
-        # Find and rename Chrome ZIP
-        if ls *.zip 1> /dev/null 2>&1; then
-          CHROME_ZIP=$(ls *.zip | head -n 1)
-          echo "Found Chrome ZIP: $CHROME_ZIP"
-          cp "$CHROME_ZIP" analista-extension-chrome.zip
-          rm "$CHROME_ZIP"
+        # Find and copy Chrome ZIP using dynamic version
+        CHROME_ZIP_PATH=".output/analista-${PACKAGE_VERSION}-chrome.zip"
+        if [ -f "$CHROME_ZIP_PATH" ]; then
+          cp "$CHROME_ZIP_PATH" "analista-extension-chrome.zip"
           echo "✅ Chrome ZIP created: analista-extension-chrome.zip"
         else
-          echo "❌ No ZIP file found after Chrome build"
-          exit 1
+          echo "❌ Chrome ZIP not found at: $CHROME_ZIP_PATH"
+          echo "Available files in .output/:"
+          ls -la .output/ || echo "No .output directory"
+          # Try to find any chrome zip file
+          CHROME_ZIP_FOUND=$(find .output -name "*chrome*.zip" | head -n 1)
+          if [ -n "$CHROME_ZIP_FOUND" ]; then
+            echo "Found alternative Chrome ZIP: $CHROME_ZIP_FOUND"
+            cp "$CHROME_ZIP_FOUND" "analista-extension-chrome.zip"
+          else
+            exit 1
+          fi
         fi
         
         # Create Firefox ZIP  
@@ -97,17 +108,25 @@ jobs:
         bun run zip:firefox
         
         echo "Files after Firefox zip command:"
-        ls -la
+        ls -la .output/
         
-        # Find and rename Firefox ZIP (excluding the Chrome one we already have)
-        FIREFOX_ZIP=$(ls *.zip | grep -v "analista-extension-chrome.zip" | head -n 1)
-        if [ -n "$FIREFOX_ZIP" ] && [ -f "$FIREFOX_ZIP" ]; then
-          echo "Found Firefox ZIP: $FIREFOX_ZIP"
-          mv "$FIREFOX_ZIP" analista-extension-firefox.zip
+        # Find and copy Firefox ZIP using dynamic version
+        FIREFOX_ZIP_PATH=".output/analista-${PACKAGE_VERSION}-firefox.zip"
+        if [ -f "$FIREFOX_ZIP_PATH" ]; then
+          cp "$FIREFOX_ZIP_PATH" "analista-extension-firefox.zip"
           echo "✅ Firefox ZIP created: analista-extension-firefox.zip"
         else
-          echo "❌ No Firefox ZIP file found"
-          exit 1
+          echo "❌ Firefox ZIP not found at: $FIREFOX_ZIP_PATH"
+          echo "Available files in .output/:"
+          ls -la .output/ || echo "No .output directory"
+          # Try to find any firefox zip file
+          FIREFOX_ZIP_FOUND=$(find .output -name "*firefox*.zip" | head -n 1)
+          if [ -n "$FIREFOX_ZIP_FOUND" ]; then
+            echo "Found alternative Firefox ZIP: $FIREFOX_ZIP_FOUND"
+            cp "$FIREFOX_ZIP_FOUND" "analista-extension-firefox.zip"
+          else
+            exit 1
+          fi
         fi
         
         # Verify final ZIP files
