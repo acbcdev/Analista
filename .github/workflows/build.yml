@@ -68,6 +68,19 @@ jobs:
         
         echo "✅ Build verification successful for ${{ matrix.browser }}"
         
+    - name: Debug ZIP files
+      run: |
+        echo "=== DEBUG ZIP FILES ==="
+        echo "Current directory:"
+        pwd
+        echo "Files in root:"
+        ls -la *.zip 2>/dev/null || echo "No ZIP files in root"
+        echo "Files in .output/:"
+        ls -la .output/ 2>/dev/null || echo "No .output directory"
+        echo "All ZIP files:"
+        find . -name "*.zip" -type f 2>/dev/null || echo "No ZIP files found anywhere"
+        echo "========================"
+        
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -77,10 +90,37 @@ jobs:
         retention-days: 30
         
     - name: Upload ZIP artifacts
+      run: |
+        # Get package version for ZIP filename
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        echo "Package version: $PACKAGE_VERSION"
+        
+        # Find the specific ZIP file for this browser
+        if [ "${{ matrix.browser }}" = "firefox" ]; then
+          ZIP_PATTERN="analista-${PACKAGE_VERSION}-firefox.zip"
+        else
+          ZIP_PATTERN="analista-${PACKAGE_VERSION}-chrome.zip"
+        fi
+        
+        ZIP_FILE=".output/${ZIP_PATTERN}"
+        echo "Looking for ZIP file: $ZIP_FILE"
+        
+        if [ -f "$ZIP_FILE" ]; then
+          echo "✅ ZIP file found: $ZIP_FILE"
+          # Copy to root for upload
+          cp "$ZIP_FILE" "./"
+        else
+          echo "❌ Expected ZIP file not found: $ZIP_FILE"
+          echo "Available files in .output/:"
+          ls -la .output/
+          exit 1
+        fi
+        
+    - name: Upload ZIP artifact
       uses: actions/upload-artifact@v4
       with:
         name: analista-extension-${{ matrix.browser }}-zip
-        path: "*.zip"
+        path: "analista-*.zip"
         retention-days: 30
 
   test:
