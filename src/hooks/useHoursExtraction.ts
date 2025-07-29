@@ -118,10 +118,33 @@ async function saveHoursToStorage(
   const date = Date.now();
   const name = url.split("user/")[1]?.replace(".html", "") ?? "";
   const platformName = platformsComparison[platform] || platform;
+  const isAlreadySaved = prevHours.find((h) => h.id === `${platform}-${name}`);
+
+  if (isAlreadySaved) {
+    const existingHours = isAlreadySaved.data;
+    const hoursToAdd = existingHours.filter((h) => {
+      return !hours.some((eh) => eh.name === h.name);
+    });
+    await storage.setItem(
+      "local:hours",
+      prevHours.map((h) => {
+        if (h.id === `${platform}-${name}`) {
+          return {
+            ...h,
+            createAt: date,
+            data: [...hours, ...hoursToAdd],
+          };
+        }
+        return h;
+      })
+    );
+    return;
+  }
   await storage.setItem("local:hours", [
     {
       createAt: date,
       data: hours,
+      id: `${platform}-${name}`,
       name,
       platform: platformName,
     },

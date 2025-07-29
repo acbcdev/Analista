@@ -28,6 +28,7 @@ export type HoursStorage = {
   data: Hours[];
   name: string;
   platform: string;
+  id: string;
 };
 export type textCase = "none" | "capitalize" | "capitalizeWords" | "global";
 export type emojiPosition = "start" | "end" | "none";
