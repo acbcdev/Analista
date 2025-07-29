@@ -19,7 +19,7 @@ export function MenuCard({
 	return (
 		<div className="relative">
 			<Link to={`/tipMenu/view/${menu.id}`} className="block">
-				<Card className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow">
+				<Card className="overflow-hidden cursor-pointer hover:bg-border duration-300 transition-shadow">
 					<CardHeader>
 						<div className="flex items-start justify-between">
 							<div className="space-y-2">
