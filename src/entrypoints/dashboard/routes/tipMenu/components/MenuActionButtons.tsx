@@ -23,6 +23,7 @@ export function MenuActionButtons({
 	menu,
 	onDuplicate,
 	onDelete,
+	onToggleStatus,
 }: MenuActionButtonsProps) {
 	return (
 		<div className="flex items-center gap-2">
@@ -57,17 +58,12 @@ export function MenuActionButtons({
 						<Copy className="h-4 w-4" />
 						Duplicate Menu
 					</DropdownMenuItem>
-
-					<DropdownMenuSeparator />
-					{/*
-					<DropdownMenuItem
+		<DropdownMenuItem
 						onClick={() => onToggleStatus(menu.id)}
-						className={`flex items-center gap-2 ${
-							menu.isActive ? "text-orange-600" : "text-green-600"
-						}`}
+						className="flex items-center gap-2"
 					>
 						{menu.isActive ? "Deactivate" : "Activate"} Menu
-					</DropdownMenuItem> */}
+					</DropdownMenuItem>	
 
 					<DropdownMenuItem
 						onClick={() => onDelete(menu.id)}

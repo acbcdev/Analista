@@ -12,6 +12,7 @@ interface MenuItemsListProps {
 	};
 	onCopyToClipboard: (text: string, type: "text" | "price") => void;
 	onRemoveItem: (index: number) => void;
+	onUpdateItem: (index: number, updatedItem: TipMenuItem) => void;
 }
 
 export function MenuItemsList({
@@ -19,6 +20,7 @@ export function MenuItemsList({
 	globalSettings,
 	onCopyToClipboard,
 	onRemoveItem,
+	onUpdateItem,
 }: MenuItemsListProps) {
 	if (items.length === 0) {
 		return null;
@@ -39,6 +41,7 @@ export function MenuItemsList({
 							globalSettings={globalSettings}
 							onCopyToClipboard={onCopyToClipboard}
 							onRemoveItem={() => onRemoveItem(index)}
+							onUpdateItem={(updatedItem) => onUpdateItem(index, updatedItem)}
 						/>
 					))}
 				</div>

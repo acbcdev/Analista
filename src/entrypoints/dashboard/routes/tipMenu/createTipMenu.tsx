@@ -96,6 +96,10 @@ export function CreateTipMenu() {
 		setItems(items.filter((_, i) => i !== index));
 	};
 
+	const updateItem = (index: number, updatedItem: TipMenuItem) => {
+		setItems(items.with(index, updatedItem));
+	};
+
 	const saveTipMenu = () => {
 		if (!menuName.trim() || items.length === 0) {
 			alert("Please provide a menu name and at least one menu item");
@@ -147,6 +151,7 @@ export function CreateTipMenu() {
 					globalSettings={globalSettings}
 					onCopyToClipboard={copyToClipboard}
 					onRemoveItem={removeItem}
+					onUpdateItem={updateItem}
 				/>
 			</div>
 		</div>

@@ -268,7 +268,7 @@ export function ViewTipMenu() {
 									<button
 										type="button"
 										onClick={() => copyPriceToClipboard(item.price)}
-										className="text-green-600 font-bold px-3 py-1 rounded hover:bg-green-50 transition-colors cursor-pointer"
+										className="text-green-600 font-bold px-3 py-1 rounded  transition-colors cursor-pointer"
 										title="Click to copy price"
 									>
 										{item.price} tokens

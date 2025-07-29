@@ -26,6 +26,10 @@ export function MenuCard({
 								<div className="flex items-center gap-2">
 									<CardTitle className="text-xl">{menu.name}</CardTitle>
 									<span
+										onClick={(e) =>{
+											e.stopPropagation(); // Prevent click from navigating
+											e.preventDefault(); // Prevent default link behavior
+											onToggleStatus(menu.id)}} // Prevent click from navigating
 										className={`px-2 py-1 text-xs rounded-full ${
 											menu.isActive
 												? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"

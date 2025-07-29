@@ -118,6 +118,10 @@ export function EditTipMenu() {
 		setItems(items.filter((_, i) => i !== index));
 	};
 
+	const updateItem = (index: number, updatedItem: TipMenuItem) => {
+		setItems(items.with(index, updatedItem));
+	};
+
 	const updateTipMenuData = () => {
 		if (!id || !menuName.trim() || items.length === 0) {
 			toast.error("Please provide a menu name and at least one menu item");
@@ -192,7 +196,7 @@ export function EditTipMenu() {
 					</div>
 					<Button
 						onClick={updateTipMenuData}
-						className="bg-blue-600 hover:bg-blue-700"
+						className="bg-blue-600 hover:bg-blue-700 text-foreground"
 						disabled={!menuName.trim() || items.length === 0}
 					>
 						<Save className="h-4 w-4 mr-2" />
@@ -221,6 +225,7 @@ export function EditTipMenu() {
 					globalSettings={globalSettings}
 					onCopyToClipboard={copyToClipboard}
 					onRemoveItem={removeItem}
+					onUpdateItem={updateItem}
 				/>
 			</div>
 		</div>

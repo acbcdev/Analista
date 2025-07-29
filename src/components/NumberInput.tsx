@@ -45,12 +45,14 @@ interface NumberInputProps {
 	/** Ref for the input element */
 	ref?: React.Ref<HTMLInputElement>;
 	onKeyDown?: (e: React.KeyboardEvent) => void;
+	onBlur?: (e: React.FocusEvent) => void;
 }
 
 const NumberInput = ({
 	value,
 	onChange,
 	onKeyDown,
+	onBlur,
 	label,
 	showLabel = true,
 	placeholder,
@@ -105,6 +107,7 @@ const NumberInput = ({
 						placeholder={placeholder}
 						className="bg-input/30 text-foreground flex-1 px-3 py-2 tabular-nums outline-none focus:outline-none"
 						onKeyDown={onKeyDown}
+						onBlur={onBlur}
 					/>
 					{showButtons && (
 						<div className="flex h-[calc(100%+2px)] flex-col">

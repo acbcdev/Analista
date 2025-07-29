@@ -1,4 +1,5 @@
 import { Settings } from "lucide-react";
+import { useState } from "react";
 import { EmojiPopover } from "@/components/EmojiPopover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

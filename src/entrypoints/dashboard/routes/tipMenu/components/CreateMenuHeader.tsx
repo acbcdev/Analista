@@ -30,7 +30,7 @@ export function CreateMenuHeader({
 			</div>
 			<Button
 				onClick={onSave}
-				className="bg-green-600 hover:bg-green-700"
+				className="bg-green-600 hover:bg-green-700 text-foreground"
 				disabled={!menuName.trim() || !hasItems}
 			>
 				<Save className="h-4 w-4 mr-2" />
