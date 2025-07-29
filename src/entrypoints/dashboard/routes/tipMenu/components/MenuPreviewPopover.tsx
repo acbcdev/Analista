@@ -35,7 +35,7 @@ export function MenuPreviewPopover({ menu }: MenuPreviewPopoverProps) {
 						{menu.items.slice(0, 5).map((item) => (
 							<div
 								key={item.id}
-								className="flex items-center justify-between p-2 bg-muted rounded text-sm"
+								className="flex items-center justify-between p-2 bg-muted rounded-sm text-sm"
 							>
 								<span>{formatMenuItem(item, menu.globalSettings)}</span>
 								<span className="font-medium">{item.price} tokens</span>
@@ -47,7 +47,6 @@ export function MenuPreviewPopover({ menu }: MenuPreviewPopoverProps) {
 							</div>
 						)}
 					</div>
-					<Separator />
 					<div className="flex justify-center">
 						<Button asChild size="sm" variant="outline" className="w-full">
 							<Link to={`/tipMenu/view/${menu.id}`}>View Complete Menu</Link>
