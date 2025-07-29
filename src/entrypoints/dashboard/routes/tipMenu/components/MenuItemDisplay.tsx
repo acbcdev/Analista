@@ -195,8 +195,8 @@ export function MenuItemDisplay({
 							<Edit3 className=" h-4 w-4" />
 							Edit price
 						</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<Popover open={isConfigOpen} onOpenChange={setIsConfigOpen}>
+						{/* <DropdownMenuSeparator /> */}
+						{/* <Popover open={isConfigOpen} onOpenChange={setIsConfigOpen}>
 							<PopoverTrigger asChild>
 								<DropdownMenuItem 
 									onSelect={(e) => {
@@ -277,7 +277,7 @@ export function MenuItemDisplay({
 									</div>
 								</div>
 							</PopoverContent>
-						</Popover>
+						</Popover> */}
 
 						<DropdownMenuSeparator />
 						<DropdownMenuItem 
