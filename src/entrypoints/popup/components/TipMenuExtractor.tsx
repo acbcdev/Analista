@@ -178,16 +178,12 @@ export function TipMenuExtractor() {
 							<Label>Extracted Items ({extractedMenu.items.length})</Label>
 
 						<div className=" rounded-md border">
-
-						
-
 							<ScrollArea className="h-40 px-5 my-2">
 								<div className="space-y-1 ">
-									
 								{extractedMenu.items.map((item, index) => (
 									<div
 										key={index}
-										className="flex justify-between items-center text-sm p-2 bg-muted rounded-sm"
+										className="flex justify-between items-center text-sm p-2 bg-border rounded-sm"
 									>
 										<span className="flex-1">{item.text}</span>
 										<span className="text-green-600 font-semibold">
@@ -197,7 +193,8 @@ export function TipMenuExtractor() {
 								))}
 								</div>
 
-								</ScrollArea></div>
+								</ScrollArea>
+								</div>
 						</div>
 
 						<Separator />
