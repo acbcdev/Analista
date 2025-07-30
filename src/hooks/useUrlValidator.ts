@@ -20,12 +20,14 @@ export function useUrlValidator(validator: (url: string) => boolean) {
  * Validadores predefinidos que se pueden reutilizar
  */
 export const urlValidators = {
-  isChaturbate: (url: string) => url.includes(STRIPCHAT_URL),
+  isChaturbate: (url: string) => url.includes("chaturbate.com"),
   isHttps: (url: string) => url.startsWith("https://"),
   isStripChat: (url: string) => url.includes(STRIPCHAT_URL),
   // Validador personalizable para dominios
   isDomain: (domain: string) => (url: string) => url.includes(domain),
-
+  isTipMenuUrl: (url: string) =>
+    url.includes(STRIPCHAT_URL) ||
+    url.includes("chaturbate.com/app/startup/the-menu"),
   // Validador para patrones regex
   matchesPattern: (pattern: RegExp) => (url: string) => pattern.test(url),
 };

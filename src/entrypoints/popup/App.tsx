@@ -7,12 +7,13 @@ import { StatusCard } from "./components/StatusCard";
 import { TipMenuInjection } from "./components/TipMenuInjection";
 import "./App.css";
 import { urlValidators, useUrlValidator } from "@/hooks/useUrlValidator";
+import { TipMenuExtractor } from "./components/TipMenuExtractor";
 
 function App() {
 	const { exportTags, saveAndViewTags } = useChaturbateTags();
 	const { extractAndSaveHours } = useHoursExtraction();
 	const isHoursUrl = useIsHoursUrl();
-	const isStripchatUrl = useUrlValidator(urlValidators.isStripChat);
+	const isTipMenuUrl = useUrlValidator(urlValidators.isTipMenuUrl);
 
 	return (
 		<main className="p-4 bg-background">
@@ -30,8 +31,8 @@ function App() {
 				showHoursSection={isHoursUrl}
 			/>
 
-			{isStripchatUrl && <TipMenuInjection />}
-
+			{isTipMenuUrl && <TipMenuInjection />}
+			{isTipMenuUrl && <TipMenuExtractor />}
 			<StatusCard />
 		</main>
 	);
